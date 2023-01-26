@@ -35,6 +35,15 @@ builder.Services.Configure<FormOptions>(options =>
     options.ValueCountLimit= int.MaxValue;
 });
 builder.Services.AddTransient<ITokenService, TokenService>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("EnableCORS", builder =>
+    {
+        builder.AllowAnyOrigin()
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -45,7 +54,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
+app.UseCors("EnableCORS");
 app.UseAuthentication();
 app.UseAuthorization();
 
