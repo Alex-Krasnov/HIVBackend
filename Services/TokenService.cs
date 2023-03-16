@@ -16,7 +16,7 @@ namespace HIVBackend.Services
                 issuer: AuthOptions.ISSUER,
                 audience: AuthOptions.AUDIENCE,
                 claims: claims,
-                expires: DateTime.Now.AddMinutes(15),
+                expires: DateTime.Now.AddMinutes(5),
                 signingCredentials: signinCredentials
             );
             var tokenString = new JwtSecurityTokenHandler().WriteToken(tokeOptions);
@@ -41,7 +41,7 @@ namespace HIVBackend.Services
                 ValidIssuer = AuthOptions.ISSUER,
                 ValidateAudience = true,
                 ValidAudience = AuthOptions.AUDIENCE,
-                ValidateLifetime = true,
+                ValidateLifetime = false,
                 IssuerSigningKey = AuthOptions.GetSymmetricSecurityKey(),
                 ValidateIssuerSigningKey = true
             };

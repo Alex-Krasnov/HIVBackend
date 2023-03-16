@@ -58,6 +58,7 @@ namespace HIVBackend.Controllers
             if (user == null) return BadRequest();
 
             user.RefreshToken = null;
+            user.RefreshTokenExpiryTime = DateTime.UtcNow;
             _context.SaveChanges();
             return NoContent();
         }

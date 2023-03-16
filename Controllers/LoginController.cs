@@ -6,6 +6,7 @@ using HIVBackend.Models.DBModuls;
 using HIVBackend.Data;
 using HIVBackend.Services;
 using HIVBackend.Models;
+using HIVBackend.Models.FormModels;
 
 namespace HIVBackend.Controllers
 {
@@ -22,11 +23,12 @@ namespace HIVBackend.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public IActionResult Post(string login, string password)
+        public IActionResult Post(LoginForm userLog)
         {
-            if (login is null || password is null) return BadRequest("Invalid client request");
+            if (userLog.username is null || userLog.password is null) 
+                    return BadRequest("Invalid client request");
 
-            TblUser? user = _context.TblUsers.FirstOrDefault(e => e.Uid == login && e.Pwd == password);
+            TblUser? user = _context.TblUsers.FirstOrDefault(e => e.Uid == userLog.username && e.Pwd == userLog.password);
 
             if (user is null) return Unauthorized();
 
@@ -34,23 +36,26 @@ namespace HIVBackend.Controllers
             {
                 new Claim(ClaimTypes.Name, user.UserName)
             };
+            claims.Add(new Claim(ClaimTypes.Role, "User"));
+            claims.Add(new Claim(ClaimTypes.Role, "User1"));
 
-            if (user.Write1 == -1)
+            if (user.Write1 == true)
                 claims.Add(new Claim(ClaimTypes.Role, "Writer"));
-            if (user.Delete1 == -1)
+            if (user.Delete1 == true)
                 claims.Add(new Claim(ClaimTypes.Role, "Deleter"));
-            if (user.Admin1 == -1)
+            if (user.Admin1 == true)
                 claims.Add(new Claim(ClaimTypes.Role, "Admin"));
-            if (user.Excel1 == -1)
+            if (user.Excel1 == true)
                 claims.Add(new Claim(ClaimTypes.Role, "Excel"));
-            if (user.Klassif1 == -1)
+            if (user.Klassif1 == true)
                 claims.Add(new Claim(ClaimTypes.Role, "Klassif"));
 
             var accessToken = _tokenService.GenerateAccessToken(claims);
             var refreshToken = _tokenService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
-            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddDays(1);
+            user.RefreshTokenExpiryTime = DateTime.UtcNow.AddHours(6);
+            //Console.WriteLine(DateTime.UtcNow.AddMinutes(-14));
 
             _context.SaveChanges();
 

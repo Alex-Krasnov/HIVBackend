@@ -17,15 +17,15 @@ public partial class TblPatientBlot
 
     public int? CheckPlaceId { get; set; }
 
-    public int? First1 { get; set; }
+    public bool? First1 { get; set; }
 
-    public int? Last1 { get; set; }
+    public bool? Last1 { get; set; }
 
     public string? User1 { get; set; }
 
     public DateOnly? Datetime1 { get; set; }
 
-    public int? FlgIfa { get; set; }
+    public bool? FlgIfa { get; set; }
 
     public int? VnResultId { get; set; }
 

@@ -153,9 +153,9 @@ public partial class TblPatientCard
 
     public string? ChildDescr { get; set; }
 
-    public int? FlgZamMedPart { get; set; }
+    public bool? FlgZamMedPart { get; set; }
 
-    public int? FlgHeadPhysician { get; set; }
+    public bool? FlgHeadPhysician { get; set; }
 
     public DateOnly? TransfFederDate { get; set; }
 
@@ -258,6 +258,7 @@ public partial class TblPatientCard
     public long? UnrzFr { get; set; }
 
     public string? UnrzFr1 { get; set; }
+    public bool IsActive { get; set; }
 
     public virtual TblAids12? Aids12 { get; set; }
 

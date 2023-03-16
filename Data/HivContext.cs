@@ -1826,6 +1826,8 @@ public partial class HivContext : DbContext
             entity.Property(e => e.WeightOld)
                 .HasPrecision(7, 2)
                 .HasColumnName("weight_old");
+            entity.Property(e => e.IsActive)
+                .HasColumnName("is_active");
 
             entity.HasOne(d => d.Aids12).WithMany(p => p.TblPatientCards)
                 .HasForeignKey(d => d.Aids12Id)
