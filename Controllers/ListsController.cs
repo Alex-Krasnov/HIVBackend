@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 using Microsoft.AspNetCore.Authorization;
+using HIVBackend.Models.FormModels;
 
 namespace HIVBackend.Controllers
 {
@@ -18,156 +19,209 @@ namespace HIVBackend.Controllers
             _context = context;
         }
 
-        [HttpGet, Route("GetInListSex")]
+        [HttpPost, Route("GetInListSex")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListSex(string name)
+        public IActionResult GetInListSex(InList data)
         {
-            var inList =_context.TblSexes.Any(e => e.SexShort == name);
-            Thread.Sleep(2000);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList =_context.TblSexes.Any(e => e.SexShort == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListRegion")]
+        [HttpPost, Route("GetInListRegion")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListRegion(string name)
+        public IActionResult GetInListRegion(InList data)
         {
-            var inList = _context.TblRegions.Any(e => e.RegionLong == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblRegions.Any(e => e.RegionLong == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListInfectCourses")]
-        [Authorize(Roles = "User")]
-        public IActionResult GetInListInfectCourses(string name)
+        [HttpPost, Route("GetInListInfectCourses")]
+        //[Authorize(Roles = "User")]
+        public IActionResult GetInListInfectCourses(InList data)
         {
-            var inList = _context.TblInfectCourses.Any(e => e.InfectCourseLong == name);
+            if(data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblInfectCourses.Any(e => e.InfectCourseLong == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListCountries")]
+        [HttpPost, Route("GetInListCountries")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListCountries(string name)
+        public IActionResult GetInListCountries(InList data)
         {
-            var inList = _context.TblCountries.Any(e => e.CountryLong == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblCountries.Any(e => e.CountryLong == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListPlaceChecks")]
+        [HttpPost, Route("GetInListPlaceChecks")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListPlaceChecks(string name)
+        public IActionResult GetInListPlaceChecks(InList data)
         {
-            var inList = _context.TblListPlaceChecks.Any(e => e.PlaceCheckName == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListPlaceChecks.Any(e => e.PlaceCheckName == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListCodeMkb10s")]
+        [HttpPost, Route("GetInListCodeMkb10s")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListCodeMkb10s(string name)
+        public IActionResult GetInListCodeMkb10s(InList data)
         {
-            var inList = _context.TblCodeMkb10s.Any(e => e.CodeMkb10Long == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblCodeMkb10s.Any(e => e.CodeMkb10Long == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListCheckCourseLong")]
+        [HttpPost, Route("GetInListCheckCourseLong")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListCheckCourseLong(string name)
+        public IActionResult GetInListCheckCourseLong(InList data)
         {
-            var inList = _context.TblCheckCourses.Any(e => e.CheckCourseLong == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblCheckCourses.Any(e => e.CheckCourseLong == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListCheckCourseShort")]
+        [HttpPost, Route("GetInListCheckCourseShort")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListCheckCourseShort(string name)
+        public IActionResult GetInListCheckCourseShort(InList data)
         {
-            var inList = _context.TblCheckCourses.Any(e => e.CheckCourseShort == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblCheckCourses.Any(e => e.CheckCourseShort == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListInfectCourseLong")]
+        [HttpPost, Route("GetInListInfectCourseLong")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListInfectCourseLong(string name)
+        public IActionResult GetInListInfectCourseLong(InList data)
         {
-            var inList = _context.TblInfectCourses.Any(e => e.InfectCourseLong == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblInfectCourses.Any(e => e.InfectCourseLong == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListInfectCourseShort")]
+        [HttpPost, Route("GetInListInfectCourseShort")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListInfectCourseShort(string name)
+        public IActionResult GetInListInfectCourseShort(InList data)
         {
-            var inList = _context.TblInfectCourses.Any(e => e.InfectCourseShort == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblInfectCourses.Any(e => e.InfectCourseShort == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListDieCourseLong")]
+        [HttpPost, Route("GetInListDieCourseLong")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListDieCourseLong(string name)
+        public IActionResult GetInListDieCourseLong(InList data)
         {
-            var inList = _context.TblDieCourses.Any(e => e.DieCourseLong == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblDieCourses.Any(e => e.DieCourseLong == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListDieCourseShort")]
+        [HttpPost, Route("GetInListDieCourseShort")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListDieCourseShort(string name)
+        public IActionResult GetInListDieCourseShort(InList data)
         {
-            var inList = _context.TblDieCourses.Any(e => e.DieCourseShort == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblDieCourses.Any(e => e.DieCourseShort == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListVulnerableGroup")]
+        [HttpPost, Route("GetInListVulnerableGroup")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListVulnerableGroup(string name)
+        public IActionResult GetInListVulnerableGroup(InList data)
         {
-            var inList = _context.TblListVulnerableGroups.Any(e => e.VulnerableGroupName == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListVulnerableGroups.Any(e => e.VulnerableGroupName == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListArv")]
+        [HttpPost, Route("GetInListArvt")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListArv(string name)
+        public IActionResult GetInListArvt(InList data)
         {
-            var inList = _context.TblArvts.Any(e => e.ArvtShort == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblArvts.Any(e => e.ArvtShort == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListInvalid")]
+        [HttpPost, Route("GetInListInvalid")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListInvalid(string name)
+        public IActionResult GetInListInvalid(InList data)
         {
-            var inList = _context.TblInvalids.Any(e => e.InvalidLong == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblInvalids.Any(e => e.InvalidLong == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListCheckPlace")]
+        [HttpPost, Route("GetInListCheckPlace")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListCheckPlace(string name)
+        public IActionResult GetInListCheckPlace(InList data)
         {
-            var inList = _context.TblCheckPlaces.Any(e => e.CheckPlaceLong == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblCheckPlaces.Any(e => e.CheckPlaceLong == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListIbResult")]
+        [HttpPost, Route("GetInListIbResult")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListIbResult(string name)
+        public IActionResult GetInListIbResult(InList data)
         {
-            var inList = _context.TblIbResults.Any(e => e.IbResultShort == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblIbResults.Any(e => e.IbResultShort == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListDeseases")]
+        [HttpPost, Route("GetInListDeseases")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListDeseases(string name)
+        public IActionResult GetInListDeseases(InList data)
         {
-            var inList = _context.TblShowIllnesses.Any(e => e.ShowIllnessLong == name);
+            var inList = _context.TblShowIllnesses.Any(e => e.ShowIllnessLong == data.Str);
             return Ok(inList);
         }
 
-        [HttpGet, Route("GetInListStage")]
+        [HttpPost, Route("GetInListStage")]
         [Authorize(Roles = "User")]
-        public IActionResult GetInListStage(string name)
+        public IActionResult GetInListStage(InList data)
         {
-            var inList = _context.TblDiagnoses.Any(e => e.DiagnosisLong == name);
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblDiagnoses.Any(e => e.DiagnosisLong == data.Str);
             return Ok(inList);
         }
     }

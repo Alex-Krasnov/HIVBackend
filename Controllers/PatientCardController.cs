@@ -5,6 +5,7 @@ using HIVBackend.Data;
 using HIVBackend.Models.OutputModel;
 using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
+using System.Reflection.Metadata;
 
 namespace HIVBackend.Controllers
 {
@@ -107,7 +108,7 @@ namespace HIVBackend.Controllers
             patientCardMain.Comm = a.AddrName;
             patientCardMain.HeightOld = a.HeightOld;
             patientCardMain.WeightOld = a.WeightOld;
-            patientCardMain.PlaceCheck = _context.TblCheckPlaces.FirstOrDefault(e => e.CheckPlaceId == a.PlaceCheckId)?.CheckPlaceLong;
+            patientCardMain.PlaceCheck = _context.TblListPlaceChecks.FirstOrDefault(e => e.PlaceCheckId == a.PlaceCheckId)?.PlaceCheckName;
             patientCardMain.CodeMKB10 = _context.TblCodeMkb10s.FirstOrDefault(e => e.CodeMkb10Id == a.CodeMkb10Id)?.CodeMkb10Long;
             patientCardMain.CheckCourseShort = _context.TblCheckCourses.FirstOrDefault(e => e.CheckCourseId == a.CheckCourseId)?.CheckCourseShort;
             patientCardMain.CheckCourseLong = _context.TblCheckCourses.FirstOrDefault(e => e.CheckCourseId == a.CheckCourseId)?.CheckCourseLong;
@@ -178,14 +179,17 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult CreateBlot(Blot blot)
         {
+            DateOnly? blotDate = null;
+            try { blotDate = DateOnly.Parse(blot.BlotDate); } catch { }
+
             TblPatientBlot item = new()
             {
                 PatientId = blot.PatientId,
                 BlotId = blot.BlotId,
                 BlotNo = blot.BlotNo,
-                BlotDate = DateOnly.Parse(blot.BlotDate),
-                IbResultId = _context.TblIbResults.First(e => e.IbResultShort == blot.IbResultId).IbResultId,
-                CheckPlaceId = _context.TblCheckPlaces.First(e => e.CheckPlaceLong == blot.CheckPlaceId).CheckPlaceId,
+                BlotDate = blotDate,
+                IbResultId = _context.TblIbResults.FirstOrDefault(e => e.IbResultShort == blot.IbResultId)?.IbResultId,
+                CheckPlaceId = _context.TblCheckPlaces.FirstOrDefault(e => e.CheckPlaceLong == blot.CheckPlaceId)?.CheckPlaceId,
                 First1 = blot.First1,
                 Last1 = blot.Last1,
                 FlgIfa = blot.FlgIfa,
@@ -202,13 +206,32 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult UpdateBlot(Blot blot)
         {
+            DateOnly? blotDate = null;
+            try { blotDate = DateOnly.Parse(blot.BlotDate); } catch { }
+
             TblPatientBlot item = new()
             {
                 PatientId = blot.PatientId,
                 BlotId = (int)blot.BlotIdOld
             };
-
             _context.TblPatientBlots.Attach(item);
+
+            if ((int)blot.BlotIdOld == blot.BlotId)
+            {
+                item.PatientId = blot.PatientId;
+                item.BlotId = blot.BlotId;
+                item.BlotNo = blot.BlotNo;
+                item.BlotDate = blotDate;
+                item.IbResultId = _context.TblIbResults.FirstOrDefault(e => e.IbResultShort == blot.IbResultId)?.IbResultId;
+                item.CheckPlaceId = _context.TblCheckPlaces.FirstOrDefault(e => e.CheckPlaceLong == blot.CheckPlaceId)?.CheckPlaceId;
+                item.First1 = blot.First1;
+                item.Last1 = blot.Last1;
+                item.FlgIfa = blot.FlgIfa;
+                item.Datetime1 = DateOnly.FromDateTime(DateTime.Now);
+                _context.SaveChanges();
+                return Ok();
+            }
+
             _context.TblPatientBlots.Remove(item);
             _context.SaveChanges();
             item = new()
@@ -216,9 +239,9 @@ namespace HIVBackend.Controllers
                 PatientId = blot.PatientId,
                 BlotId = blot.BlotId,
                 BlotNo = blot.BlotNo,
-                BlotDate = DateOnly.Parse(blot.BlotDate),
-                IbResultId = _context.TblIbResults.First(e => e.IbResultShort == blot.IbResultId).IbResultId,
-                CheckPlaceId = _context.TblCheckPlaces.First(e => e.CheckPlaceLong == blot.CheckPlaceId).CheckPlaceId,
+                BlotDate = blotDate,
+                IbResultId = _context.TblIbResults.FirstOrDefault(e => e.IbResultShort == blot.IbResultId)?.IbResultId,
+                CheckPlaceId = _context.TblCheckPlaces.FirstOrDefault(e => e.CheckPlaceLong == blot.CheckPlaceId)?.CheckPlaceId,
                 First1 = blot.First1,
                 Last1 = blot.Last1,
                 FlgIfa = blot.FlgIfa,
@@ -228,7 +251,6 @@ namespace HIVBackend.Controllers
             _context.SaveChanges();
             return Ok();
         }
-
 
         [HttpDelete, Route("DelStage")]
         [Authorize(Roles = "User")]
@@ -250,7 +272,7 @@ namespace HIVBackend.Controllers
             {
                 PatientId = stage.PatientId,
                 DiagnosisDefDate = DateOnly.Parse(stage.StageDate),
-                DiagnosisId = _context.TblDiagnoses.First(e => e.DiagnosisLong == stage.StageName).DiagnosisId
+                DiagnosisId = _context.TblDiagnoses.First(e => e.DiagnosisLong == stage.StageName)?.DiagnosisId
             };
 
             _context.TblPatientDiagnoses.Attach(item);
@@ -270,13 +292,21 @@ namespace HIVBackend.Controllers
             };
 
             _context.TblPatientDiagnoses.Attach(item);
+
+            if (stage.StageDate == stage.StageDateOld)
+            {
+                item.DiagnosisId = _context.TblDiagnoses.First(e => e.DiagnosisLong == stage.StageName)?.DiagnosisId;
+                _context.SaveChanges();
+                return Ok();
+            }
+
             _context.TblPatientDiagnoses.Remove(item);
             _context.SaveChanges();
             item = new()
             {
                 PatientId = stage.PatientId,
                 DiagnosisDefDate = DateOnly.Parse(stage.StageDate),
-                DiagnosisId = _context.TblDiagnoses.First(e => e.DiagnosisLong == stage.StageName).DiagnosisId
+                DiagnosisId = _context.TblDiagnoses.First(e => e.DiagnosisLong == stage.StageName)?.DiagnosisId
             };
             _context.TblPatientDiagnoses.Add(item);
             _context.SaveChanges();
@@ -327,14 +357,22 @@ namespace HIVBackend.Controllers
         {
             DateOnly? endDate = null;
             try { endDate = DateOnly.Parse(desease.EndDate); } catch { }
+
             TblPatientShowIllness item = new()
             {
                 PatientId = desease.PatientId,
                 StartDate = DateOnly.Parse(desease.StartDateOld),
                 ShowIllnessId = _context.TblShowIllnesses.First(e => e.ShowIllnessLong == desease.DeseasOld).ShowIllnessId
             };
-
             _context.TblPatientShowIllnesses.Attach(item);
+
+            if (desease.Deseas == desease.DeseasOld && desease.StartDate == desease.StartDateOld)
+            {
+                item.EndDate = endDate;
+                _context.SaveChanges();
+                return Ok();
+            }
+
             _context.TblPatientShowIllnesses.Remove(item);
             _context.SaveChanges();
             item = new()
@@ -354,9 +392,8 @@ namespace HIVBackend.Controllers
         public IActionResult DelPatientPatient(int patientId)
         {
             TblPatientCard item = new(){ PatientId = patientId };
-
             _context.TblPatientCards.Attach(item);
-            _context.TblPatientCards.Remove(item);
+            item.IsActive = false;
             _context.SaveChanges();
             return Ok();
         }
