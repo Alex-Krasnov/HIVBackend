@@ -61,7 +61,7 @@ namespace HIVBackend.Models.OutputModel
         public string? Snils { get; set; }
         public string? ARVT { get; set; }
         public string? Invalid { get; set; }
-        public string? Archile { get; set; }
+        public string? Archive { get; set; }
         public string? CodeWord { get; set; }
 
         public List<string>? ListSex { get; set; }

@@ -5,13 +5,12 @@ using HIVBackend.Data;
 using HIVBackend.Models.OutputModel;
 using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
-using System.Reflection.Metadata;
 
 namespace HIVBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class PatientCardController : ControllerBase
     {
         private readonly HivContext _context;
@@ -132,7 +131,7 @@ namespace HIVBackend.Controllers
             patientCardMain.Snils = a.Snils;
             patientCardMain.ARVT = _context.TblArvts.FirstOrDefault(e => e.ArvtId == a.ArvtId)?.ArvtLong;
             patientCardMain.Invalid = _context.TblInvalids.FirstOrDefault(e => e.InvalidId == a.InvalidId)?.InvalidLong;
-            patientCardMain.Archile = a.SnilsFed;
+            patientCardMain.Archive = a.SnilsFed;
             patientCardMain.CodeWord = a.Codeword;
 
             patientCardMain.ListSex = _context.TblSexes.Select(e => e.SexShort)?.ToList();
@@ -394,6 +393,287 @@ namespace HIVBackend.Controllers
             TblPatientCard item = new(){ PatientId = patientId };
             _context.TblPatientCards.Attach(item);
             item.IsActive = false;
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost, Route("UpdatePatient")]
+        [Authorize(Roles = "User")]
+        public IActionResult UpdatePatient(PatientCardMainForm patient)
+        {
+            TblPatientCard item = _context.TblPatientCards.First(e => e.PatientId == patient.PatientId);
+            _context.TblPatientCards.Attach(item);
+
+            item.FamilyName = patient.FamilyName;
+            _context.Entry(item).Property(e => e.FamilyName).IsModified = true;
+            item.FirstName = patient.FirstName;
+            _context.Entry(item).Property(e => e.FirstName).IsModified = true;
+            item.ThirdName = patient.ThirdName;
+            _context.Entry(item).Property(e => e.ThirdName).IsModified = true;
+            item.UnrzFr1 = patient.UnrzFr1;
+            _context.Entry(item).Property(e => e.UnrzFr1).IsModified = true;
+            item.CityName = patient.CityName;
+            _context.Entry(item).Property(e => e.CityName).IsModified = true;
+            item.LocationName = patient.LocationName;
+            _context.Entry(item).Property(e => e.LocationName).IsModified = true;
+            item.AddrInd = patient.AddrIndPhone;
+            _context.Entry(item).Property(e => e.AddrInd).IsModified = true;
+            item.AddrStreet = patient.AddrStreet;
+            _context.Entry(item).Property(e => e.AddrStreet).IsModified = true;
+            item.AddrHouse = patient.AddrHouse;
+            _context.Entry(item).Property(e => e.AddrHouse).IsModified = true;
+            item.AddrExt = patient.AddrExt;
+            _context.Entry(item).Property(e => e.AddrExt).IsModified = true;
+            item.AddrFlat = patient.AddrFlat;
+            _context.Entry(item).Property(e => e.AddrFlat).IsModified = true;
+            item.FactCityName = patient.FactCityName;
+            _context.Entry(item).Property(e => e.FactCityName).IsModified = true;
+            item.FactLocationName = patient.FactLocationName;
+            _context.Entry(item).Property(e => e.FactLocationName).IsModified = true;
+            item.FactAddrInd = patient.FactAddrInd;
+            _context.Entry(item).Property(e => e.FactAddrInd).IsModified = true;
+            item.FactAddrStreet = patient.FactAddrStreet;
+            _context.Entry(item).Property(e => e.FactAddrStreet).IsModified = true;
+            item.FactAddrHouse = patient.FactAddrHouse;
+            _context.Entry(item).Property(e => e.FactAddrHouse).IsModified = true;
+            item.FactAddrExt = patient.FactAddrExt;
+            _context.Entry(item).Property(e => e.FactAddrExt).IsModified = true;
+            item.FactAddrFlat = patient.FactAddrFlat;
+            _context.Entry(item).Property(e => e.FactAddrFlat).IsModified = true;
+            item.AddrName = patient.AddrNameComm;
+            _context.Entry(item).Property(e => e.AddrName).IsModified = true;
+            item.CardNo = patient.CardNo;
+            _context.Entry(item).Property(e => e.CardNo).IsModified = true;
+            item.HeightOld = patient.HeightOld;
+            _context.Entry(item).Property(e => e.HeightOld).IsModified = true;
+            item.WeightOld = patient.WeightOld;
+            _context.Entry(item).Property(e => e.WeightOld).IsModified = true;
+            item.FlgZamMedPart = patient.FlgZamMedPart;
+            _context.Entry(item).Property(e => e.FlgZamMedPart).IsModified = true;
+            item.FlgHeadPhysician = patient.FlgHeadPhysician;
+            _context.Entry(item).Property(e => e.FlgHeadPhysician).IsModified = true;
+            item.SnilsFed = patient.SnilsFedArchive;
+            _context.Entry(item).Property(e => e.SnilsFed).IsModified = true;
+            item.Codeword = patient.Codeword;
+            _context.Entry(item).Property(e => e.Codeword).IsModified = true;
+            item.Snils = patient.Snils;
+            _context.Entry(item).Property(e => e.Snils).IsModified = true;
+            item.FioChange = patient.FioChange;
+            _context.Entry(item).Property(e => e.FioChange).IsModified = true;
+
+            DateOnly? dieDate = null, dieAidsDate = null;
+            try { dieDate = DateOnly.Parse(patient.DieDate); } catch { }
+            try { dieAidsDate = DateOnly.Parse(patient.DieAidsDate); } catch { }
+
+            if (dieDate != item.DieDate)
+            {
+                item.DieDate = dieDate;
+                _context.Entry(item).Property(e => e.DieDate).IsModified = true;
+                item.DieDateInput = DateOnly.FromDateTime(DateTime.Now);
+            }
+
+            if (dieAidsDate != item.DieAidsDate)
+            {
+                item.DieAidsDate = dieAidsDate;
+                _context.Entry(item).Property(e => e.DieAidsDate).IsModified = true;
+                item.DieDateInput = DateOnly.FromDateTime(DateTime.Now);
+            }
+
+            var a = patient.BirthDate?.Length != 0;
+
+            item.BirthDate = patient.BirthDate != null && patient.BirthDate?.Length != 0 ? DateOnly.Parse(patient.BirthDate) : null;
+            _context.Entry(item).Property(e => e.BirthDate).IsModified = true;
+
+            item.RegOnDate = patient.RegOnDate != null && patient.RegOnDate?.Length != 0 ? DateOnly.Parse(patient.RegOnDate) : null;
+            _context.Entry(item).Property(e => e.RegOnDate).IsModified = true;
+
+            item.RegOffDate = patient.RegOffDate != null && patient.RegOffDate?.Length != 0 ? DateOnly.Parse(patient.RegOffDate) : null;
+            _context.Entry(item).Property(e => e.RegOffDate).IsModified = true;
+
+            item.TransfAreaDate = patient.TransfAreaDate != null && patient.TransfAreaDate?.Length != 0 ? DateOnly.Parse(patient.TransfAreaDate) : null;
+            _context.Entry(item).Property(e => e.TransfAreaDate).IsModified = true;
+
+            item.TransfFederDate = patient.TransfFederDate != null && patient.TransfFederDate?.Length != 0 ? DateOnly.Parse(patient.TransfFederDate) : null;
+            _context.Entry(item).Property(e => e.TransfFederDate).IsModified = true;
+
+            item.UfsinDate = patient.UfsinDate != null && patient.UfsinDate?.Length != 0 ? DateOnly.Parse(patient.UfsinDate) : null;
+            _context.Entry(item).Property(e => e.UfsinDate).IsModified = true;
+
+            item.DtRegBeg = patient.DtRegBeg != null && patient.DtRegBeg?.Length != 0 ? DateOnly.Parse(patient.DtRegBeg) : null;
+            _context.Entry(item).Property(e => e.DtRegBeg).IsModified = true;
+
+            item.DtRegEnd = patient.DtRegEnd != null && patient.DtRegEnd?.Length != 0 ? DateOnly.Parse(patient.DtRegEnd) : null;
+            _context.Entry(item).Property(e => e.DtRegEnd).IsModified = true;
+
+            if (patient.SexId != null)
+                if (patient.SexId.Length != 0)
+                {
+                    var id = _context.TblSexes.First(e => e.SexShort == patient.SexId)?.SexId;
+                    if (id != item.SexId)
+                        item.SexId = id;
+                }
+                else
+                {
+                    item.SexId = null;
+                    _context.Entry(item).Property(e => e.SexId).IsModified = true;
+                }
+
+            if (patient.FactRegionId != null)
+                if (patient.FactRegionId.Length != 0)
+                {
+                    var id = _context.TblRegions.First(e => e.RegionLong == patient.FactRegionId)?.RegionId;
+                    if (id != item.FactRegionId)
+                        item.FactRegionId = id;
+                }
+                else
+                {
+                    item.FactRegionId = null;
+                    _context.Entry(item).Property(e => e.FactRegionId).IsModified = true;
+                }
+
+            if (patient.CheckCourseId != null)
+                if (patient.CheckCourseId.Length != 0)
+                {
+                    var id = _context.TblCheckCourses.First(e => e.CheckCourseShort == patient.CheckCourseId)?.CheckCourseId;
+                    if (id != item.CheckCourseId)
+                        item.CheckCourseId = id;
+                }
+                else
+                {
+                    item.CheckCourseId = null;
+                    _context.Entry(item).Property(e => e.CheckCourseId).IsModified = true;
+                }
+
+            if (patient.InfectCourseId != null)
+                if (patient.InfectCourseId.Length != 0)
+                {
+                    var id = _context.TblInfectCourses.First(e => e.InfectCourseShort == patient.InfectCourseId)?.InfectCourseId;
+                    if (id != item.InfectCourseId)
+                        item.InfectCourseId = id;
+                }
+                else
+                {
+                    item.InfectCourseId = null;
+                    _context.Entry(item).Property(e => e.InfectCourseId).IsModified = true;
+                }
+
+            if (patient.DieCourseId != null)
+                if (patient.DieCourseId.Length != 0)
+                {
+                    var id = _context.TblDieCourses.First(e => e.DieCourseShort == patient.DieCourseId)?.DieCourseId;
+                    if (id != item.DieCourseId)
+                        item.DieCourseId = id;
+                }
+                else
+                {
+                    item.DieCourseId = null;
+                    _context.Entry(item).Property(e => e.DieCourseId).IsModified = true;
+                }
+
+            if (patient.InvalidId != null)
+                if (patient.InvalidId.Length != 0)
+                {
+                    var id = _context.TblInvalids.First(e => e.InvalidLong == patient.InvalidId)?.InvalidId;
+                    if (id != item.InvalidId)
+                        item.InvalidId = id;
+                }
+                else
+                {
+                    item.InvalidId = null;
+                    _context.Entry(item).Property(e => e.InvalidId).IsModified = true;
+                }
+
+            if (patient.VulnerableGroupId != null)
+                if (patient.VulnerableGroupId.Length != 0)
+                {
+                    var id = _context.TblListVulnerableGroups.First(e => e.VulnerableGroupName == patient.VulnerableGroupId)?.VulnerableGroupId;
+                    if (id != item.VulnerableGroupId)
+                        item.VulnerableGroupId = id;
+                }
+                else
+                {
+                    item.VulnerableGroupId = null;
+                    _context.Entry(item).Property(e => e.VulnerableGroupId).IsModified = true;
+                }
+
+            if (patient.CodeMkb10Id != null)
+                if (patient.CodeMkb10Id.Length != 0)
+                {
+                    var id = _context.TblCodeMkb10s.First(e => e.CodeMkb10Long == patient.CodeMkb10Id)?.CodeMkb10Id;
+                    if (id != item.CodeMkb10Id)
+                        item.CodeMkb10Id = id;
+                }
+                else
+                {
+                    item.CodeMkb10Id = null;
+                    _context.Entry(item).Property(e => e.CodeMkb10Id).IsModified = true;
+                }
+
+            if (patient.ArvtId != null)
+                if (patient.ArvtId.Length != 0)
+                {
+                    var id = _context.TblArvts.First(e => e.ArvtLong == patient.ArvtId)?.ArvtId;
+                    if (id != item.ArvtId)
+                        item.ArvtId = id;
+                }
+                else
+                {
+                    item.ArvtId = null;
+                    _context.Entry(item).Property(e => e.ArvtId).IsModified = true;
+                }
+
+            if (patient.CountryId != null)
+                if (patient.CountryId.Length != 0)
+                {
+                    var id = _context.TblCountries.First(e => e.CountryLong == patient.CountryId).CountryId;
+                    if (id != item.CountryId)
+                        item.CountryId = id;
+                }
+                else
+                {
+                    item.CountryId = null;
+                    _context.Entry(item).Property(e => e.CountryId).IsModified = true;
+                }
+
+            if (patient.PlaceCheckId != null)
+                if (patient.PlaceCheckId.Length != 0)
+                {
+                    var id = _context.TblListPlaceChecks.First(e => e.PlaceCheckName == patient.PlaceCheckId)?.PlaceCheckId;
+                    if (id != item.PlaceCheckId)
+                        item.PlaceCheckId = id;
+                }
+                else
+                {
+                    item.PlaceCheckId = null;
+                    _context.Entry(item).Property(e => e.PlaceCheckId).IsModified = true;
+                }
+
+            if (patient.RegionId != null)
+                if (patient.RegionId.Length != 0)
+                {
+                    var id = _context.TblRegions.First(e => e.RegionLong == patient.RegionId)?.RegionId;
+                    if (id != item.RegionId)
+                        item.RegionId = id;
+                }
+                else
+                {
+                    item.RegionId = null;
+                    _context.Entry(item).Property(e => e.RegionId).IsModified = true;
+                }
+
+            if (patient.RegOffReason != null)
+                if (patient.RegOffReason.Length != 0)
+                {
+                    var id = _context.TblInfectCourses.First(e => e.InfectCourseLong == patient.RegOffReason)?.InfectCourseId;
+                    if (id != item.RegOffReason)
+                        item.RegOffReason = id;
+                }
+                else
+                {
+                    item.RegOffReason = null;
+                    _context.Entry(item).Property(e => e.RegOffReason).IsModified = true;
+                }
+
             _context.SaveChanges();
             return Ok();
         }
