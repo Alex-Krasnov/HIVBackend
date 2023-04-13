@@ -23,7 +23,7 @@ public partial class TblPatientCureSchema
 
     public string? ProtNum { get; set; }
 
-    public int? LastYn { get; set; }
+    public Boolean? LastYn { get; set; }
 
     public int? RangeTherapyId { get; set; }
 
