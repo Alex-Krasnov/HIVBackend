@@ -59,7 +59,7 @@ namespace HIVBackend.Controllers
             {
                 hospResultRs.Add(new(){
                     DateHospIn = item.DateHospIn,
-                    LPUname = _context.TblLpus.FirstOrDefault(e => e.LpuId == item.LpuId)?.LpuLong,
+                    LpuName = _context.TblLpus.FirstOrDefault(e => e.LpuId == item.LpuId)?.LpuLong,
                     HospCourseName = _context.TblHospCourses.FirstOrDefault(e => e.HospCourseId == item.HospCourseId)?.HospCourseLong,
                     DateHospOut = item.DateHospOut,
                     HospResult = _context.TblHospResults.FirstOrDefault(e => e.HospResultId == item.HospResultId)?.HospResultLong
@@ -71,8 +71,9 @@ namespace HIVBackend.Controllers
             patientCardTreatment.PatientId = patient.PatientId;
             patientCardTreatment.PatientFio = patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName;
             patientCardTreatment.StageName = _context.TblDiagnoses.FirstOrDefault(e => e.DiagnosisId == patient.DiagnosisId)?.DiagnosisLong;
-            patientCardTreatment.SageCom = patient.StageDescr;
+            patientCardTreatment.StageCom = patient.StageDescr;
             patientCardTreatment.PatientCom = patient.PatientDescr;
+            patientCardTreatment.InvalidName = _context.TblInvalids.FirstOrDefault(e => e.InvalidId == patient.InvalidId)?.InvalidLong;
 
             patientCardTreatment.ListInvalids = _context.TblInvalids.Select(e => e.InvalidLong)?.ToList();
             patientCardTreatment.ListCorrespIllness = _context.TblCorrespIllnesses.Select(e => e.CorrespIllnessLong)?.ToList();
@@ -82,6 +83,10 @@ namespace HIVBackend.Controllers
             patientCardTreatment.ListLpus = _context.TblLpus.Select(e => e.LpuLong)?.ToList();
             patientCardTreatment.ListHospCourses = _context.TblHospCourses.Select(e => e.HospCourseLong)?.ToList();
             patientCardTreatment.ListHospResults = _context.TblHospResults.Select(e => e.HospResultLong)?.ToList();
+
+            patientCardTreatment.CorrespIllnesses = correspIllnesses;
+            patientCardTreatment.CureSchemas = cureSchemas;
+            patientCardTreatment.HospResultRs = hospResultRs;
 
             return Ok(patientCardTreatment);
         }
@@ -125,7 +130,7 @@ namespace HIVBackend.Controllers
             TblPatientCorrespIllness item = new()
             {
                 PatientId = correspIllness.PatientId,
-                CorrespIllnessId = _context.TblCorrespIllnesses.First(e => e.CorrespIllnessLong == correspIllness.CorrespIllnessName).CorrespIllnessId
+                CorrespIllnessId = _context.TblCorrespIllnesses.First(e => e.CorrespIllnessLong == correspIllness.CorrespIllnessNameOld).CorrespIllnessId
             };
 
             _context.TblPatientCorrespIllnesses.Attach(item);
@@ -142,7 +147,7 @@ namespace HIVBackend.Controllers
             return Ok();
         }
 
-        [HttpDelete, Route("DelCureSchema")]
+        [HttpPost, Route("DelCureSchema")]
         [Authorize(Roles = "User")]
         public IActionResult DelCureSchema(CureSchema cureSchema)
         {
@@ -168,7 +173,7 @@ namespace HIVBackend.Controllers
                 PatientId = cureSchema.PatientId,
                 CureSchemaId = _context.TblCureSchemas.First(e => e.CureSchemaLong == cureSchema.CureSchemaName).CureSchemaId,
                 StartDate = DateOnly.Parse(cureSchema.StartDate),
-                EndDate = cureSchema.EndDate != null ? DateOnly.Parse(cureSchema.EndDate) : null,
+                EndDate = cureSchema.EndDate != null && cureSchema.EndDate?.Length != 0 ? DateOnly.Parse(cureSchema.EndDate) : null,
                 SchemaDescr = cureSchema.SchemaCom,
                 CureChangeId = _context.TblCureChanges.FirstOrDefault(e => e.CureChangeLong == cureSchema.CureChangeName)?.CureChangeId,
                 ProtNum = cureSchema.ProtNum,
@@ -193,8 +198,8 @@ namespace HIVBackend.Controllers
             TblPatientCureSchema item = new()
             {
                 PatientId = cureSchema.PatientId,
-                CureSchemaId = cureSchemaId,
-                StartDate = startDate
+                CureSchemaId = cureSchemaIdOld,
+                StartDate = startDateOld
             };
             _context.TblPatientCureSchemas.Attach(item);
 
@@ -234,13 +239,13 @@ namespace HIVBackend.Controllers
 
         [HttpDelete, Route("DelHospResult")]
         [Authorize(Roles = "User")]
-        public IActionResult DelHospResult(HospResult hospResult)
+        public IActionResult DelHospResult(int patientId, string name, string date)
         {
             TblPatientHospResultR item = new()
             {
-                PatientId = hospResult.PatientId,
-                LpuId = _context.TblLpus.First(e => e.LpuLong == hospResult.LpuName).LpuId,
-                DateHospIn = DateOnly.Parse(hospResult.DateHospIn)
+                PatientId = patientId,
+                LpuId = _context.TblLpus.First(e => e.LpuLong == name).LpuId,
+                DateHospIn = DateOnly.Parse(date)
             };
 
             _context.TblPatientHospResultRs.Attach(item);
@@ -282,16 +287,16 @@ namespace HIVBackend.Controllers
             TblPatientHospResultR item = new()
             {
                 PatientId = hospResult.PatientId,
-                LpuId = lpuId,
-                DateHospIn = dateHospIn
+                LpuId = lpuIdOld,
+                DateHospIn = dateHospInOld
             };
             _context.TblPatientHospResultRs.Attach(item);
 
             if (lpuId == lpuIdOld && dateHospIn == dateHospInOld)
             {
                 item.DateHospOut = hospResult.DateHospOut != null && hospResult.DateHospOut?.Length != 0 ? DateOnly.Parse(hospResult.DateHospOut) : null;
-                item.HospResultId = _context.TblHospCourses.FirstOrDefault(e => e.HospCourseLong == hospResult.HospCourseName)?.HospCourseId;
-                item.HospCourseId = _context.TblHospResults.FirstOrDefault(e => e.HospResultLong == hospResult.HospResultName)?.HospResultId;
+                item.HospResultId = _context.TblHospResults.FirstOrDefault(e => e.HospResultLong == hospResult.HospResultName)?.HospResultId;
+                item.HospCourseId = _context.TblHospCourses.FirstOrDefault(e => e.HospCourseLong == hospResult.HospCourseName)?.HospCourseId;
                 //item.User1 = ;
                 item.Datetime1 = DateOnly.FromDateTime(DateTime.Now);
 
@@ -308,11 +313,41 @@ namespace HIVBackend.Controllers
                 LpuId = lpuId,
                 DateHospIn = dateHospIn,
                 DateHospOut = hospResult.DateHospOut != null && hospResult.DateHospOut?.Length != 0 ? DateOnly.Parse(hospResult.DateHospOut) : null,
-                HospResultId = _context.TblHospCourses.FirstOrDefault(e => e.HospCourseLong == hospResult.HospCourseName)?.HospCourseId,
-                HospCourseId = _context.TblHospResults.FirstOrDefault(e => e.HospResultLong == hospResult.HospResultName)?.HospResultId
+                HospResultId = _context.TblHospResults.FirstOrDefault(e => e.HospResultLong == hospResult.HospResultName)?.HospResultId,
+                HospCourseId = _context.TblHospCourses.FirstOrDefault(e => e.HospCourseLong == hospResult.HospCourseName)?.HospCourseId
             };
 
             _context.TblPatientHospResultRs.Add(item);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost, Route("UpdatePatient")]
+        [Authorize(Roles = "User")]
+        public IActionResult UpdatePatient(PatientCardTreatmentForm patient)
+        {
+            TblPatientCard item = new()
+            {
+                PatientId = patient.PatientId
+            };
+            _context.TblPatientCards.Attach(item);
+
+            item.PatientDescr = patient.Com;
+            item.StageDescr = patient.StageCom;
+
+            if (patient.Invalid != null)
+                if (patient.Invalid.Length != 0)
+                {
+                    var id = _context.TblInvalids.First(e => e.InvalidLong == patient.Invalid)?.InvalidId;
+                    if (id != item.InvalidId)
+                        item.InvalidId = id;
+                }
+                else
+                {
+                    item.InvalidId = null;
+                    _context.Entry(item).Property(e => e.InvalidId).IsModified = true;
+                }
+
             _context.SaveChanges();
             return Ok();
         }

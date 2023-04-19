@@ -7,7 +7,7 @@ namespace HIVBackend.Models.OutputModel
         public int PatientId { get; set; }
         public string? PatientFio { get; set; }
         public string? StageName { get; set; }
-        public string? SageCom { get; set; }
+        public string? StageCom { get; set; }
         public string? PatientCom { get; set; }
         public string? InvalidName { get; set; }
 
@@ -43,7 +43,7 @@ namespace HIVBackend.Models.OutputModel
     public class FrmHospResultRs
     {
         public DateOnly? DateHospIn { get; set; }
-        public string? LPUname { get; set; }
+        public string? LpuName { get; set; }
         public string? HospCourseName { get; set; }
         public DateOnly? DateHospOut { get; set; }
         public string? HospResult { get; set; }

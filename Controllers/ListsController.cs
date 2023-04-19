@@ -265,7 +265,7 @@ namespace HIVBackend.Controllers
             if (data.Str == null || data.Str?.Length == 0)
                 return Ok(true);
 
-            var inList = _context.TblCureChanges.Any(e => e.CureChangeLong == data.Str);
+            var inList = _context.TblRangeTherapies.Any(e => e.RangeTherapyLong == data.Str);
             return Ok(inList);
         }
 
