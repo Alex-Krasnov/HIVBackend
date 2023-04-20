@@ -42,9 +42,8 @@
     {
         public int ContactId { get; set; }
         public string? InfectCourseName { get; set; }
-        public string? FamilyName { get; set; }
-        public string? FirstName { get; set; }
-        public string? ThirdName { get; set; }
+        public string? Fio { get; set; }
+        public int? Type { get; set; }
     }
 
     public class FrmChemsex

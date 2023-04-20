@@ -301,5 +301,115 @@ namespace HIVBackend.Controllers
             var inList = _context.TblHospResults.Any(e => e.HospResultLong == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListEducation")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListEducation(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListEducations.Any(e => e.EduName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListFammilyStatus")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListFammilyStatus(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListFamilyStatuses.Any(e => e.FammilyStatusName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListEmployment")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListEmployment(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListEmloyments.Any(e => e.EmploymentName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListTrans")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListTrans(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListTrans.Any(e => e.TransName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListVac")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListVac(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListVacs.Any(e => e.VacName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListMkb10Covid")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListMkb10Covid(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListMkb10Covids.Any(e => e.Mkb10LongName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListTransmisionMech")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListTransmisionMech(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListTransmisionMeches.Any(e => e.TransmisiomMechName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListSituationDetect")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListSituationDetect(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListSituationDetects.Any(e => e.SituationDetectName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListEpidDoctor")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListEpidDoctor(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListEpidDoctors.Any(e => e.DoctorName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListYn")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListYn(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListYns.Any(e => e.YNName == data.Str);
+            return Ok(inList);
+        }
     }
 }

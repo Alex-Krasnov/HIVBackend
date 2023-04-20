@@ -47,37 +47,41 @@ namespace HIVBackend.Controllers
 
             foreach (var item in patientConstantContact)
             {
+                var pcItem = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId);
+                string fio = pcItem?.FamilyName+" "+ pcItem?.FirstName+" "+ pcItem?.ThirdName;
                 constantContact.Add(new()
                 {
                     ContactId = item.PatientContactId,
                     InfectCourseName = _context.TblInfectCourses.FirstOrDefault(e => e.InfectCourseId == item.InfectCourseId)?.InfectCourseLong,
-                    FamilyName = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId)?.FamilyName,
-                    FirstName = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId)?.FirstName,
-                    ThirdName = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId)?.ThirdName
+                    Fio = fio,
+                    Type = item.ContactType
+
                 });
             }
 
             foreach (var item in patientRandomContact)
             {
+                var pcItem = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId);
+                string fio = pcItem?.FamilyName + " " + pcItem?.FirstName + " " + pcItem?.ThirdName;
                 randomContact.Add(new()
                 {
                     ContactId = item.PatientContactId,
                     InfectCourseName = _context.TblInfectCourses.FirstOrDefault(e => e.InfectCourseId == item.InfectCourseId)?.InfectCourseLong,
-                    FamilyName = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId)?.FamilyName,
-                    FirstName = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId)?.FirstName,
-                    ThirdName = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId)?.ThirdName
+                    Fio = fio,
+                    Type = item.ContactType
                 });
             }
 
             foreach (var item in patientOtherContact)
             {
+                var pcItem = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId);
+                string fio = pcItem?.FamilyName + " " + pcItem?.FirstName + " " + pcItem?.ThirdName;
                 otherContact.Add(new()
                 {
                     ContactId = item.PatientContactId,
                     InfectCourseName = _context.TblInfectCourses.FirstOrDefault(e => e.InfectCourseId == item.InfectCourseId)?.InfectCourseLong,
-                    FamilyName = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId)?.FamilyName,
-                    FirstName = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId)?.FirstName,
-                    ThirdName = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == item.PatientContactId)?.ThirdName
+                    Fio = fio,
+                    Type = item.ContactType
                 });
             }
 
@@ -169,7 +173,7 @@ namespace HIVBackend.Controllers
 
             patientCardEpid.ConstantContact = constantContact;
             patientCardEpid.RandomContact = randomContact;
-            patientCardEpid.ConstantContact = otherContact;
+            patientCardEpid.OtherContact = otherContact;
             patientCardEpid.Chemsex = chemsex;
             patientCardEpid.PavInj = pavInj;
             patientCardEpid.PavNotInj = pavNotInj;
@@ -177,6 +181,15 @@ namespace HIVBackend.Controllers
             patientCardEpid.Covid = covid;
 
             return Ok(patientCardEpid);
+        }
+
+        [HttpGet, Route("GetFio")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetFio(int patientId)
+        {
+            var patient = _context.TblPatientCards.First(e => e.PatientId == patientId);
+
+            return Ok(patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName);
         }
 
         [HttpDelete, Route("DelContact")]
@@ -203,7 +216,8 @@ namespace HIVBackend.Controllers
             {
                 PatientId = contact.PatientId,
                 PatientContactId = contact.ContactId,
-                ContactType = contact.Type
+                ContactType = contact.Type,
+                InfectCourseId = _context.TblInfectCourses.FirstOrDefault(e => e.InfectCourseLong == contact.InfectCourseName)?.InfectCourseId
             };
 
             _context.TblPatientContacts.Attach(item);
