@@ -127,7 +127,7 @@ namespace HIVBackend.Controllers
                     VacId= item.VacId,
                     DVac1 = item.DVac1,
                     DVac2 = item.DVac2,
-                    VacName = _context.TblListVacs.FirstOrDefault(e => e.VacId == item.VacId)?.VacName
+                    VacName = _context.TblListVacs.FirstOrDefault(e => e.VacId == item.VacName)?.VacName
                 });
             }
 
@@ -188,8 +188,9 @@ namespace HIVBackend.Controllers
         public IActionResult GetFio(int patientId)
         {
             var patient = _context.TblPatientCards.First(e => e.PatientId == patientId);
+            string fio = patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName;
 
-            return Ok(patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName);
+            return Ok(new{ fio = fio});
         }
 
         [HttpDelete, Route("DelContact")]
@@ -267,8 +268,8 @@ namespace HIVBackend.Controllers
         public IActionResult DelChemsex(int id)
         {
             TblPatientContactChemsex item = _context.TblPatientContactChemsexes.First(e => e.DrugId == id);
-                
-            //_context.TblPatientContactChemsexes.Attach(item);
+
+            _context.TblPatientContactChemsexes.Attach(item);
             _context.TblPatientContactChemsexes.Remove(item);
             _context.SaveChanges();
             return Ok();
@@ -278,8 +279,10 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult CreateChemsex(Chemsex chemsex)
         {
+            int maxId = _context.TblPatientContactChemsexes.Max(e => e.DrugId) + 1;
             TblPatientContactChemsex item = new()
             {
+                DrugId = maxId,
                 PatientId = chemsex.PatientId,
                 YNId = _context.TblListYns.FirstOrDefault(e => e.YNName == chemsex.YnName)?.IdYN,
                 DrugName = chemsex.DrugName,
@@ -289,7 +292,10 @@ namespace HIVBackend.Controllers
             _context.TblPatientContactChemsexes.Attach(item);
             _context.TblPatientContactChemsexes.Add(item);
             _context.SaveChanges();
-            return Ok();
+            //int chemsexId = item.DrugId;
+            //int chemsexId = _context.TblPatientContactChemsexes.First(e => e.PatientId == item.PatientId
+            //&& e.YNId == item.YNId && e.DrugName == item.DrugName && e.ContactType == item.ContactType).DrugId;
+            return Ok(maxId);
         }
 
         [HttpPost, Route("UpdateChemsex")]
@@ -313,7 +319,7 @@ namespace HIVBackend.Controllers
             return Ok();
         }
 
-        [HttpPost, Route("DelPavInj")]
+        [HttpDelete, Route("DelPavInj")]
         [Authorize(Roles = "User")]
         public IActionResult DelPavInj(int id)
         {
@@ -332,8 +338,10 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult CreatePavInj(Pav pav)
         {
+            int maxId = _context.TblPatientContactPavInjs.Max(e => e.DrugId) + 1;
             TblPatientContactPavInj item = new()
             {
+                DrugId = maxId,
                 PatientId = pav.PatientId,
                 YNId = _context.TblListYns.FirstOrDefault(e => e.YNName == pav.YnName)?.IdYN,
                 DrugName = pav.DrugName,
@@ -344,7 +352,7 @@ namespace HIVBackend.Controllers
             _context.TblPatientContactPavInjs.Attach(item);
             _context.TblPatientContactPavInjs.Add(item);
             _context.SaveChanges();
-            return Ok();
+            return Ok(maxId);
         }
 
         [HttpPost, Route("UpdatePavInj")]
@@ -370,7 +378,7 @@ namespace HIVBackend.Controllers
             return Ok();
         }
 
-        [HttpPost, Route("DelPavNotInj")]
+        [HttpDelete, Route("DelPavNotInj")]
         [Authorize(Roles = "User")]
         public IActionResult DelPavNotInj(int id)
         {
@@ -389,8 +397,10 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult CreatePavNotInj(Pav pav)
         {
+            int maxId = _context.TblPatientContactPavNotInjs.Max(e => e.DrugId) + 1;
             TblPatientContactPavNotInj item = new()
             {
+                DrugId = maxId,
                 PatientId = pav.PatientId,
                 YNId = _context.TblListYns.FirstOrDefault(e => e.YNName == pav.YnName)?.IdYN,
                 DrugName = pav.DrugName,
@@ -401,7 +411,7 @@ namespace HIVBackend.Controllers
             _context.TblPatientContactPavNotInjs.Attach(item);
             _context.TblPatientContactPavNotInjs.Add(item);
             _context.SaveChanges();
-            return Ok();
+            return Ok(maxId);
         }
 
         [HttpPost, Route("UpdatePavNotInj")]
@@ -446,8 +456,10 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult CreateCovidVac(CovidVac covidVac)
         {
+            int maxId = _context.TblCovidVacs.Max(e =>e.VacId) + 1;
             TblCovidVac item = new()
             {
+                VacId = maxId,
                 DVac1 = covidVac.DVac1 != null && covidVac.DVac1?.Length != 0 ? DateOnly.Parse(covidVac.DVac1) : null,
                 DVac2 = covidVac.DVac2 != null && covidVac.DVac2?.Length != 0 ? DateOnly.Parse(covidVac.DVac2) : null,
                 VacName = _context.TblListVacs.FirstOrDefault(e => e.VacName == covidVac.VacName)?.VacId,
@@ -457,7 +469,7 @@ namespace HIVBackend.Controllers
             _context.TblCovidVacs.Attach(item);
             _context.TblCovidVacs.Add(item);
             _context.SaveChanges();
-            return Ok();
+            return Ok(maxId);
         }
 
         [HttpPost, Route("UpdateCovidVac")]
@@ -484,8 +496,10 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult CreateCovid(Covid covid)
         {
+            int maxId = _context.TblCovids.Max(e => e.IdCovid) + 1;
             TblCovid item = new()
             {
+                IdCovid = maxId,
                 PatientId = covid.PatientId,
                 DPositivResCovid = covid.DPositivRes != null && covid.DPositivRes?.Length != 0 ? DateOnly.Parse(covid.DPositivRes) : null,
                 DNegativeResCovid = covid.DNegativeRes != null && covid.DNegativeRes?.Length != 0 ? DateOnly.Parse(covid.DNegativeRes) : null,
@@ -495,7 +509,7 @@ namespace HIVBackend.Controllers
             _context.TblCovids.Attach(item);
             _context.TblCovids.Add(item);
             _context.SaveChanges();
-            return Ok();
+            return Ok(maxId);
         }
 
         [HttpPost, Route("UpdateCovid")]
@@ -514,6 +528,124 @@ namespace HIVBackend.Controllers
             _context.Entry(item).Property(e => e.DNegativeResCovid).IsModified = true;
             item.CovidMkb10 = _context.TblListMkb10Covids.FirstOrDefault(e => e.Mkb10LongName == covid.CovidMKB)?.Mkb10Id;
             _context.Entry(item).Property(e => e.CovidMkb10).IsModified = true;
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost, Route("UpdatePatient")]
+        [Authorize(Roles = "User")]
+        public IActionResult UpdatePatient(PatientCardEpidForm patient)
+        {
+            TblPatientCard item = new()
+            {
+                PatientId = patient.PatientId
+            };
+            _context.TblPatientCards.Attach(item);
+
+            item.DtMailReg = patient.DtMailReg != null && patient.DtMailReg?.Length != 0 ? DateOnly.Parse(patient.DtMailReg) : null;
+            _context.Entry(item).Property(e => e.DtMailReg).IsModified = true;
+            item.EpidemTimeInfectStart = patient.EpidTimeInfectStart != null && patient.EpidTimeInfectStart?.Length != 0 ? DateOnly.Parse(patient.EpidTimeInfectStart) : null;
+            _context.Entry(item).Property(e => e.EpidemTimeInfectStart).IsModified = true;
+            item.EpidemTimeInfectEnd = patient.EpidTimeInfectEnd != null && patient.EpidTimeInfectEnd?.Length != 0 ? DateOnly.Parse(patient.EpidTimeInfectEnd) : null;
+            _context.Entry(item).Property(e => e.EpidemTimeInfectEnd).IsModified = true;
+
+
+            item.NumMail = patient.NumMail;
+            _context.Entry(item).Property(e => e.NumMail).IsModified = true;
+            item.EpidemDescr = patient.EpidemCom;
+            _context.Entry(item).Property(e => e.EpidemDescr).IsModified = true;
+
+            if (patient.EduName != null)
+                if (patient.EduName.Length != 0)
+                {
+                    var id = _context.TblListEducations.First(e => e.EduName == patient.EduName)?.EducationId;
+                    if (id != item.EduId)
+                        item.EduId = id;
+                }
+                else
+                {
+                    item.EduId = null;
+                    _context.Entry(item).Property(e => e.EduId).IsModified = true;
+                }
+
+            if (patient.FamilyStatusName != null)
+                if (patient.FamilyStatusName.Length != 0)
+                {
+                    var id = _context.TblListFamilyStatuses.First(e => e.FammilyStatusName == patient.FamilyStatusName)?.FamilyStatusId;
+                    if (id != item.FamilyStatusId)
+                        item.FamilyStatusId = id;
+                }
+                else
+                {
+                    item.FamilyStatusId = null;
+                    _context.Entry(item).Property(e => e.FamilyStatusId).IsModified = true;
+                }
+
+            if (patient.EmploymentName != null)
+                if (patient.EmploymentName.Length != 0)
+                {
+                    var id = _context.TblListEmloyments.First(e => e.EmploymentName == patient.EmploymentName)?.EmploymentId;
+                    if (id != item.EmploymentId)
+                        item.EmploymentId = id;
+                }
+                else
+                {
+                    item.EmploymentId = null;
+                    _context.Entry(item).Property(e => e.EmploymentId).IsModified = true;
+                }
+
+            if (patient.TransName != null)
+                if (patient.TransName.Length != 0)
+                {
+                    var id = _context.TblListTrans.First(e => e.TransName == patient.TransName)?.TransId;
+                    if (id != item.TransId)
+                        item.TransId = id;
+                }
+                else
+                {
+                    item.TransId = null;
+                    _context.Entry(item).Property(e => e.TransId).IsModified = true;
+                }
+
+            if (patient.TransmitionMechName != null)
+                if (patient.TransmitionMechName.Length != 0)
+                {
+                    var id = _context.TblListTransmisionMeches.First(e => e.TransmisiomMechName == patient.TransmitionMechName)?.TransmissionMechId;
+                    if (id != item.TransmitionMechId)
+                        item.TransmitionMechId = id;
+                }
+                else
+                {
+                    item.TransmitionMechId = null;
+                    _context.Entry(item).Property(e => e.TransmitionMechId).IsModified = true;
+                }
+
+            if (patient.SituationDetectName != null)
+                if (patient.SituationDetectName.Length != 0)
+                {
+                    var id = _context.TblListSituationDetects.First(e => e.SituationDetectName == patient.SituationDetectName)?.SituationDetectId;
+                    if (id != item.SituationtDetectId)
+                        item.SituationtDetectId = id;
+                }
+                else
+                {
+                    item.SituationtDetectId = null;
+                    _context.Entry(item).Property(e => e.SituationtDetectId).IsModified = true;
+                }
+
+            if (patient.EpidDocName != null)
+                if (patient.EpidDocName.Length != 0)
+                {
+                    var id = _context.TblListEpidDoctors.First(e => e.DoctorName == patient.EpidDocName)?.IdDoctor;
+                    if (id != item.EpidDocId)
+                        item.EpidDocId = id;
+                }
+                else
+                {
+                    item.EpidDocId = null;
+                    _context.Entry(item).Property(e => e.EpidDocId).IsModified = true;
+                }
+
             _context.SaveChanges();
             return Ok();
         }

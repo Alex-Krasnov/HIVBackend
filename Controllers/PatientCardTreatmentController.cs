@@ -333,7 +333,9 @@ namespace HIVBackend.Controllers
             _context.TblPatientCards.Attach(item);
 
             item.PatientDescr = patient.Com;
+            _context.Entry(item).Property(e => e.PatientDescr).IsModified = true;
             item.StageDescr = patient.StageCom;
+            _context.Entry(item).Property(e => e.StageDescr).IsModified = true;
 
             if (patient.Invalid != null)
                 if (patient.Invalid.Length != 0)

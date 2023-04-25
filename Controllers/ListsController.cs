@@ -411,5 +411,16 @@ namespace HIVBackend.Controllers
             var inList = _context.TblListYns.Any(e => e.YNName == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListPatientCard")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListPatientCard(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblPatientCards.Any(e => e.PatientId == int.Parse(data.Str));
+            return Ok(inList);
+        }
     }
 }
