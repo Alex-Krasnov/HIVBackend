@@ -422,5 +422,137 @@ namespace HIVBackend.Controllers
             var inList = _context.TblPatientCards.Any(e => e.PatientId == int.Parse(data.Str));
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListSpecs")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListSpecs(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblSpecs.Any(e => e.SpecLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListDoctors")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListDoctors(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblDoctors.Any(e => e.DoctorLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListCabinets")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListCabinets(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblCabinets.Any(e => e.CabinetLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListRegTimes")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListRegTimes(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblRegTimes.Any(e => e.RegTimeLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInList13")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInList13(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblTalonListOfValues.Where(e => e.TalonField == 13).Any(e => e.ValueDescr == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInList14")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInList14(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblTalonListOfValues.Where(e => e.TalonField == 14).Any(e => e.ValueDescr == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInList21")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInList21(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblTalonListOfValues.Where(e => e.TalonField == 21).Any(e => e.ValueDescr == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInList22")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInList22(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblTalonListOfValues.Where(e => e.TalonField == 22).Any(e => e.ValueDescr == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInList24")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInList24(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblTalonListOfValues.Where(e => e.TalonField == 24).Any(e => e.ValueDescr == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInList25")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInList25(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblTalonListOfValues.Where(e => e.TalonField == 25).Any(e => e.ValueDescr == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInList35")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInList35(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblTalonListOfValues.Where(e => e.TalonField == 35).Any(e => e.ValueDescr == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInList36")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInList36(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblTalonListOfValues.Where(e => e.TalonField == 36).Any(e => e.ValueDescr == data.Str);
+            return Ok(inList);
+        }
     }
 }

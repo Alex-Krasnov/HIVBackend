@@ -17,7 +17,7 @@ public partial class TblPatientRegistry
 
     public string? RegDescr { get; set; }
 
-    public int? RegCheck { get; set; }
+    public Boolean? RegCheck { get; set; }
 
     public int? Numpp { get; set; }
 }
