@@ -22,15 +22,15 @@ namespace HIVBackend.Controllers
         }
 
         [HttpGet]
-        //[Authorize(Roles = "User")]
+        [Authorize(Roles = "User")]
         public IActionResult Get(int patientId)
         {
-            List<FrmVirusLoad> virusLoads = new();
-            List<FrmVirusLoadQual> virusLoadsQuals = new();
-            List<FrmCMV> cMVs = new();
+            List<FrmDiag3Col> virusLoads = new();
+            List<FrmDiag2Col> virusLoadsQuals = new();
+            List<FrmDiag3Col> cMVs = new();
             List<FrmImStat> imStats = new();
             List<FrmImStatCD348> imStatCD348s = new();
-            List<FrmIHL> iHLs = new();
+            List<FrmDiag2Col> iHLs = new();
 
         TblPatientCard patient = _context.TblPatientCards.Where(e => e.PatientId == patientId && e.IsActive == true).ToList().FirstOrDefault();
             if (patient is null)
