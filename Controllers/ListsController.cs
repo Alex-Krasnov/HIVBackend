@@ -554,5 +554,38 @@ namespace HIVBackend.Controllers
             var inList = _context.TblTalonListOfValues.Where(e => e.TalonField == 36).Any(e => e.ValueDescr == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListVl")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListVl(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblVloadResults.Any(e => e.VloadResultLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListHc")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListHc(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblHepatitResults.Any(e => e.HepatitResultLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListHb")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListHb(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblHepatitResult2s.Any(e => e.HepatitResult2Long == data.Str);
+            return Ok(inList);
+        }
     }
 }
