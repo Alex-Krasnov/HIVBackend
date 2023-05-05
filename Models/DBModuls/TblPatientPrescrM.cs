@@ -33,7 +33,7 @@ public partial class TblPatientPrescrM
 
     public double? GivePackNum { get; set; }
 
-    public int? GiveDateCheck1 { get; set; }
+    public bool? GiveDateCheck1 { get; set; }
 
     public DateOnly? KorvetDateImp { get; set; }
 

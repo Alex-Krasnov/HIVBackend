@@ -587,5 +587,27 @@ namespace HIVBackend.Controllers
             var inList = _context.TblHepatitResult2s.Any(e => e.HepatitResult2Long == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListFinSource")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListFinSource(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblFinSources.Any(e => e.FinSourceLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListMedicine")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListMedicine(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblMedicines.Any(e => e.MedicineLong == data.Str);
+            return Ok(inList);
+        }
     }
 }
