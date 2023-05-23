@@ -609,5 +609,38 @@ namespace HIVBackend.Controllers
             var inList = _context.TblMedicines.Any(e => e.MedicineLong == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListPregCheck")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListPregCheck(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblPregChecks.Any(e => e.PregCheckLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListBirthType")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListBirthType(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblBirthTypes.Any(e => e.BirthTypeLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListChildCount")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListChildCount(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblChildCounts.Any(e => e.ChildCountLong == data.Str);
+            return Ok(inList);
+        }
     }
 }

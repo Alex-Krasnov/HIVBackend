@@ -19,7 +19,7 @@ public partial class TblPatientPregnantM
 
     public string? ChildThirdName { get; set; }
 
-    public int? PwcheckYn { get; set; }
+    public bool? PwcheckYn { get; set; }
 
     public int? BirthTypeId { get; set; }
 
