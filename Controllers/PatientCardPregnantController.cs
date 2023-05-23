@@ -99,7 +99,7 @@ namespace HIVBackend.Controllers
                 ChildBirthDate = preg.ChildBirthDate != null && preg.ChildBirthDate?.Length != 0 ? DateOnly.Parse(preg.ChildBirthDate) : null,
                 BirthTypeId = _context.TblBirthTypes.FirstOrDefault(e => e.BirthTypeLong == preg.BirthType)?.BirthTypeId,
                 ChildCountId = _context.TblChildCounts.FirstOrDefault(e => e.ChildCountLong == preg.ChildCount)?.ChildCountId,
-                ChildPatientId = preg.ChildId,
+                ChildPatientId = preg.ChildId.Length == 0 ? null : int.Parse(preg.ChildId),
                 MedicineStMonthNo = (short?)preg.StartMonth,
                 ChildFamilyName = preg.ChildFamilyName,
                 ChildFirstName = preg.ChildFirstName,
@@ -139,7 +139,7 @@ namespace HIVBackend.Controllers
                 _context.Entry(item).Property(e => e.ChildBirthDate).IsModified = true;
                 item.ChildCountId = _context.TblChildCounts.FirstOrDefault(e => e.ChildCountLong == preg.ChildCount)?.ChildCountId;
                 _context.Entry(item).Property(e => e.ChildCountId).IsModified = true;
-                item.ChildPatientId = preg.ChildId;
+                item.ChildPatientId = preg.ChildId.Length == 0 ? null : int.Parse(preg.ChildId);
                 _context.Entry(item).Property(e => e.ChildPatientId).IsModified = true;
                 item.MedicineStMonthNo = (short?)preg.StartMonth;
                 _context.Entry(item).Property(e => e.MedicineStMonthNo).IsModified = true;
@@ -176,7 +176,7 @@ namespace HIVBackend.Controllers
                 ChildBirthDate = preg.ChildBirthDate != null && preg.ChildBirthDate?.Length != 0 ? DateOnly.Parse(preg.ChildBirthDate) : null,
                 BirthTypeId = _context.TblBirthTypes.FirstOrDefault(e => e.BirthTypeLong == preg.BirthType)?.BirthTypeId,
                 ChildCountId = _context.TblChildCounts.FirstOrDefault(e => e.ChildCountLong == preg.ChildCount)?.ChildCountId,
-                ChildPatientId = preg.ChildId,
+                ChildPatientId = preg.ChildId.Length == 0 ? null : int.Parse(preg.ChildId),
                 MedicineStMonthNo = (short?)preg.StartMonth,
                 ChildFamilyName = preg.ChildFamilyName,
                 ChildFirstName = preg.ChildFirstName,
