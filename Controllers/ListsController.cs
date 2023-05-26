@@ -686,5 +686,16 @@ namespace HIVBackend.Controllers
             var inList = _context.TblMaterHomes.Any(e => e.MaterhomeLong == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListJail")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListJail(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblJails.Any(e => e.JailLong == data.Str);
+            return Ok(inList);
+        }
     }
 }
