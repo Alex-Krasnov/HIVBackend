@@ -237,11 +237,11 @@ public partial class TblPatientCard
 
     public int? TransmitionMechId { get; set; }
 
-    public int? RefusalPhp { get; set; }
+    public bool? RefusalPhp { get; set; }
 
-    public int? RefusalResearch { get; set; }
+    public bool? RefusalResearch { get; set; }
 
-    public int? RefusalTherapy { get; set; }
+    public bool? RefusalTherapy { get; set; }
 
     public DateOnly? LetterCareDate { get; set; }
 

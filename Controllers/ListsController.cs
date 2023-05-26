@@ -642,5 +642,49 @@ namespace HIVBackend.Controllers
             var inList = _context.TblChildCounts.Any(e => e.ChildCountLong == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListFamilyType")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListFamilyType(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblFamilyTypes.Any(e => e.FamilyTypeLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListChildPlace")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListChildPlace(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblChildPlaces.Any(e => e.ChildPlaceLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListChildPhp")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListChildPhp(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblChildPhps.Any(e => e.ChildPhpLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListMaterHome")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListMaterHome(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblMaterHomes.Any(e => e.MaterhomeLong == data.Str);
+            return Ok(inList);
+        }
     }
 }
