@@ -1218,7 +1218,7 @@ public partial class HivContext : DbContext
                 .HasMaxLength(100)
                 .IsFixedLength()
                 .HasColumnName("mkb10_long_name");
-            entity.Property(e => e.Mkb10SortName)
+            entity.Property(e => e.Mkb10ShortName)
                 .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("MKB10_sort_name");

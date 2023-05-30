@@ -697,5 +697,148 @@ namespace HIVBackend.Controllers
             var inList = _context.TblJails.Any(e => e.JailLong == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListOutHosp")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListOutHosp(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListOutHosps.Any(e => e.HospName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListClinVarCovid")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListClinVarCovid(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListClinVarCovids.Any(e => e.ClinVarCovidName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListCourseCovid")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListClinCourseCovid(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListCourseCovids.Any(e => e.CourseCovidName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListMkb10CovidShort")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListMkb10CovidShort(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListMkb10Covids.Any(e => e.Mkb10ShortName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListMkb10CovidLong")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListMkb10CovidLong(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListMkb10Covids.Any(e => e.Mkb10LongName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListMkbTuderShort")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListMkbTuderShort(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListMkbTuders.Any(e => e.TuberNameShort == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListMkbTuderLong")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListMkbTuderLong(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListMkbTuders.Any(e => e.TuberNameLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListMkbPneumoniaShort")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListMkbPneumoniaShort(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListMkbPneumonia.Any(e => e.PneumoniaNameShort == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListMkbPneumoniaLong")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListMkbPneumoniaLong(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListMkbPneumonia.Any(e => e.PneumoniaNameLong == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListAvlType")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListAvlType(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListAvlTypes.Any(e => e.TypeAvlName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListCommitment")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListCommitment(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListCommitments.Any(e => e.CommitmentName == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListFullMkb10Short")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListFullMkb10Short(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListFullMkb10s.Any(e => e.DieCourseShort == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListFullMkb10Long")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListFullMkb10Long(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListFullMkb10s.Any(e => e.DieCourseLong == data.Str);
+            return Ok(inList);
+        }
     }
 }

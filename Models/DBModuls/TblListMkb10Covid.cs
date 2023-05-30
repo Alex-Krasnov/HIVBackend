@@ -9,7 +9,7 @@ public partial class TblListMkb10Covid
 
     public string? Mkb10LongName { get; set; }
 
-    public string? Mkb10SortName { get; set; }
+    public string? Mkb10ShortName { get; set; }
 
     public virtual ICollection<TblCovid> TblCovids { get; } = new List<TblCovid>();
 }

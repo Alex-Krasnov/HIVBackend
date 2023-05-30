@@ -494,7 +494,7 @@ namespace HIVBackend.Controllers
 
         [HttpPost, Route("CreateCovid")]
         [Authorize(Roles = "User")]
-        public IActionResult CreateCovid(Covid covid)
+        public IActionResult CreateCovid(CovidEpid covid)
         {
             int maxId = _context.TblCovids.Max(e => e.IdCovid) + 1;
             TblCovid item = new()
@@ -514,7 +514,7 @@ namespace HIVBackend.Controllers
 
         [HttpPost, Route("UpdateCovid")]
         [Authorize(Roles = "User")]
-        public IActionResult UpdateCovid(Covid covid)
+        public IActionResult UpdateCovid(CovidEpid covid)
         {
             TblCovid item = new()
             {

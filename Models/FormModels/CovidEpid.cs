@@ -1,6 +1,6 @@
 ﻿namespace HIVBackend.Models.FormModels
 {
-    public class Covid
+    public class CovidEpid
     {
         public int PatientId { get; set; }
         public int? CovidId { get; set; }
