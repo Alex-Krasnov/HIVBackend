@@ -840,5 +840,39 @@ namespace HIVBackend.Controllers
             var inList = _context.TblListFullMkb10s.Any(e => e.DieCourseLong == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListYNA")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListYNA(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+            List<string> yna = new(){ "Да", "Нет", "Все" };
+
+            var inList = yna.Any(e => data.Str.Contains(e));
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListAids12")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListAids12(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblAids12s.Any(e => e.Aids12Long == data.Str);
+            return Ok(inList);
+        }
+
+        [HttpPost, Route("getInListChemop")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListChemop(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblChemops.Any(e => e.ChemopLong == data.Str);
+            return Ok(inList);
+        }
     }
 }

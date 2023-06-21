@@ -2,7 +2,7 @@
 {
     public class SearchFastForm
     {
-        public int? PatientId { get; set; }
+        public string? PatientId { get; set; }
         public string? CardNo { get; set; }
         public string? FamilyName { get; set;}
         public string? FirstName { get; set; }
