@@ -3644,6 +3644,9 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.FioChange)
                 .HasColumnName("fio_change");
+
+            entity.Property(e => e.Age)
+                .HasColumnName("age");
         });
 
         OnModelCreatingPartial(modelBuilder);

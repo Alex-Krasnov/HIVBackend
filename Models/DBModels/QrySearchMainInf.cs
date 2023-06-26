@@ -63,4 +63,5 @@ public partial class QrySearchMainInf
     public DateOnly? PasWhen { get; set; }
     public string? PasWhom { get; set; }
     public string? FioChange { get; set; }
+    public int? Age { get; set; }
 }

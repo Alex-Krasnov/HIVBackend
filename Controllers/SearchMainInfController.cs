@@ -3,23 +3,10 @@ using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
 using System.Data;
-using System.Dynamic;
 using System.Linq.Expressions;
-using System.Linq;
-using System.Reflection.Metadata;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System.Data.Common;
-using System.Xml.Linq;
-using static Npgsql.PostgresTypes.PostgresCompositeType;
-using System.Reflection;
-using Microsoft.EntityFrameworkCore.Metadata;
-using System.Collections;
 using HIVBackend.Interfaces;
 
 namespace HIVBackend.Controllers
@@ -54,7 +41,7 @@ namespace HIVBackend.Controllers
             outModel.ListResIb = _context.TblIbResults.Select(e => e.IbResultShort).OrderBy(e => e).ToList();
             outModel.ListSelectBlot = new() { "Все", "Первый", "Последний", "Перв.и посл." };
             outModel.ListHospCourse = _context.TblHospCourses.Select(e => e.HospCourseLong).OrderBy(e => e).ToList();
-            outModel.ListAge = _context.TblAgegrs.Select(e => e.AgegrLong).OrderBy(e => e).ToList();
+            outModel.ListAge = _context.TblAgegrs.Select(e => e.AgegrLong).ToList();
             outModel.ListArvt = _context.TblArvts.Select(e => e.ArvtLong).OrderBy(e => e).ToList();
             outModel.ListCodeMKB10 = _context.TblCodeMkb10s.Select(e => e.CodeMkb10Long).OrderBy(e => e).ToList();
             outModel.ListYN = _context.TblListYns.Select(e => e.YNName).OrderBy(e => e).ToList();
@@ -242,8 +229,12 @@ namespace HIVBackend.Controllers
                         activeColumns.Add("HospCourseLong");
                     }
 
-                    //if (key.Name == "selectAge")
-                    //    columName.Add("Возраст");
+                    if (key.Name == "selectAge")
+                    {
+                        columName.Add("Возраст");
+
+                        activeColumns.Add("Age");
+                    }
 
                     if (key.Name == "selectCardNo")
                     {
@@ -351,6 +342,56 @@ namespace HIVBackend.Controllers
                 }
             }
 
+            List<string> ages = new();
+
+            if (form.age.Contains("0 - 1"))
+            {
+                ages.Add("0");
+                ages.Add("1");
+            }
+            if (form.age.Contains("1 - 2"))
+            {
+                ages.Add("1");
+                ages.Add("2");
+            }
+            if (form.age.Contains("3 - 4"))
+            {
+                ages.Add("3");
+                ages.Add("4");
+            }
+
+            if (form.age.Contains("5 - 9"))
+                for(int i = 5;i <= 9; i++)
+                    ages.Add($"{i}");
+
+            if (form.age.Contains("10 - 14"))
+                for (int i = 10; i <= 14; i++)
+                    ages.Add($"{i}");
+
+            if (form.age.Contains("15 - 17"))
+                for (int i = 15; i <= 17; i++)
+                    ages.Add($"{i}");
+
+            if (form.age.Contains("18 - 24"))
+                for (int i = 18; i <= 24; i++)
+                    ages.Add($"{i}");
+
+            if (form.age.Contains("25 - 34"))
+                for (int i = 25; i <= 34; i++)
+                    ages.Add($"{i}");
+
+            if (form.age.Contains("35 - 44"))
+                for (int i = 35; i <= 44; i++)
+                    ages.Add($"{i}");
+
+            if (form.age.Contains("45 - 49"))
+                for (int i = 45; i <= 49; i++)
+                    ages.Add($"{i}");
+
+            if (form.age.Contains("50 - 59"))
+                for (int i = 50; i <= 59; i++)
+                    ages.Add($"{i}");
+
             var qryWhere = _context.QrySearchMainInfs.Where(e =>
                         (form.dateInpStart.Length != 0 ? e.InputDate >= DateOnly.Parse(form.dateInpStart) : true) &&
                         (form.dateInpEnd.Length != 0 ? e.InputDate <= DateOnly.Parse(form.dateInpEnd) : true) &&
@@ -396,20 +437,8 @@ namespace HIVBackend.Controllers
                         (form.ibSelect == "Перв.и посл." ? (e.Last1 == true || e.First1 == true) : true) &&
                         (form.hospCourse[0] != "Все" ? form.hospCourse.Contains(e.ShowIllnessLong) : true) &&
 
-                        (form.age[0] != "Все" ? (
-                            (form.age.Contains("0 - 1") ? e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-1) : true) ||
-                            (form.age.Contains("1 - 2") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-2) && e.BirthDate < DateOnly.FromDateTime(DateTime.Now).AddYears(-1)) : true) ||
-                            (form.age.Contains("3 - 4") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-4) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-3)) : true) ||
-                            (form.age.Contains("5 - 9") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-9) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-5)) : true) ||
-                            (form.age.Contains("10 - 14") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-14) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-10)) : true) ||
-                            (form.age.Contains("15 - 17") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-17) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-15)) : true) ||
-                            (form.age.Contains("18 - 24") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-24) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-18)) : true) ||
-                            (form.age.Contains("25 - 34") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-34) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-25)) : true) ||
-                            (form.age.Contains("35 - 44") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-44) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-35)) : true) ||
-                            (form.age.Contains("45 - 49") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-49) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-45)) : true) ||
-                            (form.age.Contains("50 - 59") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-59) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-50)) : true) ||
-                            (form.age.Contains("> 60") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-60)) : true)
-                        ) : true) &&
+                        (form.age[0] != "Все" && form.age.Contains("> 60") != true ? (ages.Contains(e.Age.ToString())) : true) &&
+                        (form.age[0] != "Все" && form.age.Contains("> 60") ? ( ages.Contains(e.Age.ToString()) || e.Age >= 60) : true) &&
 
                         (form.cardNo.Length != 0 ? e.CardNo.ToLower().StartsWith(form.cardNo.ToLower()) : true) &&
                         (form.art[0] != "Все" ? form.art.Contains(e.ArvtLong) : true) &&
@@ -444,6 +473,21 @@ namespace HIVBackend.Controllers
                         (form.dateRegStart.Length != 0 ? e.DtRegEnd >= DateOnly.Parse(form.dateRegStart) : true) &&
                         (form.dateRegEnd.Length != 0 ? e.DtRegEnd <= DateOnly.Parse(form.dateRegEnd) : true)
                             );
+
+            //(form.age[0] != "Все" ? (
+            //                (form.age.Contains("0 - 1") ? e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-1) : true) ||
+            //                (form.age.Contains("1 - 2") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-2) && e.BirthDate < DateOnly.FromDateTime(DateTime.Now).AddYears(-1)) : true) ||
+            //                (form.age.Contains("3 - 4") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-4) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-3)) : true) ||
+            //                (form.age.Contains("5 - 9") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-9) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-5)) : true) ||
+            //                (form.age.Contains("10 - 14") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-14) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-10)) : true) ||
+            //                (form.age.Contains("15 - 17") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-17) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-15)) : true) ||
+            //                (form.age.Contains("18 - 24") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-24) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-18)) : true) ||
+            //                (form.age.Contains("25 - 34") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-34) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-25)) : true) ||
+            //                (form.age.Contains("35 - 44") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-44) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-35)) : true) ||
+            //                (form.age.Contains("45 - 49") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-49) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-45)) : true) ||
+            //                (form.age.Contains("50 - 59") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-59) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-50)) : true) ||
+            //                (form.age.Contains("> 60") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-60)) : true)
+            //            ) : true) &&
 
             var lambda = CreateLambdaSelect(activeColumns);
             var selected = qryWhere.Select(lambda);
