@@ -12,7 +12,7 @@ namespace HIVBackend.Models.OutputModel
         public DateOnly? BirthDate { get; set; }
         public string? Sex { get; set; }
         public DateOnly? RegOnDate { get; set; }
-        public DateOnly? RegOffDate { get; set;}
+        public DateOnly? RegOffDate { get; set; }
         public string? RegOffReason { get; set; }
         public string? UnrzFr { get; set; }
         public string? Region { get; set; }
@@ -40,9 +40,9 @@ namespace HIVBackend.Models.OutputModel
         public string? PlaceCheck { get; set; }
         public string? CodeMKB10 { get; set; }
         public string? CheckCourseShort { get; set; }
-        public string? CheckCourseLong { get; set;}
+        public string? CheckCourseLong { get; set; }
         public string? InfectCourseShort { get; set; }
-        public string? InfectCourseLong { get;set; }
+        public string? InfectCourseLong { get; set; }
         public string? DieCourseShort { get; set; }
         public string? DieCourseLong { get; set; }
         public string? CardNo { get; set; }
@@ -63,6 +63,7 @@ namespace HIVBackend.Models.OutputModel
         public string? Invalid { get; set; }
         public string? Archive { get; set; }
         public string? CodeWord { get; set; }
+        public bool? FlgDiagnosisAfterDeath { get; set; }
 
         public List<string>? ListSex { get; set; }
         public List<string>? ListRegOffReason { get; set; }
@@ -75,7 +76,7 @@ namespace HIVBackend.Models.OutputModel
         public List<string>? ListInfectCourseShort { get; set; }
         public List<string>? ListInfectCourseLong { get; set; }
         public List<string>? ListDieCourseShort { get; set; }
-        public List<string>? ListDieCourseLong { get; set; }
+        public List<Tast>? ListDieCourseLong { get; set; }
         public List<string>? ListVulnerableGroup { get; set; }
         public List<string>? ListARVT { get; set; }
         public List<string>? ListInvalid { get; set; }
@@ -100,6 +101,12 @@ namespace HIVBackend.Models.OutputModel
         public bool? Last { get; set; }
         public bool? Ifa { get; set; }
         public DateOnly? InputDate { get; set; }
+    }
+
+    public class Tast
+    {
+        public string? Short { get; set; }
+        public string? Long { get; set; }
     }
 
     public class FrmStage

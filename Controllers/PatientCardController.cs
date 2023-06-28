@@ -113,8 +113,8 @@ namespace HIVBackend.Controllers
             patientCardMain.CheckCourseLong = _context.TblCheckCourses.FirstOrDefault(e => e.CheckCourseId == a.CheckCourseId)?.CheckCourseLong;
             patientCardMain.InfectCourseShort = _context.TblInfectCourses.FirstOrDefault(e => e.InfectCourseId == a.InfectCourseId)?.InfectCourseShort;
             patientCardMain.InfectCourseLong = _context.TblInfectCourses.FirstOrDefault(e => e.InfectCourseId == a.InfectCourseId)?.InfectCourseLong;
-            patientCardMain.DieCourseShort = _context.TblDieCourses.FirstOrDefault(e => e.DieCourseId == a.DieCourseId)?.DieCourseShort;
-            patientCardMain.DieCourseLong = _context.TblDieCourses.FirstOrDefault(e => e.DieCourseId == a.DieCourseId)?.DieCourseLong;
+            patientCardMain.DieCourseShort = _context.TblTempDieCureMkb10lists.FirstOrDefault(e => e.DieCourseId == a.DieCourseId)?.DieCourseShort;
+            patientCardMain.DieCourseLong = _context.TblTempDieCureMkb10lists.FirstOrDefault(e => e.DieCourseId == a.DieCourseId)?.DieCourseLong;
             patientCardMain.CardNo = a.CardNo;
             patientCardMain.VulnerableGroup = _context.TblListVulnerableGroups.FirstOrDefault(e => e.VulnerableGroupId == a.VulnerableGroupId)?.VulnerableGroupName;
             patientCardMain.RegOn = true;
@@ -133,6 +133,7 @@ namespace HIVBackend.Controllers
             patientCardMain.Invalid = _context.TblInvalids.FirstOrDefault(e => e.InvalidId == a.InvalidId)?.InvalidLong;
             patientCardMain.Archive = a.SnilsFed;
             patientCardMain.CodeWord = a.Codeword;
+            patientCardMain.FlgDiagnosisAfterDeath = a.FlgDiagnosisAfterDeath;
 
             patientCardMain.ListSex = _context.TblSexes.Select(e => e.SexShort)?.ToList();
             patientCardMain.ListRegOffReason = _context.TblInfectCourses
@@ -143,10 +144,16 @@ namespace HIVBackend.Controllers
             patientCardMain.ListCodeMKB = _context.TblCodeMkb10s.Select(e => e.CodeMkb10Long)?.ToList();
             patientCardMain.ListCheckCourseShort = _context.TblCheckCourses.Select(e => e.CheckCourseShort)?.ToList();
             patientCardMain.ListCheckCourseLong = _context.TblCheckCourses.Select(e => e.CheckCourseLong)?.ToList();
-            patientCardMain.ListInfectCourseShort = _context.TblInfectCourses.Select(e => e.InfectCourseShort)?.ToList();
-            patientCardMain.ListInfectCourseLong = _context.TblInfectCourses.Select(e => e.InfectCourseLong)?.ToList();
-            patientCardMain.ListDieCourseShort = _context.TblDieCourses.Select(e => e.DieCourseShort)?.ToList();
-            patientCardMain.ListDieCourseLong = _context.TblDieCourses.Select(e => e.DieCourseLong)?.ToList();
+            patientCardMain.ListInfectCourseShort = _context.TblInfectCourses.Where(e => e.InfectCourseShort != null).Select(e => e.InfectCourseShort)?.ToList();
+            patientCardMain.ListInfectCourseLong = _context.TblInfectCourses.Where(e => e.InfectCourseShort != null).Select(e => e.InfectCourseLong)?.ToList();
+
+
+            //patientCardMain.ListDieCourseShort = _context.TblTempDieCureMkb10lists.Select(e => e.DieCourseShort)?.ToList();
+            patientCardMain.ListDieCourseLong = _context.TblTempDieCureMkb10lists.Select(e => new Tast{ Short = e.DieCourseShort, Long = e.DieCourseLong })?.ToList();
+
+
+
+
             patientCardMain.ListVulnerableGroup = _context.TblListVulnerableGroups.Select(e => e.VulnerableGroupName)?.ToList();
             patientCardMain.ListARVT = _context.TblArvts.Select(e => e.ArvtShort)?.ToList();
             patientCardMain.ListInvalid = _context.TblInvalids.Select(e => e.InvalidLong)?.ToList();
@@ -460,6 +467,8 @@ namespace HIVBackend.Controllers
             _context.Entry(item).Property(e => e.Snils).IsModified = true;
             item.FioChange = patient.FioChange;
             _context.Entry(item).Property(e => e.FioChange).IsModified = true;
+            item.FlgDiagnosisAfterDeath = patient.FlgDiagnosisAfterDeath;
+            _context.Entry(item).Property(e => e.FlgDiagnosisAfterDeath).IsModified = true;
 
             DateOnly? dieDate = null, dieAidsDate = null;
             try { dieDate = DateOnly.Parse(patient.DieDate); } catch { }
@@ -560,7 +569,7 @@ namespace HIVBackend.Controllers
             if (patient.DieCourseId != null)
                 if (patient.DieCourseId.Length != 0)
                 {
-                    var id = _context.TblDieCourses.First(e => e.DieCourseShort == patient.DieCourseId)?.DieCourseId;
+                    var id = _context.TblTempDieCureMkb10lists.First(e => e.DieCourseShort == patient.DieCourseId)?.DieCourseId;
                     if (id != item.DieCourseId)
                         item.DieCourseId = id;
                 }

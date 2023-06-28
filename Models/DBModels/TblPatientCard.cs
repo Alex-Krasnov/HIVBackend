@@ -259,6 +259,7 @@ public partial class TblPatientCard
 
     public string? UnrzFr1 { get; set; }
     public bool IsActive { get; set; }
+    public bool? FlgDiagnosisAfterDeath { get; set; }
 
     public virtual TblAids12? Aids12 { get; set; }
 

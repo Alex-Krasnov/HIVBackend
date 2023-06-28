@@ -60,5 +60,6 @@
         public string? Codeword { get; set; }
         public string? Snils { get; set; }
         public string? FioChange { get; set; }
+        public bool? FlgDiagnosisAfterDeath { get; set; }
     }
 }

@@ -136,7 +136,7 @@ namespace HIVBackend.Controllers
             if (data.Str == null || data.Str?.Length == 0)
                 return Ok(true);
 
-            var inList = _context.TblDieCourses.Any(e => e.DieCourseLong == data.Str);
+            var inList = _context.TblTempDieCureMkb10lists.Any(e => e.DieCourseLong == data.Str);
             return Ok(inList);
         }
 
@@ -147,7 +147,7 @@ namespace HIVBackend.Controllers
             if (data.Str == null || data.Str?.Length == 0)
                 return Ok(true);
 
-            var inList = _context.TblDieCourses.Any(e => e.DieCourseShort == data.Str);
+            var inList = _context.TblTempDieCureMkb10lists.Any(e => e.DieCourseShort == data.Str);
             return Ok(inList);
         }
 

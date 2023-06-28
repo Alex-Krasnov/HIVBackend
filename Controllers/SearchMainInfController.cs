@@ -21,6 +21,7 @@ namespace HIVBackend.Controllers
         {
             _context = context;
         }
+
         [HttpGet]
         [Authorize(Roles = "User")]
         public IActionResult GetForm()
@@ -473,21 +474,6 @@ namespace HIVBackend.Controllers
                         (form.dateRegStart.Length != 0 ? e.DtRegEnd >= DateOnly.Parse(form.dateRegStart) : true) &&
                         (form.dateRegEnd.Length != 0 ? e.DtRegEnd <= DateOnly.Parse(form.dateRegEnd) : true)
                             );
-
-            //(form.age[0] != "Все" ? (
-            //                (form.age.Contains("0 - 1") ? e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-1) : true) ||
-            //                (form.age.Contains("1 - 2") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-2) && e.BirthDate < DateOnly.FromDateTime(DateTime.Now).AddYears(-1)) : true) ||
-            //                (form.age.Contains("3 - 4") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-4) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-3)) : true) ||
-            //                (form.age.Contains("5 - 9") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-9) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-5)) : true) ||
-            //                (form.age.Contains("10 - 14") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-14) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-10)) : true) ||
-            //                (form.age.Contains("15 - 17") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-17) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-15)) : true) ||
-            //                (form.age.Contains("18 - 24") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-24) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-18)) : true) ||
-            //                (form.age.Contains("25 - 34") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-34) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-25)) : true) ||
-            //                (form.age.Contains("35 - 44") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-44) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-35)) : true) ||
-            //                (form.age.Contains("45 - 49") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-49) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-45)) : true) ||
-            //                (form.age.Contains("50 - 59") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-59) && e.BirthDate <= DateOnly.FromDateTime(DateTime.Now).AddYears(-50)) : true) ||
-            //                (form.age.Contains("> 60") ? (e.BirthDate >= DateOnly.FromDateTime(DateTime.Now).AddYears(-60)) : true)
-            //            ) : true) &&
 
             var lambda = CreateLambdaSelect(activeColumns);
             var selected = qryWhere.Select(lambda);
