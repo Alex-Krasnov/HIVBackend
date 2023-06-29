@@ -31,6 +31,7 @@ public partial class QrySearchMainInf
     public string? CheckCourseLong { get; set; }
     public string? DieCourseShort { get; set; }
     public string? DieCourseLong { get; set; }
+    public int? DethtypeId { get; set; }
     public string? InfectCourseLong { get; set; }
     public string? ShowIllnessLong { get; set; }
     public DateOnly? StartDate { get; set; }
@@ -64,4 +65,6 @@ public partial class QrySearchMainInf
     public string? PasWhom { get; set; }
     public string? FioChange { get; set; }
     public int? Age { get; set; }
+    public int? RegtypeId { get; set; }
+    public int? FactRegtypeId { get; set; }   
 }

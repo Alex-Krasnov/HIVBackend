@@ -8,7 +8,7 @@
         public List<string>? ListInfectCourse { get; set; }
         public List<string>? ListCheckPlace { get; set; }//blot
         public List<string>? ListStage { get; set; }
-        public List<string>? ListCheckCourse { get; set; }
+        public List<Selector2Col>? ListCheckCourse { get; set; }
         public List<string>? ListDieCourse { get; set; }
         public List<string>? ListShowIllness { get; set; }
         public List<string>? ListResIb { get; set; }
@@ -21,5 +21,7 @@
         public List<string>? ListYNA { get; set; }
         public List<string>? ListAids12 { get; set; }
         public List<string>? ListChemop { get; set; }
+        public List<string>? ListDiePreset { get; set; }
+        public List<string>? ListRegionPreset { get; set; }
     }
 }

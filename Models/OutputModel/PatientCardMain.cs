@@ -76,7 +76,7 @@ namespace HIVBackend.Models.OutputModel
         public List<string>? ListInfectCourseShort { get; set; }
         public List<string>? ListInfectCourseLong { get; set; }
         public List<string>? ListDieCourseShort { get; set; }
-        public List<Tast>? ListDieCourseLong { get; set; }
+        public List<Selector2Col>? ListDieCourseLong { get; set; }
         public List<string>? ListVulnerableGroup { get; set; }
         public List<string>? ListARVT { get; set; }
         public List<string>? ListInvalid { get; set; }
@@ -101,12 +101,6 @@ namespace HIVBackend.Models.OutputModel
         public bool? Last { get; set; }
         public bool? Ifa { get; set; }
         public DateOnly? InputDate { get; set; }
-    }
-
-    public class Tast
-    {
-        public string? Short { get; set; }
-        public string? Long { get; set; }
     }
 
     public class FrmStage

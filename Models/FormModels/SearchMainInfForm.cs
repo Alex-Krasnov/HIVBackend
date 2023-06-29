@@ -35,6 +35,7 @@ namespace HIVBackend.Models.FormModels
         public string dateDieAidsEnd { get; set; }
         public string[]? checkCourse { get; set; }
         public string[]? dieCourse { get; set; }
+        public string diePreset { get; set; }
         public string[]? infectCourse { get; set; }
         public string[]? showIllnes { get; set; }
         public string dateShowIllnesStart { get; set; }
@@ -75,6 +76,8 @@ namespace HIVBackend.Models.FormModels
         public string dateChemprofEndEnd { get; set; }
         public string dateRegStart { get; set; }
         public string dateRegEnd { get; set; }
+        public string regionPreset { get; set; }
+        public string factRegionPreset { get; set; }
 
         public Boolean selectInpDate { get; set; }
         public Boolean selectPatientId { get; set; }

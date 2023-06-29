@@ -36,7 +36,7 @@ namespace HIVBackend.Controllers
                 .Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
             outModel.ListCheckPlace = _context.TblCheckPlaces.Select(e => e.CheckPlaceLong).OrderBy(e => e).ToList();
             outModel.ListStage = _context.TblDiagnoses.Select(e => e.DiagnosisLong).OrderBy(e => e).ToList();
-            outModel.ListCheckCourse = _context.TblCheckCourses.Select(e => e.CheckCourseLong).OrderBy(e => e).ToList();
+            outModel.ListCheckCourse = _context.TblCheckCourses.Select(e => new Selector2Col {Short = e.CheckCourseShort, Long = e.CheckCourseLong }).OrderBy(e => e.Short).ToList();
             outModel.ListDieCourse = _context.TblTempDieCureMkb10lists.Select(e => e.DieCourseLong).OrderBy(e => e).ToList();
             outModel.ListShowIllness = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong).OrderBy(e => e).ToList();
             outModel.ListResIb = _context.TblIbResults.Select(e => e.IbResultShort).OrderBy(e => e).ToList();
@@ -49,6 +49,8 @@ namespace HIVBackend.Controllers
             outModel.ListYNA = new() { "Да", "Нет", "Все" };
             outModel.ListAids12 = _context.TblAids12s.Select(e => e.Aids12Long).OrderBy(e => e).ToList();
             outModel.ListChemop = _context.TblChemops.Select(e => e.ChemopLong).OrderBy(e => e).ToList();
+            outModel.ListDiePreset = new() { "Все", "ВИЧ", "Не связанные с ВИЧ", "СПИД" };
+            outModel.ListRegionPreset = new() { "Все", "Московская обл.", "Иногородние", "Иностранные" };
 
             return Ok(outModel);
         }
@@ -425,8 +427,13 @@ namespace HIVBackend.Controllers
                         (form.dateDieAidsEnd.Length != 0 ? e.DieAidsDate <= DateOnly.Parse(form.dateDieAidsEnd) : true) &&
                         (form.checkCourse[0] != "Все" ? form.checkCourse.Contains(e.CheckCourseLong) : true) &&
                         (form.dieCourse[0] != "Все" ? form.dieCourse.Contains(e.DieCourseLong) : true) &&
+                        (form.diePreset == "ВИЧ" ? (e.DethtypeId == 1 || e.DethtypeId == 3) : true) &&
+                        (form.diePreset == "Не связанные с ВИЧ" ? e.DethtypeId == 2 : true) &&
+                        (form.diePreset == "СПИД" ? e.DethtypeId == 3 : true) &&
                         (form.infectCourse[0] != "Все" ? form.infectCourse.Contains(e.InfectCourseLong) : true) &&
                         (form.showIllnes[0] != "Все" ? form.showIllnes.Contains(e.ShowIllnessLong) : true) &&
+                        (form.dateShowIllnesStart.Length != 0 ? e.StartDate >= DateOnly.Parse(form.dateShowIllnesStart) : true) &&
+                        (form.dateShowIllnesEnd.Length != 0 ? e.StartDate <= DateOnly.Parse(form.dateShowIllnesEnd) : true) &&
                         (form.ibRes.Length != 0 ? e.IbResultShort == form.ibRes : true) &&
                         (form.dateIbResStart.Length != 0 ? e.BlotDate >= DateOnly.Parse(form.dateIbResStart) : true) &&
                         (form.dateIbResEnd.Length != 0 ? e.BlotDate <= DateOnly.Parse(form.dateIbResEnd) : true) &&
@@ -437,10 +444,8 @@ namespace HIVBackend.Controllers
                         (form.ibSelect == "Последний" ? e.Last1 == true : true) &&
                         (form.ibSelect == "Перв.и посл." ? (e.Last1 == true || e.First1 == true) : true) &&
                         (form.hospCourse[0] != "Все" ? form.hospCourse.Contains(e.ShowIllnessLong) : true) &&
-
                         (form.age[0] != "Все" && form.age.Contains("> 60") != true ? (ages.Contains(e.Age.ToString())) : true) &&
                         (form.age[0] != "Все" && form.age.Contains("> 60") ? ( ages.Contains(e.Age.ToString()) || e.Age >= 60) : true) &&
-
                         (form.cardNo.Length != 0 ? e.CardNo.ToLower().StartsWith(form.cardNo.ToLower()) : true) &&
                         (form.art[0] != "Все" ? form.art.Contains(e.ArvtLong) : true) &&
                         (form.mkb10[0] != "Все" ? form.mkb10.Contains(e.CodeMkb10Long) : true) &&
@@ -472,7 +477,13 @@ namespace HIVBackend.Controllers
                         (form.dateChemprofEndStart.Length != 0 ? e.ChemopDateTo >= DateOnly.Parse(form.dateChemprofEndStart) : true) &&
                         (form.dateChemprofEndEnd.Length != 0 ? e.ChemopDateTo <= DateOnly.Parse(form.dateChemprofEndEnd) : true) &&
                         (form.dateRegStart.Length != 0 ? e.DtRegEnd >= DateOnly.Parse(form.dateRegStart) : true) &&
-                        (form.dateRegEnd.Length != 0 ? e.DtRegEnd <= DateOnly.Parse(form.dateRegEnd) : true)
+                        (form.dateRegEnd.Length != 0 ? e.DtRegEnd <= DateOnly.Parse(form.dateRegEnd) : true) &&
+                        (form.regionPreset == "Московская обл." ? e.RegtypeId == 1 : true) &&
+                        (form.regionPreset == "Иногородние" ? e.RegtypeId == 2 : true) &&
+                        (form.regionPreset == "Иностранные" ? e.RegtypeId == 3 : true) &&
+                        (form.factRegionPreset == "Московская обл." ? e.FactRegtypeId == 1 : true) &&
+                        (form.factRegionPreset == "Иногородние" ? e.FactRegtypeId == 2 : true) &&
+                        (form.factRegionPreset == "Иностранные" ? e.FactRegtypeId == 3 : true)
                             );
 
             var lambda = CreateLambdaSelect(activeColumns);

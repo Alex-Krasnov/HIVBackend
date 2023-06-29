@@ -147,12 +147,7 @@ namespace HIVBackend.Controllers
             patientCardMain.ListInfectCourseShort = _context.TblInfectCourses.Where(e => e.InfectCourseShort != null).Select(e => e.InfectCourseShort)?.ToList();
             patientCardMain.ListInfectCourseLong = _context.TblInfectCourses.Where(e => e.InfectCourseShort != null).Select(e => e.InfectCourseLong)?.ToList();
 
-
-            //patientCardMain.ListDieCourseShort = _context.TblTempDieCureMkb10lists.Select(e => e.DieCourseShort)?.ToList();
-            patientCardMain.ListDieCourseLong = _context.TblTempDieCureMkb10lists.Select(e => new Tast{ Short = e.DieCourseShort, Long = e.DieCourseLong })?.ToList();
-
-
-
+            patientCardMain.ListDieCourseLong = _context.TblTempDieCureMkb10lists.Select(e => new Selector2Col{ Short = e.DieCourseShort, Long = e.DieCourseLong })?.ToList();
 
             patientCardMain.ListVulnerableGroup = _context.TblListVulnerableGroups.Select(e => e.VulnerableGroupName)?.ToList();
             patientCardMain.ListARVT = _context.TblArvts.Select(e => e.ArvtShort)?.ToList();

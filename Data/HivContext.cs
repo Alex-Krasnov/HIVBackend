@@ -3550,6 +3550,9 @@ public partial class HivContext : DbContext
             entity.Property(e => e.DieCourseLong)
                 .HasColumnName("die_course_long");
 
+            entity.Property(e => e.DethtypeId)
+                .HasColumnName("Dethtype_id");
+
             entity.Property(e => e.InfectCourseLong)
                 .HasColumnName("infect_course_long");
 
@@ -3648,6 +3651,12 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.Age)
                 .HasColumnName("age");
+
+            entity.Property(e => e.RegtypeId)
+                .HasColumnName("regtype_id");
+
+            entity.Property(e => e.FactRegtypeId)
+                .HasColumnName("fact_regtype_id");
         });
 
         OnModelCreatingPartial(modelBuilder);
