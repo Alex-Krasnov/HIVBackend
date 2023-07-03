@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Linq.Expressions;
-using HIVBackend.Interfaces;
+using HIVBackend.Services;
 
 namespace HIVBackend.Controllers
 {
@@ -486,7 +486,7 @@ namespace HIVBackend.Controllers
                         (form.factRegionPreset == "Иностранные" ? e.FactRegtypeId == 3 : true)
                             );
 
-            var lambda = CreateLambdaSelect(activeColumns);
+            var lambda = new CreateLambda<QrySearchMainInf>().CreateLambdaSelect(activeColumns);
             var selected = qryWhere.Select(lambda);
             var resQry = selected.GroupBy(item => item, new DictionaryEqualityComparer()).Select(e => e.First()).ToList();
             int resCount = resQry.Count();
@@ -503,32 +503,6 @@ namespace HIVBackend.Controllers
 
             return Ok(new { columName, resPage, resCount });
 
-        }
-
-        Func<QrySearchMainInf, IDictionary<string, object>> CreateLambdaSelect(List<string> fields)
-        {
-            var parameter = Expression.Parameter(typeof(QrySearchMainInf), "e");
-
-            var dictionaryElements = new List<ElementInit>();
-            foreach (var columnName in fields)
-            {
-                dictionaryElements.Add(
-                    Expression.ElementInit(
-                        typeof(Dictionary<string, object>).GetMethod("Add"),
-                        Expression.Constant(columnName),
-                        Expression.Convert(Expression.Property(parameter, columnName),
-                        typeof(object))
-                    )
-                );
-            }
-
-            var dictionaryInit = Expression.ListInit(
-            Expression.New(typeof(Dictionary<string, object>)),
-            dictionaryElements);
-
-            var lambdaSelect = Expression.Lambda<Func<QrySearchMainInf, IDictionary<string, object>>>(dictionaryInit, parameter);// e => new { e. ,...}
-
-            return lambdaSelect.Compile();
         }
     }
 }

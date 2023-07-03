@@ -263,6 +263,8 @@ public partial class HivContext : DbContext
     public virtual DbSet<TblZzztempSnil> TblZzztempSnils { get; set; }
 
     public virtual DbSet<QrySearchMainInf> QrySearchMainInfs { get; set; }
+    
+    public virtual DbSet<QrySearchPregnant> QrySearchPregnants { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=HIV;Username=vs_test;Password=4100");
@@ -3651,6 +3653,175 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.Age)
                 .HasColumnName("age");
+
+            entity.Property(e => e.RegtypeId)
+                .HasColumnName("regtype_id");
+
+            entity.Property(e => e.FactRegtypeId)
+                .HasColumnName("fact_regtype_id");
+        });
+
+        modelBuilder.Entity<QrySearchPregnant>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.ToTable("qrySearchPregnant");
+
+            entity.Property(e => e.PatientId)
+                .HasColumnName("patient_id");
+
+            entity.Property(e => e.InputDate)
+                .HasColumnName("input_date");
+
+            entity.Property(e => e.FamilyName)
+                .HasColumnName("family_name");
+
+            entity.Property(e => e.FirstName)
+                .HasColumnName("first_name");
+
+            entity.Property(e => e.ThirdName)
+                .HasColumnName("third_name");
+
+            entity.Property(e => e.BirthDate)
+                .HasColumnName("birth_date");
+
+            entity.Property(e => e.RegionLong)
+                .HasColumnName("region_long");
+
+            entity.Property(e => e.RegionLongFact)
+                .HasColumnName("region_long_fact");
+
+            entity.Property(e => e.CountryLong)
+                .HasColumnName("country_long");
+
+            entity.Property(e => e.RegOnDate)
+                .HasColumnName("reg_on_date");
+
+            entity.Property(e => e.RegOffDate)
+                .HasColumnName("reg_off_date");
+
+            entity.Property(e => e.DiagnosisLong)
+                .HasColumnName("diagnosis_long");
+
+            entity.Property(e => e.DiagnosisDefDate)
+                .HasColumnName("diagnosis_def_date");
+
+            entity.Property(e => e.CheckCourseLong)
+                .HasColumnName("check_course_long");
+
+            entity.Property(e => e.InfectCourseLong)
+                .HasColumnName("infect_course_long");
+
+            entity.Property(e => e.ShowIllnessLong)
+                .HasColumnName("show_illness_long");
+
+            entity.Property(e => e.StartDate)
+                .HasColumnName("start_date");
+
+            entity.Property(e => e.EndDate)
+                .HasColumnName("end_date");
+
+            entity.Property(e => e.TransfAreaDate)
+                .HasColumnName("transf_area_date");
+
+            entity.Property(e => e.ArvtLong)
+                .HasColumnName("arvt_long");
+
+            entity.Property(e => e.UfsinDate)
+                .HasColumnName("ufsin_date");
+
+            entity.Property(e => e.FlgZamMedPart)
+                .HasColumnName("flg_zam_med_part");
+
+            entity.Property(e => e.FlgHeadPhysician)
+                .HasColumnName("flg_head_physician");
+
+            entity.Property(e => e.CityName)
+                .HasColumnName("city_name");
+
+            entity.Property(e => e.LocationName)
+                .HasColumnName("location_name");
+
+            entity.Property(e => e.AddrInd)
+                .HasColumnName("addr_ind");
+
+            entity.Property(e => e.AddrStreet)
+                .HasColumnName("addr_street");
+
+            entity.Property(e => e.AddrHouse)
+                .HasColumnName("addr_house");
+
+            entity.Property(e => e.AddrExt)
+                .HasColumnName("addr_ext");
+
+            entity.Property(e => e.AddrFlat)
+                .HasColumnName("addr_flat");
+
+            entity.Property(e => e.PregCheckLong)
+                .HasColumnName("preg_check_long");
+
+            entity.Property(e => e.PregMonthNo)
+                .HasColumnName("preg_month_no");
+
+            entity.Property(e => e.Php1Name)
+                .HasColumnName("php1_name");
+
+            entity.Property(e => e.BirthTypeLong)
+                .HasColumnName("birth_type_long");
+
+            entity.Property(e => e.MedecineStartMonthNo)
+                .HasColumnName("medicine_st_month_no");
+
+            entity.Property(e => e.ChildBirthDate)
+                .HasColumnName("child_birth_date");
+
+            entity.Property(e => e.PregDate)
+                .HasColumnName("preg_date");
+
+            entity.Property(e => e.ChildFamilyName)
+                .HasColumnName("child_family_name");
+
+            entity.Property(e => e.ChildFirstName)
+                .HasColumnName("child_first_name");
+
+            entity.Property(e => e.ChildThirdName)
+                .HasColumnName("child_third_name");
+
+            entity.Property(e => e.CardNo)
+                .HasColumnName("card_no");
+
+            entity.Property(e => e.Php2Name)
+                .HasColumnName("php2_name");
+
+            entity.Property(e => e.Php3Name)
+                .HasColumnName("php3_name");
+
+            entity.Property(e => e.DateStart1)
+                .HasColumnName("date_start1");
+
+            entity.Property(e => e.DateEnd1)
+                .HasColumnName("date_end1");
+
+            entity.Property(e => e.MedecineForSchemaLong1)
+                .HasColumnName("medforschema_long1");
+
+            entity.Property(e => e.MedecineForSchemaLong2)
+                .HasColumnName("medforschema_long2");
+
+            entity.Property(e => e.MedecineForSchemaLong3)
+                .HasColumnName("medforschema_long3");
+
+            entity.Property(e => e.ChildId)
+                .HasColumnName("child_id");
+
+            entity.Property(e => e.MaterhomeLong)
+                .HasColumnName("materhome_long");
+
+            entity.Property(e => e.AclSampleDate)
+                .HasColumnName("acl_sample_date");
+
+            entity.Property(e => e.AclMcnCode)
+                .HasColumnName("acl_mcn_code");
 
             entity.Property(e => e.RegtypeId)
                 .HasColumnName("regtype_id");

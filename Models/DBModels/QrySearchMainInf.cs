@@ -66,5 +66,6 @@ public partial class QrySearchMainInf
     public string? FioChange { get; set; }
     public int? Age { get; set; }
     public int? RegtypeId { get; set; }
-    public int? FactRegtypeId { get; set; }   
+    public int? FactRegtypeId { get; set; }
 }
+
