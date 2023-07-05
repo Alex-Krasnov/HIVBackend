@@ -10,7 +10,9 @@ public partial class QrySearchMainInf
     public string? SexShort { get; set; }
     public DateOnly? BirthDate { get; set; }
     public string? RegionLong { get; set; }
+    public int? RegtypeId { get; set; }
     public string? RegionLongFact { get; set; }
+    public int? FactRegtypeId { get; set; }
     public string? CountryLong { get; set; }
     public string? CityName { get; set; }
     public string? LocationName { get; set; }
@@ -65,7 +67,5 @@ public partial class QrySearchMainInf
     public string? PasWhom { get; set; }
     public string? FioChange { get; set; }
     public int? Age { get; set; }
-    public int? RegtypeId { get; set; }
-    public int? FactRegtypeId { get; set; }
 }
 
