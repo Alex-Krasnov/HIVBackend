@@ -60,5 +60,10 @@ public partial class QrySearchTreatment
     public string? FinSourceLong { get; set; }
     public string? ArvtLong { get; set; }
     public string? RangeTherapyLong { get; set; }
+    public DateOnly? VlDate { get; set; }
+    public int? VlResult { get; set; }
+    public DateOnly? ImDate { get; set; }
+    public int? ImResult { get; set; }
+
 }
 

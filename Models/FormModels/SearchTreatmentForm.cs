@@ -74,6 +74,14 @@ namespace HIVBackend.Models.FormModels
         public string[]? finSource { get; set; }
         public string[]? art { get; set; }
         public string[]? rangeTherapy { get; set; }
+        public string? dateVlStart { get; set; }
+        public string? dateVlEnd { get; set; }
+        public string? resVlStart { get; set; }
+        public string? resVlEnd { get; set; }
+        public string? dateIMStart { get; set; }
+        public string? dateImEnd { get; set; }
+        public string? resImStart { get; set; }
+        public string? resImEnd { get; set; }
 
 
         public Boolean selectInpDate { get; set; }
@@ -110,6 +118,10 @@ namespace HIVBackend.Models.FormModels
         public Boolean selectFinSource { get; set; }
         public Boolean selectArt { get; set; }
         public Boolean selectRangeTherapy { get; set; }
+        public Boolean selectVlDate { get; set; }
+        public Boolean selectVlRes { get; set; }
+        public Boolean selectImDate { get; set; }
+        public Boolean selectImRes { get; set; }
 
         public int Page { get; set; }
     }

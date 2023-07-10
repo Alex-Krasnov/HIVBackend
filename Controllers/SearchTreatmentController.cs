@@ -305,8 +305,38 @@ namespace HIVBackend.Controllers
                         columName.Add("Ряд терапии");
                         activeColumns.Add("RangeTherapyLong");
                     }
+
+                    if (key.Name == "selectVlDate")
+                    {
+                        columName.Add("Дата опред.вир.нагр.");
+                        activeColumns.Add("VlDate");
+                    }
+
+                    if (key.Name == "selectVlRes")
+                    {
+                        columName.Add("Вирусн.нагр.");
+                        activeColumns.Add("VlResult");
+                    }
+
+                    if (key.Name == "selectImDate")
+                    {
+                        columName.Add("Дата опред.иммун.стат.");
+                        activeColumns.Add("ImDate");
+                    }
+
+                    if (key.Name == "selectImRes")
+                    {
+                        columName.Add("CD4+(abc)");
+                        activeColumns.Add("ImResult");
+                    }
                 }
             }
+
+            int ResVlStart, ResVlEnd, ResImStart, ResImEnd;
+            bool IsVlStart = int.TryParse(form.resVlStart, out ResVlStart),
+            IsVlEnd = int.TryParse(form.resVlEnd, out ResVlEnd),
+            IsImStart = int.TryParse(form.resImStart, out ResImStart),
+            IsImEnd = int.TryParse(form.resImEnd, out ResImEnd);
 
             var qryWhere = _context.QrySearchTreatments.Where(e =>
                         (form.dateInpStart.Length != 0 ? e.InputDate >= DateOnly.Parse(form.dateInpStart) : true) &&
@@ -390,7 +420,15 @@ namespace HIVBackend.Controllers
                         (form.dateSchemaEnd.Length != 0 ? e.SchemaStartDate <= DateOnly.Parse(form.dateSchemaEnd) : true) &&
                         (form.finSource[0] != "Все" ? form.finSource.Contains(e.FinSourceLong) : true) &&
                         (form.art[0] != "Все" ? form.art.Contains(e.ArvtLong) : true) &&
-                        (form.rangeTherapy[0] != "Все" ? form.rangeTherapy.Contains(e.RangeTherapyLong) : true)
+                        (form.rangeTherapy[0] != "Все" ? form.rangeTherapy.Contains(e.RangeTherapyLong) : true) &&
+                        (form.dateVlStart.Length != 0 ? e.VlDate >= DateOnly.Parse(form.dateVlStart) : true) &&
+                        (form.dateVlEnd.Length != 0 ? e.VlDate <= DateOnly.Parse(form.dateVlEnd) : true) &&
+                        (form.dateVlStart.Length != 0 && IsVlStart ? e.VlResult >= ResVlStart : true) &&
+                        (form.dateVlEnd.Length != 0 && IsVlEnd ? e.VlResult <= ResVlEnd : true) &&
+                        (form.dateIMStart.Length != 0 ? e.ImDate >= DateOnly.Parse(form.dateIMStart) : true) &&
+                        (form.dateImEnd.Length != 0 ? e.ImDate <= DateOnly.Parse(form.dateImEnd) : true) &&
+                        (form.dateVlStart.Length != 0 && IsImStart ? e.ImResult >= ResImStart : true) &&
+                        (form.dateVlEnd.Length != 0 && IsImEnd ? e.ImResult <= ResImEnd : true)
                             );
 
             var lambda = new CreateLambda<QrySearchTreatment>().CreateLambdaSelect(activeColumns);
