@@ -270,6 +270,8 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<QrySearchTreatment> QrySearchTreatments { get; set; }
 
+    public virtual DbSet<QrySearchAnalyse> QrySearchAnalyses { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=HIV;Username=vs_test;Password=4100");
 
@@ -4177,6 +4179,196 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.ImResult)
                 .HasColumnName("i0025");
+        });
+
+        modelBuilder.Entity<QrySearchAnalyse>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.ToTable("qrySearchAnalyse");
+
+            entity.Property(e => e.PatientId)
+                .HasColumnName("patient_id");
+
+            entity.Property(e => e.InputDate)
+                .HasColumnName("input_date");
+
+            entity.Property(e => e.FamilyName)
+                .HasColumnName("family_name");
+
+            entity.Property(e => e.FirstName)
+                .HasColumnName("first_name");
+
+            entity.Property(e => e.ThirdName)
+                .HasColumnName("third_name");
+
+            entity.Property(e => e.SexShort)
+                .HasColumnName("sex_short");
+
+            entity.Property(e => e.BirthDate)
+                .HasColumnName("birth_date");
+
+            entity.Property(e => e.RegionLong)
+                .HasColumnName("region_long");
+
+            entity.Property(e => e.RegtypeId)
+                .HasColumnName("regtype_id");
+
+            entity.Property(e => e.RegionLongFact)
+                .HasColumnName("region_long_fact");
+
+            entity.Property(e => e.FactRegtypeId)
+                .HasColumnName("fact_regtype_id");
+
+            entity.Property(e => e.CountryLong)
+                .HasColumnName("country_long");
+
+            entity.Property(e => e.CityName)
+                .HasColumnName("city_name");
+
+            entity.Property(e => e.LocationName)
+                .HasColumnName("location_name");
+
+            entity.Property(e => e.AddrInd)
+                .HasColumnName("addr_ind");
+
+            entity.Property(e => e.AddrStreet)
+                .HasColumnName("addr_street");
+
+            entity.Property(e => e.AddrHouse)
+                .HasColumnName("addr_house");
+
+            entity.Property(e => e.AddrExt)
+                .HasColumnName("addr_ext");
+
+            entity.Property(e => e.AddrFlat)
+                .HasColumnName("addr_flat");
+
+            entity.Property(e => e.RegOnDate)
+                .HasColumnName("reg_on_date");
+
+            entity.Property(e => e.RegOffDate)
+                .HasColumnName("reg_off_date");
+
+            entity.Property(e => e.RegOff)
+                .HasColumnName("reg_off");
+
+            entity.Property(e => e.DiagnosisLong)
+                .HasColumnName("diagnosis_long");
+
+            entity.Property(e => e.DieDate)
+                .HasColumnName("die_date");
+
+            entity.Property(e => e.DieAidsDate)
+                .HasColumnName("die_aids_date");
+
+            entity.Property(e => e.DieCourseShort)
+                .HasColumnName("die_course_short");
+
+            entity.Property(e => e.DieCourseLong)
+                .HasColumnName("die_course_long");
+
+            entity.Property(e => e.DethtypeId)
+                .HasColumnName("Dethtype_id");
+
+            entity.Property(e => e.CheckCourseLong)
+                .HasColumnName("check_course_long");
+
+            entity.Property(e => e.InfectCourseLong)
+                .HasColumnName("infect_course_long");
+
+            entity.Property(e => e.ShowIllnessLong)
+                .HasColumnName("show_illness_long");
+
+            entity.Property(e => e.StartDate)
+                .HasColumnName("start_date");
+
+            entity.Property(e => e.EndDate)
+                .HasColumnName("end_date");
+
+            entity.Property(e => e.TransfAreaDate)
+                .HasColumnName("transf_area_date");
+
+            entity.Property(e => e.FlgZamMedPart)
+                .HasColumnName("flg_zam_med_part");
+
+            entity.Property(e => e.FlgHeadPhysician)
+                .HasColumnName("flg_head_physician");
+
+            entity.Property(e => e.IbResultShort)
+                .HasColumnName("ib_result_short");
+
+            entity.Property(e => e.BlotDate)
+                .HasColumnName("blot_date");
+
+            entity.Property(e => e.BlotNo)
+                .HasColumnName("blot_no");
+
+            entity.Property(e => e.First1)
+                .HasColumnName("first1");
+
+            entity.Property(e => e.Last1)
+                .HasColumnName("last1");
+
+            entity.Property(e => e.Datetime1)
+                .HasColumnName("datetime1");
+
+            entity.Property(e => e.UfsinDate)
+                .HasColumnName("ufsin_date");
+
+            entity.Property(e => e.VlDate)
+                .HasColumnName("vl_date");
+
+            entity.Property(e => e.VlResult)
+                .HasColumnName("vl_result");
+
+            entity.Property(e => e.ImDate)
+                .HasColumnName("im_date");
+
+            entity.Property(e => e.I0015)
+                .HasColumnName("i0015");
+
+            entity.Property(e => e.I0025)
+                .HasColumnName("i0025");
+
+            entity.Property(e => e.I0035)
+                .HasColumnName("i0035");
+
+            entity.Property(e => e.HepBRes)
+                .HasColumnName("hep_b_res");
+
+            entity.Property(e => e.HepBDate)
+                .HasColumnName("hep_b_date");
+
+            entity.Property(e => e.HepCRes)
+                .HasColumnName("hep_c_res");
+
+            entity.Property(e => e.HepCDate)
+                .HasColumnName("hep_c_date");
+
+            entity.Property(e => e.HepBIfaRes)
+                .HasColumnName("hep_b_ifa_res");
+
+            entity.Property(e => e.HepBIfaDate)
+                .HasColumnName("hep_b_ifa_date");
+
+            entity.Property(e => e.HepCIfaRes)
+                .HasColumnName("hep_c_ifa_res");
+
+            entity.Property(e => e.HepCIfaDate)
+                .HasColumnName("hep_c_ifa_date");
+
+            entity.Property(e => e.HepSyphIfaRes)
+                .HasColumnName("hep_syph_ifa_res");
+
+            entity.Property(e => e.HepSyphIfaDate)
+                .HasColumnName("hep_syph_ifa_date");
+
+            entity.Property(e => e.CardNo)
+                .HasColumnName("card_no");
+
+            entity.Property(e => e.ArvtLong)
+                .HasColumnName("arvt_long");
         });
 
         OnModelCreatingPartial(modelBuilder);

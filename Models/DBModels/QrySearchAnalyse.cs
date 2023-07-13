@@ -1,5 +1,5 @@
 ﻿namespace HIVBackend.Models.DBModuls;
-public partial class QrySearchTreatment
+public partial class QrySearchAnalyse
 {
     public int PatientId { get; set; }
     public DateOnly? InputDate { get; set; }
@@ -44,25 +44,24 @@ public partial class QrySearchTreatment
     public bool? Last1 { get; set; }
     public DateOnly? Datetime1 { get; set; }
     public DateOnly? UfsinDate { get; set; }
-    public string? InvalidLong { get; set; }
-    public string? CorrespIllnessLong { get; set; }
-    public DateOnly? CorrespIllnessDate { get; set; }
-    public string? CureSchemaLong { get; set; }
-    public DateOnly? SchemaStartDate { get; set; }
-    public bool? SchemaLast { get; set; }
-    public string? MedforschemaLong { get; set; }
-    public string? CureChangeLong { get; set; }
-    public string? MedicineLong { get; set; }
-    public string? GiveMedicineLong { get; set; }
-    public string? DoctorLong { get; set; }
-    public DateOnly? GiveDate { get; set; }
-    public string? CardNo { get; set; }
-    public string? FinSourceLong { get; set; }
-    public string? ArvtLong { get; set; }
-    public string? RangeTherapyLong { get; set; }
     public DateOnly? VlDate { get; set; }
     public int? VlResult { get; set; }
     public DateOnly? ImDate { get; set; }
-    public int? ImResult { get; set; }
+    public int? I0015 { get; set; }
+    public int? I0025 { get; set; }
+    public int? I0035 { get; set; }
+    public string? HepBRes { get; set; }
+    public DateOnly? HepBDate { get; set; }
+    public string? HepCRes { get; set; }
+    public DateOnly? HepCDate { get; set; }
+    public string? HepBIfaRes { get; set; }
+    public DateOnly? HepBIfaDate { get; set; }
+    public string? HepCIfaRes { get; set; }
+    public DateOnly? HepCIfaDate { get; set; }
+    public string? HepSyphIfaRes { get; set; }
+    public DateOnly? HepSyphIfaDate { get; set; }
+    public string? CardNo { get; set; }
+    public string? ArvtLong { get; set; }
+
 }
 

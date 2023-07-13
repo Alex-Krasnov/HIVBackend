@@ -874,5 +874,17 @@ namespace HIVBackend.Controllers
             var inList = _context.TblChemops.Any(e => e.ChemopLong == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListPNA")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListPNA(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+            List<string> yna = new() { "Все", "Пол", "Отр" };
+
+            var inList = yna.Any(e => data.Str.Contains(e));
+            return Ok(inList);
+        }
     }
 }

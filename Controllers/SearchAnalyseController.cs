@@ -6,18 +6,16 @@ using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Data;
 
 namespace HIVBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SearchTreatmentController : ControllerBase
+    public class SearchAnalyseController : ControllerBase
     {
-
         private readonly HivContext _context;
-        public SearchTreatmentController(HivContext context)
+        public SearchAnalyseController(HivContext context)
         {
             _context = context;
         }
@@ -26,7 +24,7 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult GetForm()
         {
-            SearchTreatment outModel = new();
+            SearchAnalyse outModel = new();
 
             outModel.ListSex = _context.TblSexes.Select(e => e.SexShort).ToList();
             outModel.ListRegion = _context.TblRegions.Select(e => e.RegionLong).OrderBy(e => e).ToList();
@@ -39,18 +37,10 @@ namespace HIVBackend.Controllers
             outModel.ListShowIllness = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong).OrderBy(e => e).ToList();
             outModel.ListYNA = new() { "Да", "Нет", "Все" };
             outModel.ListArvt = _context.TblArvts.Select(e => e.ArvtLong).OrderBy(e => e).ToList();
-            outModel.ListSchema = _context.TblCureSchemas.Select(e => e.CureSchemaLong).OrderBy(e => e).ToList();
             outModel.ListDiePreset = new() { "Все", "ВИЧ", "Не связанные с ВИЧ", "СПИД" };
-            outModel.ListInvalid = _context.TblInvalids.Select(e => e.InvalidLong).OrderBy(e => e).ToList();
-            outModel.ListCorrespIllness = _context.TblCorrespIllnesses.Select(e => e.CorrespIllnessLong).OrderBy(e => e).ToList();
-            outModel.ListSchemaMedecine = _context.TblMedicineForSchemas.Select(e => e.MedforschemaLong).OrderBy(e => e).ToList();
-            outModel.ListMedecine = _context.TblMedicines.Select(e => e.MedicineLong).OrderBy(e => e).ToList();
-            outModel.ListDoctor = _context.TblDoctors.Select(e => e.DoctorLong).OrderBy(e => e).ToList();
-            outModel.ListSchemaChange = _context.TblCureChanges.Select(e => e.CureChangeLong).OrderBy(e => e).ToList();
-            outModel.ListFinSourse = _context.TblFinSources.Select(e => e.FinSourceLong).OrderBy(e => e).ToList();
-            outModel.ListRangeTherapy = _context.TblRangeTherapies.Select(e => e.RangeTherapyLong).OrderBy(e => e).ToList();
             outModel.ListDieCourse = _context.TblTempDieCureMkb10lists.Select(e => e.DieCourseLong).OrderBy(e => e).ToList();
             outModel.ListResIb = _context.TblIbResults.Select(e => e.IbResultShort).OrderBy(e => e).ToList();
+            outModel.ListPNA = new() { "Все", "Пол", "Отр" };
             outModel.ListSelectBlot = new() { "Все", "Первый", "Последний", "Перв.и посл." };
 
             return Ok(outModel);
@@ -58,14 +48,14 @@ namespace HIVBackend.Controllers
 
         [HttpPost, Route("GetRes")]
         [Authorize(Roles = "User")]
-        public IActionResult GetRes(SearchTreatmentForm form)
+        public IActionResult GetRes(SearchAnalyseForm form)
         {
             int pageSize = 100;
             List<string> columName = new() { "Ид пациента" };
 
             List<string> activeColumns = new() { "PatientId" };
 
-            foreach (var key in typeof(SearchTreatmentForm).GetProperties())
+            foreach (var key in typeof(SearchAnalyseForm).GetProperties())
             {
                 if (key.Name.StartsWith("select") && (Boolean)key.GetValue(form) == true)
                 {
@@ -221,90 +211,16 @@ namespace HIVBackend.Controllers
                         activeColumns.Add("UfsinDate");
                     }
 
-                    if (key.Name == "selectInvalid")
-                    {
-                        columName.Add("Группа инвалидности");
-                        activeColumns.Add("InvalidLong");
-                    }
-
-                    if (key.Name == "selectCorrespIllnesses")
-                    {
-                        columName.Add("Сопутствующее заболевание");
-                        activeColumns.Add("CorrespIllnessLong");
-                        columName.Add("Сопутствующее заболевание дата");
-                        activeColumns.Add("CorrespIllnessDate");
-                    }
-
-                    if (key.Name == "selectSchema")
-                    {
-                        columName.Add("Схема лечения");
-                        activeColumns.Add("CureSchemaLong");
-                    }
-
-                    if (key.Name == "selectSchemaMedecine")
-                    {
-                        columName.Add("Схема лечения (препарат)");
-                        activeColumns.Add("MedforschemaLong");
-                    }
-
-                    if (key.Name == "selectMedecine")
-                    {
-                        columName.Add("Препарат прописанный");
-                        activeColumns.Add("MedicineLong");
-                    }
-
-                    if (key.Name == "selectMedecineGive")
-                    {
-                        columName.Add("Препарат выданный");
-                        activeColumns.Add("GiveMedicineLong");
-                    }
-
-                    if (key.Name == "selectDoctor")
-                    {
-                        columName.Add("Персонал");
-                        activeColumns.Add("DoctorLong");
-                    }
-
-                    if (key.Name == "selectGiveDate")
-                    {
-                        columName.Add("Дата выдачи препарата");
-                        activeColumns.Add("GiveDate");
-                    }
-
-                    if (key.Name == "selectSchemaChange")
-                    {
-                        columName.Add("Причина смены схемы леч.");
-                        activeColumns.Add("CureChangeLong");
-                    }
-
                     if (key.Name == "selectCardNo")
                     {
                         columName.Add("№ карты");
                         activeColumns.Add("CardNo");
                     }
 
-                    if (key.Name == "selectSchemaDate")
-                    {
-                        columName.Add("Дата назн.схемы");
-                        activeColumns.Add("SchemaStartDate");
-                    }
-
-                    if (key.Name == "selectFinSource")
-                    {
-                        columName.Add("Источник финансирования");
-                        activeColumns.Add("FinSourceLong");
-                    }
-
                     if (key.Name == "selectArt")
                     {
                         columName.Add("АРТ");
                         activeColumns.Add("ArvtLong");
-                    }
-
-                    if (key.Name == "selectRangeTherapy")
-                    {
-                        columName.Add("Ряд терапии");
-                        activeColumns.Add("RangeTherapyLong");
                     }
 
                     if (key.Name == "selectVlDate")
@@ -325,21 +241,77 @@ namespace HIVBackend.Controllers
                         activeColumns.Add("ImDate");
                     }
 
-                    if (key.Name == "selectImRes")
+                    if (key.Name == "selectImCd3Res")
+                    {
+                        columName.Add("CD3+");
+                        activeColumns.Add("I0015");
+                    }
+
+                    if (key.Name == "selectImCd4Res")
                     {
                         columName.Add("CD4+(abc)");
-                        activeColumns.Add("ImResult");
+                        activeColumns.Add("I0025");
+                    }
+
+                    if (key.Name == "selectImCd8Res")
+                    {
+                        columName.Add("CD8+(abc)");
+                        activeColumns.Add("I0035");
+                    }
+
+                    if (key.Name == "selectHepCIfa")
+                    {
+                        columName.Add("Дата гепатит С методом ИФА");
+                        activeColumns.Add("HepCIfaDate");
+                        columName.Add("Гепатит С методом ИФА");
+                        activeColumns.Add("HepCIfaRes");
+                    }
+
+                    if (key.Name == "selectHepBIfa")
+                    {
+                        columName.Add("Дата гепатит В методом ИФА");
+                        activeColumns.Add("HepBIfaDate");
+                        columName.Add("Гепатит В методом ИФА");
+                        activeColumns.Add("HepBIfaRes");
+                    }
+
+                    if (key.Name == "selectHepSyphIfa")
+                    {
+                        columName.Add("Дата сифилис методом ИФА");
+                        activeColumns.Add("HepSyphIfaDate");
+                        columName.Add("Сифилис методом ИФА");
+                        activeColumns.Add("HepSyphIfaRes");
+                    }
+
+                    if (key.Name == "selectHepC")
+                    {
+                        columName.Add("Дата гепатит С методом ПЦР");
+                        activeColumns.Add("HepCDate");
+                        columName.Add("Гепатит С методом ПЦР");
+                        activeColumns.Add("HepCRes");
+                    }
+
+                    if (key.Name == "selectHepB")
+                    {
+                        columName.Add("Дата гепатит В методом ПЦР");
+                        activeColumns.Add("HepBDate");
+                        columName.Add("Гепатит В методом ПЦР");
+                        activeColumns.Add("HepBRes");
                     }
                 }
             }
 
-            int ResVlStart, ResVlEnd, ResImStart, ResImEnd;
+            int ResVlStart, ResVlEnd, ResImCd3Start, ResImCd3End, ResImCd4Start, ResImCd4End, ResImCd8Start, ResImCd8End;
             bool IsVlStart = int.TryParse(form.resVlStart, out ResVlStart),
             IsVlEnd = int.TryParse(form.resVlEnd, out ResVlEnd),
-            IsImStart = int.TryParse(form.resImStart, out ResImStart),
-            IsImEnd = int.TryParse(form.resImEnd, out ResImEnd);
+            IsImCd3Start = int.TryParse(form.resImCd3Start, out ResImCd3Start),
+            IsImCd3End = int.TryParse(form.resImCd3End, out ResImCd3End),
+            IsImCd4Start = int.TryParse(form.resImCd4Start, out ResImCd4Start),
+            IsImCd4End = int.TryParse(form.resImCd4End, out ResImCd4End),
+            IsImCd8Start = int.TryParse(form.resImCd8Start, out ResImCd8Start),
+            IsImCd8End = int.TryParse(form.resImCd8End, out ResImCd8End);
 
-            var qryWhere = _context.QrySearchTreatments.Where(e =>
+            var qryWhere = _context.QrySearchAnalyses.Where(e =>
                         (form.dateInpStart.Length != 0 ? e.InputDate >= DateOnly.Parse(form.dateInpStart) : true) &&
                         (form.dateInpEnd.Length != 0 ? e.InputDate <= DateOnly.Parse(form.dateInpEnd) : true) &&
                         (form.patientId.Length != 0 ? e.PatientId == int.Parse(form.patientId) : true) &&
@@ -403,36 +375,38 @@ namespace HIVBackend.Controllers
                         (form.ufsinYNA == "Нет" ? e.UfsinDate == null : true) &&
                         (form.dateUfsinStart.Length != 0 ? e.UfsinDate >= DateOnly.Parse(form.dateUfsinStart) : true) &&
                         (form.dateUfsinEnd.Length != 0 ? e.UfsinDate <= DateOnly.Parse(form.dateUfsinEnd) : true) &&
-                        (form.invalid[0] != "Все" ? form.invalid.Contains(e.InvalidLong) : true) &&
-                        (form.correspIllnesses[0] != "Все" ? form.correspIllnesses.Contains(e.CorrespIllnessLong) : true) &&
-                        (form.dateCorrespIllnessesStart.Length != 0 ? e.CorrespIllnessDate >= DateOnly.Parse(form.dateCorrespIllnessesStart) : true) &&
-                        (form.dateCorrespIllnessesEnd.Length != 0 ? e.CorrespIllnessDate <= DateOnly.Parse(form.dateCorrespIllnessesEnd) : true) &&
-                        (form.schema[0] != "Все" ? form.schema.Contains(e.CureSchemaLong) : true) &&
-                        (form.schemaLast == true ? e.SchemaLast == true : true) &&
-                        (form.schemaMedecine[0] != "Все" ? form.schemaMedecine.Contains(e.MedforschemaLong) : true) &&
-                        (form.medecine[0] != "Все" ? form.medecine.Contains(e.MedicineLong) : true) &&
-                        (form.medecineGive[0] != "Все" ? form.medecineGive.Contains(e.GiveMedicineLong) : true) &&
-                        (form.doctor[0] != "Все" ? form.doctor.Contains(e.DoctorLong) : true) &&
-                        (form.dateDieStart.Length != 0 ? e.GiveDate >= DateOnly.Parse(form.dateDieStart) : true) &&
-                        (form.dateGiveEnd.Length != 0 ? e.GiveDate <= DateOnly.Parse(form.dateGiveEnd) : true) &&
-                        (form.schemaChange[0] != "Все" ? form.schemaChange.Contains(e.CureChangeLong) : true) &&
                         (form.cardNo.Length != 0 ? e.CardNo.ToLower().StartsWith(form.cardNo.ToLower()) : true) &&
-                        (form.dateSchemaStart.Length != 0 ? e.SchemaStartDate >= DateOnly.Parse(form.dateSchemaStart) : true) &&
-                        (form.dateSchemaEnd.Length != 0 ? e.SchemaStartDate <= DateOnly.Parse(form.dateSchemaEnd) : true) &&
-                        (form.finSource[0] != "Все" ? form.finSource.Contains(e.FinSourceLong) : true) &&
                         (form.art[0] != "Все" ? form.art.Contains(e.ArvtLong) : true) &&
-                        (form.rangeTherapy[0] != "Все" ? form.rangeTherapy.Contains(e.RangeTherapyLong) : true) &&
+
                         (form.dateVlStart.Length != 0 ? e.VlDate >= DateOnly.Parse(form.dateVlStart) : true) &&
                         (form.dateVlEnd.Length != 0 ? e.VlDate <= DateOnly.Parse(form.dateVlEnd) : true) &&
                         (form.resVlStart.Length != 0 && IsVlStart ? e.VlResult >= ResVlStart : true) &&
                         (form.resVlEnd.Length != 0 && IsVlEnd ? e.VlResult <= ResVlEnd : true) &&
                         (form.dateIMStart.Length != 0 ? e.ImDate >= DateOnly.Parse(form.dateIMStart) : true) &&
                         (form.dateImEnd.Length != 0 ? e.ImDate <= DateOnly.Parse(form.dateImEnd) : true) &&
-                        (form.resImStart.Length != 0 && IsImStart ? e.ImResult >= ResImStart : true) &&
-                        (form.resImEnd.Length != 0 && IsImEnd ? e.ImResult <= ResImEnd : true)
+                        (form.resImCd3Start.Length != 0 && IsImCd3Start ? e.I0015 >= ResImCd3Start : true) &&
+                        (form.resImCd3End.Length != 0 && IsImCd3End ? e.I0015 <= ResImCd3End : true) &&
+                        (form.resImCd4Start.Length != 0 && IsImCd4Start ? e.I0025 >= ResImCd4Start : true) &&
+                        (form.resImCd4End.Length != 0 && IsImCd4End ? e.I0025 <= ResImCd4End : true) &&
+                        (form.resImCd8Start.Length != 0 && IsImCd8Start ? e.I0025 >= ResImCd8Start : true) &&
+                        (form.resImCd8End.Length != 0 && IsImCd8End ? e.I0025 <= ResImCd8End : true) &&
+                        (form.dateHepCIfaStart.Length != 0 ? e.HepCIfaDate >= DateOnly.Parse(form.dateHepCIfaStart) : true) &&
+                        (form.dateHepCIfaEnd.Length != 0 ? e.HepCIfaDate <= DateOnly.Parse(form.dateHepCIfaEnd) : true) &&
+                        (form.dateHepCIfaVal == "Пол" ? e.HepCIfaRes.Contains("Пол") : true) &&
+                        (form.dateHepCIfaVal == "Отр" ? e.HepCIfaRes.Contains("Отр") : true) &&
+                        (form.dateHepBIfaStart.Length != 0 ? e.HepBIfaDate >= DateOnly.Parse(form.dateHepBIfaStart) : true) &&
+                        (form.dateHepBIfaEnd.Length != 0 ? e.HepBIfaDate <= DateOnly.Parse(form.dateHepBIfaEnd) : true) &&
+                        (form.dateHepBIfaVal == "Пол" ? e.HepBIfaRes.Contains("Пол") : true) &&
+                        (form.dateHepBIfaVal == "Отр" ? e.HepBIfaRes.Contains("Отр") : true) &&
+                        (form.dateHepSyphIfaStart.Length != 0 ? e.HepSyphIfaDate >= DateOnly.Parse(form.dateHepBIfaStart) : true) &&
+                        (form.dateHepSyphIfaEnd.Length != 0 ? e.HepSyphIfaDate <= DateOnly.Parse(form.dateHepBIfaEnd) : true) &&
+                        (form.dateHepSyphIfaVal == "Пол" ? e.HepSyphIfaRes.Contains("Пол") : true) &&
+                        (form.dateHepSyphIfaVal == "Отр" ? e.HepSyphIfaRes.Contains("Отр") : true) &&
+                        (form.dateHepCStart.Length != 0 ? e.HepCDate >= DateOnly.Parse(form.dateHepCStart) : true) &&
+                        (form.dateHepCEnd.Length != 0 ? e.HepCDate <= DateOnly.Parse(form.dateHepCEnd) : true)
                             );
 
-            var lambda = new CreateLambda<QrySearchTreatment>().CreateLambdaSelect(activeColumns);
+            var lambda = new CreateLambda<QrySearchAnalyse>().CreateLambdaSelect(activeColumns);
             var selected = qryWhere.Select(lambda);
             var resQry = selected.GroupBy(item => item, new DictionaryEqualityComparer()).Select(e => e.First()).ToList();
             int resCount = resQry.Count();
