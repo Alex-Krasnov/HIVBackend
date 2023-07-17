@@ -272,6 +272,8 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<QrySearchAnalyse> QrySearchAnalyses { get; set; }
 
+    public virtual DbSet<QrySearchAcl> QrySearchAcls { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=HIV;Username=vs_test;Password=4100");
 
@@ -4369,6 +4371,91 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.ArvtLong)
                 .HasColumnName("arvt_long");
+        });
+
+        modelBuilder.Entity<QrySearchAcl>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.ToTable("qrySearchAcl");
+
+            entity.Property(e => e.PatientId)
+                .HasColumnName("patient_id");
+
+            entity.Property(e => e.InputDate)
+                .HasColumnName("input_date");
+
+            entity.Property(e => e.FamilyName)
+                .HasColumnName("family_name");
+
+            entity.Property(e => e.FirstName)
+                .HasColumnName("first_name");
+
+            entity.Property(e => e.ThirdName)
+                .HasColumnName("third_name");
+
+            entity.Property(e => e.SexShort)
+                .HasColumnName("sex_short");
+
+            entity.Property(e => e.BirthDate)
+                .HasColumnName("birth_date");
+
+            entity.Property(e => e.RegionLong)
+                .HasColumnName("region_long");
+
+            entity.Property(e => e.RegtypeId)
+                .HasColumnName("regtype_id");
+
+            entity.Property(e => e.RegionLongFact)
+                .HasColumnName("region_long_fact");
+
+            entity.Property(e => e.FactRegtypeId)
+                .HasColumnName("fact_regtype_id");
+
+            entity.Property(e => e.RegOnDate)
+                .HasColumnName("reg_on_date");
+
+            entity.Property(e => e.RegOffDate)
+                .HasColumnName("reg_off_date");
+
+            entity.Property(e => e.RegOff)
+                .HasColumnName("reg_off");
+
+            entity.Property(e => e.DiagnosisLong)
+                .HasColumnName("diagnosis_long");
+
+            entity.Property(e => e.CheckCourseLong)
+                .HasColumnName("check_course_long");
+
+            entity.Property(e => e.IbResultShort)
+                .HasColumnName("ib_result_short");
+
+            entity.Property(e => e.BlotDate)
+                .HasColumnName("blot_date");
+
+            entity.Property(e => e.BlotNo)
+                .HasColumnName("blot_no");
+
+            entity.Property(e => e.First1)
+                .HasColumnName("first1");
+
+            entity.Property(e => e.Last1)
+                .HasColumnName("last1");
+
+            entity.Property(e => e.Datetime1)
+                .HasColumnName("datetime1");
+
+            entity.Property(e => e.AclTestCode)
+                .HasColumnName("acl_test_code");
+
+            entity.Property(e => e.AclSampleDate)
+                .HasColumnName("acl_sample_date");
+
+            entity.Property(e => e.AclMcnCode)
+                .HasColumnName("acl_mcn_code");
+
+            entity.Property(e => e.AclResult)
+                .HasColumnName("acl_result");
         });
 
         OnModelCreatingPartial(modelBuilder);
