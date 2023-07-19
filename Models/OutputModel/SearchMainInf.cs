@@ -5,6 +5,7 @@
         public List<string>? ListSex { get; set; }
         public List<string>? ListRegion { get; set; }
         public List<string>? ListCountry { get; set; }
+        public List<string>? ListRegOff { get; set; }
         public List<string>? ListInfectCourse { get; set; }
         public List<string>? ListCheckPlace { get; set; }//blot
         public List<string>? ListStage { get; set; }

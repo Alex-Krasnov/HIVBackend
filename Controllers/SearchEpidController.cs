@@ -2,22 +2,20 @@
 using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using System.Data;
-using System.Linq.Expressions;
 using HIVBackend.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HIVBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SearchMainInfController : ControllerBase
+    public class SearchEpidController : ControllerBase
     {
 
         private readonly HivContext _context;
-        public SearchMainInfController(HivContext context)
+        public SearchEpidController(HivContext context)
         {
             _context = context;
         }
@@ -26,19 +24,19 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult GetForm()
         {
-            SearchMainInf outModel = new ();
+            SearchEpid outModel = new();
 
             outModel.ListSex = _context.TblSexes.Select(e => e.SexShort).OrderBy(e => e).ToList();
             outModel.ListRegion = _context.TblRegions.Select(e => e.RegionLong).OrderBy(e => e).ToList();
+            outModel.ListRegionPreset = new() { "Все", "Московская обл.", "Иногородние", "Иностранные" };
             outModel.ListCountry = _context.TblCountries.Select(e => e.CountryLong).OrderBy(e => e).ToList();
-            outModel.ListRegOff = _context.TblInfectCourses
-                .Where(e => e.InfectCourseId == 201 || e.InfectCourseId == 203 || e.InfectCourseId == 210)
-                .Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
-            outModel.ListInfectCourse = _context.TblInfectCourses.Where(e => e.InfectCourseId != 210).Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
             outModel.ListCheckPlace = _context.TblCheckPlaces.Select(e => e.CheckPlaceLong).OrderBy(e => e).ToList();
+            outModel.ListRegOff = _context.TblInfectCourses.Where(e => e.InfectCourseId == 201 || e.InfectCourseId == 203 || e.InfectCourseId == 210).Select(e => e.InfectCourseLong).ToList();
             outModel.ListStage = _context.TblDiagnoses.Select(e => e.DiagnosisLong).OrderBy(e => e).ToList();
-            outModel.ListCheckCourse = _context.TblCheckCourses.Select(e => new Selector2Col {Short = e.CheckCourseShort, Long = e.CheckCourseLong }).OrderBy(e => e.Short).ToList();
+            outModel.ListCheckCourse = _context.TblCheckCourses.Select(e => new Selector2Col { Short = e.CheckCourseShort, Long = e.CheckCourseLong }).OrderBy(e => e.Short).ToList();
             outModel.ListDieCourse = _context.TblTempDieCureMkb10lists.Select(e => e.DieCourseLong).OrderBy(e => e).ToList();
+            outModel.ListDiePreset = new() { "Все", "ВИЧ", "Не связанные с ВИЧ", "СПИД" };
+            outModel.ListInfectCourse = _context.TblInfectCourses.Where(e => e.InfectCourseId != 210).Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
             outModel.ListShowIllness = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong).OrderBy(e => e).ToList();
             outModel.ListResIb = _context.TblIbResults.Select(e => e.IbResultShort).OrderBy(e => e).ToList();
             outModel.ListSelectBlot = new() { "Все", "Первый", "Последний", "Перв.и посл." };
@@ -46,39 +44,40 @@ namespace HIVBackend.Controllers
             outModel.ListAge = _context.TblAgegrs.Select(e => e.AgegrLong).ToList();
             outModel.ListArvt = _context.TblArvts.Select(e => e.ArvtLong).OrderBy(e => e).ToList();
             outModel.ListCodeMKB10 = _context.TblCodeMkb10s.Select(e => e.CodeMkb10Long).OrderBy(e => e).ToList();
-            outModel.ListYN = _context.TblListYns.Select(e => e.YNName).OrderBy(e => e).ToList();
-            outModel.ListYNA = new() { "Да", "Нет", "Все" };
             outModel.ListAids12 = _context.TblAids12s.Select(e => e.Aids12Long).OrderBy(e => e).ToList();
-            outModel.ListChemop = _context.TblChemops.Select(e => e.ChemopLong).OrderBy(e => e).ToList();
-            outModel.ListDiePreset = new() { "Все", "ВИЧ", "Не связанные с ВИЧ", "СПИД" };
-            outModel.ListRegionPreset = new() { "Все", "Московская обл.", "Иногородние", "Иностранные" };
+            outModel.ListEducation = _context.TblListEducations.Select(e => e.EduName).OrderBy(e => e).ToList();
+            outModel.ListFamilyStatus = _context.TblListFamilyStatuses.Select(e => e.FammilyStatusName).OrderBy(e => e).ToList();
+            outModel.ListEmployment = _context.TblListEmloyments.Select(e => e.EmploymentName).OrderBy(e => e).ToList();
+            outModel.ListTrans = _context.TblListTrans.Select(e => e.TransName).OrderBy(e => e).ToList();
+            outModel.ListPlaceCheck = _context.TblListPlaceChecks.Select(e => e.PlaceCheckName).OrderBy(e => e).ToList();
+            outModel.ListSituationDetected = _context.TblListSituationDetects.Select(e => e.SituationDetectName).OrderBy(e => e).ToList();
+            outModel.ListTransmisionMech = _context.TblListTransmisionMeches.Select(e => e.TransmisiomMechName).OrderBy(e => e).ToList();
+            outModel.ListVulnerableGroup = _context.TblListVulnerableGroups.Select(e => e.VulnerableGroupName).OrderBy(e => e).ToList();
+            outModel.ListCovidVac = _context.TblListVacs.Select(e => e.VacName).OrderBy(e => e).ToList();
+            outModel.ListMkb10Covid = _context.TblListMkb10Covids.Select(e => e.Mkb10ShortName).OrderBy(e => e).ToList();
+            outModel.ListContactType = _context.TblInfectCourses.Where(e => e.InfectCourseId == 104 || e.InfectCourseId == 100).Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
+            outModel.ListYNA = new() { "Да", "Нет", "Все" };
 
             return Ok(outModel);
         }
 
         [HttpPost, Route("GetRes")]
         [Authorize(Roles = "User")]
-        public IActionResult GetRes(SearchMainInfForm form)
+        public IActionResult GetRes(SearchEpidForm form)
         {
             int pageSize = 100;
-            List<string> columName = new() {"Ид пациента"};
+            List<string> columName = new() { "Ид пациента" };
 
             List<string> activeColumns = new() { "PatientId" };
 
-            foreach (var key in typeof(SearchMainInfForm).GetProperties())
+            foreach (var key in typeof(SearchEpidForm).GetProperties())
             {
                 if (key.Name.StartsWith("select") && (Boolean)key.GetValue(form) == true)
                 {
-                    if(key.Name == "selectInpDate")
+                    if (key.Name == "selectInpDate")
                     {
                         columName.Add("Дата ввода");
                         activeColumns.Add("InputDate");
-                    }
-
-                    if (key.Name == "selectPatientId")
-                    {
-                        columName.Add("СНИЛС");
-                        activeColumns.Add("Snils");
                     }
 
                     if (key.Name == "selectFio")
@@ -159,8 +158,6 @@ namespace HIVBackend.Controllers
                     {
                         columName.Add("Стадия");
                         activeColumns.Add("DiagnosisLong");
-                        columName.Add("Дата постановки стадии");
-                        activeColumns.Add("DiagnosisDefDate");
                     }
 
                     if (key.Name == "selectDieDate")
@@ -169,8 +166,6 @@ namespace HIVBackend.Controllers
                         activeColumns.Add("DieDate");
                         columName.Add("Дата смерти от СПИДа");
                         activeColumns.Add("DieAidsDate");
-                        columName.Add("Дата ввода смерти");
-                        activeColumns.Add("DieDateInput");
                     }
 
                     if (key.Name == "selectCheckCourse")
@@ -185,16 +180,6 @@ namespace HIVBackend.Controllers
                         activeColumns.Add("DieCourseLong");
                         columName.Add("МКБ причина смерти");
                         activeColumns.Add("DieCourseShort");
-                        //columName.Add("Непосредственная причина смерти");
-                        //columName.Add("МКБ непосредственная причина смерти");
-                        //columName.Add("Состояния приведшие к смерти");
-                        //columName.Add("МКБ состояния приведшие к смерти");
-                        //columName.Add("Первоночальная причина смерти");
-                        //columName.Add("МКБ первоночальная причина смерти");
-                        //columName.Add("Внешняя причина смерти");
-                        //columName.Add("МКБ внешняя причина смерти");
-                        //columName.Add("Прочие состояния способствовавшие смерти");
-                        //columName.Add("МКБ пр состояния");
                     }
 
                     if (key.Name == "selectInfectCourse")
@@ -258,12 +243,6 @@ namespace HIVBackend.Controllers
                         activeColumns.Add("CodeMkb10Long");
                     }
 
-                    if (key.Name == "selectArchive")
-                    {
-                        columName.Add("Архив");
-                        activeColumns.Add("Archive");
-                    }
-
                     if (key.Name == "selectTransfArea")
                     {
                         columName.Add("Дата передачи в район");
@@ -296,52 +275,114 @@ namespace HIVBackend.Controllers
                         activeColumns.Add("Aids12Long");
                     }
 
-                    if (key.Name == "selectUnrz")
+                    if (key.Name == "selectDtMailReg")
                     {
-                        columName.Add("УНРЗ");
-                        activeColumns.Add("UnrzFr");
+                        columName.Add("Дата письма в др.регион");
+                        activeColumns.Add("DtMailReg");
                     }
 
-                    if (key.Name == "selectChemprof")
+                    if (key.Name == "selectEdu")
                     {
-                        columName.Add("Химиопрофилактика");
-                        activeColumns.Add("ChemopLong");
-                        columName.Add("Химиопрофилактика с");
-                        activeColumns.Add("ChemopDateFrom");
-                        columName.Add("Химиопрофилактика по");
-                        activeColumns.Add("ChemopDateTo");
+                        columName.Add("Образование");
+                        activeColumns.Add("EduName");
                     }
 
-                    if (key.Name == "selectDateReg")
+                    if (key.Name == "selectFamilyStatus")
                     {
-                        columName.Add("Дата регистрации нач");
-                        activeColumns.Add("DtRegBeg");
-                        columName.Add("Дата регистрации кон");
-                        activeColumns.Add("DtRegEnd");
+                        columName.Add("Семейное положение");
+                        activeColumns.Add("FamilyStatusName");
                     }
 
-                    if (key.Name == "selectPasSer")
+                    if (key.Name == "selectEmployment")
                     {
-                        columName.Add("Паспорт серия");
-                        activeColumns.Add("PasSer");
+                        columName.Add("Занятость");
+                        activeColumns.Add("EmploymentName");
                     }
 
-                    if (key.Name == "selectPasNum")
+                    if (key.Name == "selectTrans")
                     {
-                        columName.Add("Паспорт номер");
-                        activeColumns.Add("PasNum");
+                        columName.Add("Трансгендерность");
+                        activeColumns.Add("TransName");
                     }
 
-                    if (key.Name == "selectPasWhom")
+                    if (key.Name == "selectPlaceCheck")
                     {
-                        columName.Add("Паспорт выдан");
-                        activeColumns.Add("PasWhen");
+                        columName.Add("Место выявления");
+                        activeColumns.Add("PlaceCheckName");
                     }
 
-                    if (key.Name == "selectPasWhen")
+                    if (key.Name == "selectSituationDetect")
                     {
-                        columName.Add("Паспорт Дата выдачи");
-                        activeColumns.Add("PasWhom");
+                        columName.Add("Обст. выявления");
+                        activeColumns.Add("SituationDetectName");
+                    }
+
+                    if (key.Name == "selectTransmisionMech")
+                    {
+                        columName.Add("Вер. мех. передачи");
+                        activeColumns.Add("TrasmisoinMechName");
+                    }
+
+                    if (key.Name == "selectVulnerableGroup")
+                    {
+                        columName.Add("Кат. уязвимой группы");
+                        activeColumns.Add("VulnerableGroupName");
+                    }
+
+                    if (key.Name == "selectCovidVac")
+                    {
+                        columName.Add("Дата 1 дозы");
+                        activeColumns.Add("DVac1");
+                        columName.Add("Дата 2 дозы");
+                        activeColumns.Add("DVac2");
+                        columName.Add("Наименование вакцины");
+                        activeColumns.Add("VacName");
+                    }
+
+                    if (key.Name == "selectCovid")
+                    {
+                        columName.Add("Дата пол рез");
+                        activeColumns.Add("DPositivResCovid");
+                        columName.Add("Дата отриц рез");
+                        activeColumns.Add("DNegativeResCovid");
+                        columName.Add("Диагноз МКБ10 COVID");
+                        activeColumns.Add("Mkb10LongName");
+                    }
+
+                    if (key.Name == "selectChemsex")
+                    {
+                        columName.Add("Химсекс(Да/Нет)");
+                        activeColumns.Add("YnNameChemsex");
+                        columName.Add("Химсекс(Вид контакта)");
+                        activeColumns.Add("ChemsexContactType");
+                    }
+
+                    if (key.Name == "selectPavInj")
+                    {
+                        columName.Add("ПАВ инек. дата начала");
+                        activeColumns.Add("DateStartPavInj");
+                        columName.Add("ПАВ инек. дата окончания");
+                        activeColumns.Add("DateEndPavInj");
+                        columName.Add("ПАВ инек. (да/нет)");
+                        activeColumns.Add("YnNamePavInj");
+                    }
+
+                    if (key.Name == "selectPavNotInj")
+                    {
+                        columName.Add("ПАВ неинек. дата начала");
+                        activeColumns.Add("DateStartPavNotInj");
+                        columName.Add("ПАВ неинек. дата окончания");
+                        activeColumns.Add("DateEndPavNotInj");
+                        columName.Add("ПАВ неинек. (да/нет)");
+                        activeColumns.Add("YnNamePavNotInj");
+                    }
+
+                    if (key.Name == "selectTimeInfect")
+                    {
+                        columName.Add("Вероятные сроки инфиц. с");
+                        activeColumns.Add("EpidemInfectStart");
+                        columName.Add("Вероятные сроки инфиц. по");
+                        activeColumns.Add("EpidemInfectEnd");
                     }
                 }
             }
@@ -365,7 +406,7 @@ namespace HIVBackend.Controllers
             }
 
             if (form.age.Contains("5 - 9"))
-                for(int i = 5;i <= 9; i++)
+                for (int i = 5; i <= 9; i++)
                     ages.Add($"{i}");
 
             if (form.age.Contains("10 - 14"))
@@ -396,19 +437,24 @@ namespace HIVBackend.Controllers
                 for (int i = 50; i <= 59; i++)
                     ages.Add($"{i}");
 
-            var qryWhere = _context.QrySearchMainInfs.Where(e =>
+            var qryWhere = _context.QrySearchEpids.Where(e =>
                         (form.dateInpStart.Length != 0 ? e.InputDate >= DateOnly.Parse(form.dateInpStart) : true) &&
                         (form.dateInpEnd.Length != 0 ? e.InputDate <= DateOnly.Parse(form.dateInpEnd) : true) &&
                         (form.patientId.Length != 0 ? e.PatientId == int.Parse(form.patientId) : true) &&
                         (form.familyName.Length != 0 ? e.FamilyName.ToLower().StartsWith(form.familyName.ToLower()) : true) &&
                         (form.firstName.Length != 0 ? e.FirstName.ToLower().StartsWith(form.firstName.ToLower()) : true) &&
                         (form.thirdName.Length != 0 ? e.ThirdName.ToLower().StartsWith(form.thirdName.ToLower()) : true) &&
-                        (form.fioChange.Length != 0 ? e.FioChange.ToLower().StartsWith(form.fioChange.ToLower()) : true) &&
                         (form.sex.Length != 0 ? e.SexShort == form.sex : true) &&
                         (form.birthDateStart.Length != 0 ? e.BirthDate >= DateOnly.Parse(form.birthDateStart) : true) &&
                         (form.birthDateEnd.Length != 0 ? e.BirthDate <= DateOnly.Parse(form.birthDateEnd) : true) &&
                         (form.regionFact[0] != "Все" ? form.regionFact.Contains(e.RegionLong) : true) &&
+                        (form.regionPreset == "Московская обл." ? e.RegtypeId == 1 : true) &&
+                        (form.regionPreset == "Иногородние" ? e.RegtypeId == 2 : true) &&
+                        (form.regionPreset == "Иностранные" ? e.RegtypeId == 3 : true) &&
                         (form.regionReg[0] != "Все" ? form.regionReg.Contains(e.RegionLong) : true) &&
+                        (form.factRegionPreset == "Московская обл." ? e.FactRegtypeId == 1 : true) &&
+                        (form.factRegionPreset == "Иногородние" ? e.FactRegtypeId == 2 : true) &&
+                        (form.factRegionPreset == "Иностранные" ? e.FactRegtypeId == 3 : true) &&
                         (form.country[0] != "Все" ? form.country.Contains(e.CountryLong) : true) &&
                         (form.city.Length != 0 ? e.CityName.ToLower().StartsWith(form.city.ToLower()) : true) &&
                         (form.location.Length != 0 ? e.LocationName.ToLower().StartsWith(form.location.ToLower()) : true) &&
@@ -446,12 +492,10 @@ namespace HIVBackend.Controllers
                         (form.ibSelect == "Перв.и посл." ? (e.Last1 == true || e.First1 == true) : true) &&
                         (form.hospCourse[0] != "Все" ? form.hospCourse.Contains(e.ShowIllnessLong) : true) &&
                         (form.age[0] != "Все" && form.age.Contains("> 60") != true ? (ages.Contains(e.Age.ToString())) : true) &&
-                        (form.age[0] != "Все" && form.age.Contains("> 60") ? ( ages.Contains(e.Age.ToString()) || e.Age >= 60) : true) &&
+                        (form.age[0] != "Все" && form.age.Contains("> 60") ? (ages.Contains(e.Age.ToString()) || e.Age >= 60) : true) &&
                         (form.cardNo.Length != 0 ? e.CardNo.ToLower().StartsWith(form.cardNo.ToLower()) : true) &&
                         (form.art[0] != "Все" ? form.art.Contains(e.ArvtLong) : true) &&
                         (form.mkb10[0] != "Все" ? form.mkb10.Contains(e.CodeMkb10Long) : true) &&
-                        (form.archiveYNA == "Да" ? (e.Archive != null || e.Archive.Length != 0) : true) &&
-                        (form.archiveYNA == "Нет" ? (e.Archive == null || e.Archive.Length == 0) : true) &&
                         (form.transfAreaYNA == "Да" ? e.TransfAreaDate != null : true) &&
                         (form.transfAreaYNA == "Нет" ? e.TransfAreaDate == null : true) &&
                         (form.dateTransfAreaStart.Length != 0 ? e.TransfAreaDate >= DateOnly.Parse(form.dateTransfAreaStart) : true) &&
@@ -469,33 +513,44 @@ namespace HIVBackend.Controllers
                         (form.dateUfsinStart.Length != 0 ? e.UfsinDate >= DateOnly.Parse(form.dateUfsinStart) : true) &&
                         (form.dateUfsinEnd.Length != 0 ? e.UfsinDate <= DateOnly.Parse(form.dateUfsinEnd) : true) &&
                         (form.aids12.Length != 0 ? e.Aids12Long == form.aids12 : true) &&
-                        (form.unrzYNA == "Да" ? (e.UnrzFr != null || e.UnrzFr.Length != 0) : true) &&
-                        (form.unrzYNA == "Нет" ? e.UnrzFr == null : true) &&
-                        (form.unrz.Length != 0 ? e.UnrzFr.ToLower().StartsWith(form.unrz.ToLower()) : true) &&
-                        (form.chemprof.Length != 0 ? e.ChemopLong == form.chemprof : true) &&
-                        (form.dateChemprofStartStart.Length != 0 ? e.ChemopDateFrom >= DateOnly.Parse(form.dateChemprofStartStart) : true) &&
-                        (form.dateChemprofStartEnd.Length != 0 ? e.ChemopDateFrom <= DateOnly.Parse(form.dateChemprofStartEnd) : true) &&
-                        (form.dateChemprofEndStart.Length != 0 ? e.ChemopDateTo >= DateOnly.Parse(form.dateChemprofEndStart) : true) &&
-                        (form.dateChemprofEndEnd.Length != 0 ? e.ChemopDateTo <= DateOnly.Parse(form.dateChemprofEndEnd) : true) &&
-                        (form.dateRegStart.Length != 0 ? e.DtRegEnd >= DateOnly.Parse(form.dateRegStart) : true) &&
-                        (form.dateRegEnd.Length != 0 ? e.DtRegEnd <= DateOnly.Parse(form.dateRegEnd) : true) &&
-                        (form.regionPreset == "Московская обл." ? e.RegtypeId == 1 : true) &&
-                        (form.regionPreset == "Иногородние" ? e.RegtypeId == 2 : true) &&
-                        (form.regionPreset == "Иностранные" ? e.RegtypeId == 3 : true) &&
-                        (form.factRegionPreset == "Московская обл." ? e.FactRegtypeId == 1 : true) &&
-                        (form.factRegionPreset == "Иногородние" ? e.FactRegtypeId == 2 : true) &&
-                        (form.factRegionPreset == "Иностранные" ? e.FactRegtypeId == 3 : true)
+                        (form.dtMailRegStart.Length != 0 ? e.DtMailReg >= DateOnly.Parse(form.dtMailRegStart) : true) &&
+                        (form.dtMailRegEnd.Length != 0 ? e.DtMailReg <= DateOnly.Parse(form.dtMailRegEnd) : true) &&
+                        (form.education[0] != "Все" ? form.education.Contains(e.EduName) : true) &&
+                        (form.familyStatus[0] != "Все" ? form.familyStatus.Contains(e.FamilyName) : true) &&
+                        (form.employment[0] != "Все" ? form.employment.Contains(e.EmploymentName) : true) &&
+                        (form.trans[0] != "Все" ? form.trans.Contains(e.TransName) : true) &&
+                        (form.placeCheck[0] != "Все" ? form.placeCheck.Contains(e.PlaceCheckName) : true) &&
+                        (form.situationDetect[0] != "Все" ? form.situationDetect.Contains(e.SituationDetectName) : true) &&
+                        (form.transmisionMech[0] != "Все" ? form.transmisionMech.Contains(e.TrasmisoinMechName) : true) &&
+                        (form.vulnerableGroup[0] != "Все" ? form.vulnerableGroup.Contains(e.VulnerableGroupName) : true) &&
+                        (form.vacName.Length != 0 ? e.Mkb10LongName == form.covidMkb10 : true) &&
+                        (form.vacDateStart.Length != 0 ? e.DVac1 >= DateOnly.Parse(form.vacDateStart) : true) &&
+                        (form.vacDateEnd.Length != 0 ? e.DVac1 <= DateOnly.Parse(form.vacDateEnd) : true) &&
+                        (form.covidMkb10.Length != 0 ? e.Mkb10LongName == form.covidMkb10 : true) &&
+                        (form.covidDateStart.Length != 0 ? e.DPositivResCovid >= DateOnly.Parse(form.covidDateStart) : true) &&
+                        (form.covidDateEnd.Length != 0 ? e.DPositivResCovid <= DateOnly.Parse(form.covidDateEnd) : true) &&
+                        (form.chemsexYNA == "Да" ? e.YnNameChemsex == "Да" : true) &&
+                        (form.chemsexYNA == "Нет" ? e.YnNameChemsex == "Нет" : true) &&
+                        (form.chemsexContactType.Length != 0 ? e.ChemsexContactType == form.chemsexContactType : true) &&
+                        (form.pavInjYNA == "Да" ? e.YnNamePavInj == "Да" : true) &&
+                        (form.pavInjYNA == "Нет" ? e.YnNamePavInj == "Нет" : true) &&
+                        (form.pavInjDateStart.Length != 0 ? e.DateStartPavInj >= DateOnly.Parse(form.pavInjDateStart) : true) &&
+                        (form.pavInjDateEnd.Length != 0 ? e.DateStartPavInj <= DateOnly.Parse(form.pavInjDateEnd) : true) &&
+                        (form.pavNotInjYNA == "Да" ? e.YnNamePavNotInj == "Да" : true) &&
+                        (form.pavNotInjYNA == "Нет" ? e.YnNamePavNotInj == "Нет" : true) &&
+                        (form.pavNotInjDateStart.Length != 0 ? e.DateStartPavNotInj >= DateOnly.Parse(form.pavNotInjDateStart) : true) &&
+                        (form.pavNotInjDateEnd.Length != 0 ? e.DateStartPavNotInj <= DateOnly.Parse(form.pavNotInjDateEnd) : true) &&
+                        (form.timeInfectDateStart.Length != 0 ? e.EpidemInfectStart >= DateOnly.Parse(form.timeInfectDateStart) : true) &&
+                        (form.timeInfectDateEnd.Length != 0 ? e.EpidemInfectStart <= DateOnly.Parse(form.timeInfectDateEnd) : true)
                             );
 
-            var lambda = new CreateLambda<QrySearchMainInf>().CreateLambdaSelect(activeColumns);
+            var lambda = new CreateLambda<QrySearchEpid>().CreateLambdaSelect(activeColumns);
             var selected = qryWhere.Select(lambda);
             var resQry = selected.GroupBy(item => item, new DictionaryEqualityComparer()).Select(e => e.First()).ToList();
             int resCount = resQry.Count();
 
             if (resCount == 0)
-            {
                 return Ok(new { columName, resCount });
-            }
 
             var resPage = resQry.Select((x, i) => new { Index = i, Value = x })
                         .GroupBy(x => x.Index / pageSize)
