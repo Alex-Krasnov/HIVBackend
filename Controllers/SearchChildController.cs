@@ -36,9 +36,7 @@ namespace HIVBackend.Controllers
             outModel.ListStage = _context.TblDiagnoses.Select(e => e.DiagnosisLong).OrderBy(e => e).ToList();
             outModel.ListCheckCourse = _context.TblCheckCourses.Select(e => new Selector2Col { Short = e.CheckCourseShort, Long = e.CheckCourseLong })
                 .OrderBy(e => e.Short).ToList();
-            outModel.ListInfectCourse = _context.TblInfectCourses
-                .Where(e => e.InfectCourseId == 201 || e.InfectCourseId == 203 || e.InfectCourseId == 210)
-                .Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
+            outModel.ListInfectCourse = _context.TblInfectCourses.Where(e => e.InfectCourseId != 210).Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
             outModel.ListShowIllness = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong).OrderBy(e => e).ToList();
             outModel.ListCodeMKB10 = _context.TblCodeMkb10s.Select(e => e.CodeMkb10Long).OrderBy(e => e).ToList();
             outModel.ListFamilyType = _context.TblFamilyTypes.Select(e => e.FamilyTypeLong).OrderBy(e => e).ToList();

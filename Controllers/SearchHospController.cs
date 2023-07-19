@@ -6,18 +6,17 @@ using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Data;
 
 namespace HIVBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SearchVisitController : ControllerBase
+    public class SearchHospController : ControllerBase
     {
 
         private readonly HivContext _context;
-        public SearchVisitController(HivContext context)
+        public SearchHospController(HivContext context)
         {
             _context = context;
         }
@@ -26,7 +25,7 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult GetForm()
         {
-            SearchVisit outModel = new();
+            SearchHosp outModel = new();
 
             outModel.ListSex = _context.TblSexes.Select(e => e.SexShort).OrderBy(e => e).ToList();
             outModel.ListRegion = _context.TblRegions.Select(e => e.RegionLong).OrderBy(e => e).ToList();
@@ -34,8 +33,9 @@ namespace HIVBackend.Controllers
             outModel.ListInfectCourse = _context.TblInfectCourses.Where(e => e.InfectCourseId != 210).Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
             outModel.ListStage = _context.TblDiagnoses.Select(e => e.DiagnosisLong).OrderBy(e => e).ToList();
             outModel.ListCheckCourse = _context.TblCheckCourses.Select(e => new Selector2Col { Short = e.CheckCourseShort, Long = e.CheckCourseLong }).OrderBy(e => e.Short).ToList();
-            outModel.ListShowIllness = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong).OrderBy(e => e).ToList();
-            outModel.ListArvt = _context.TblArvts.Select(e => e.ArvtLong).OrderBy(e => e).ToList();
+            outModel.ListLpu = _context.TblLpus.Select(e => e.LpuLong).OrderBy(e => e).ToList();
+            outModel.ListHospCourse = _context.TblHospCourses.Select(e => e.HospCourseLong).Select(e => e).OrderBy(e => e).ToList();
+            outModel.ListHospResult = _context.TblHospResults.Select(e => e.HospResultLong).OrderBy(e => e).ToList();
             outModel.ListYNA = new() { "Да", "Нет", "Все" };
             outModel.ListRegionPreset = new() { "Все", "Московская обл.", "Иногородние", "Иностранные" };
 
@@ -44,14 +44,14 @@ namespace HIVBackend.Controllers
 
         [HttpPost, Route("GetRes")]
         [Authorize(Roles = "User")]
-        public IActionResult GetRes(SearchVisitForm form)
+        public IActionResult GetRes(SearchHospForm form)
         {
             int pageSize = 100;
             List<string> columName = new() { "Ид пациента" };
 
             List<string> activeColumns = new() { "PatientId" };
 
-            foreach (var key in typeof(SearchVisitForm).GetProperties())
+            foreach (var key in typeof(SearchHospForm).GetProperties())
             {
                 if (key.Name.StartsWith("select") && (Boolean)key.GetValue(form) == true)
                 {
@@ -101,6 +101,24 @@ namespace HIVBackend.Controllers
                         activeColumns.Add("CountryLong");
                     }
 
+                    if (key.Name == "selectAddr")
+                    {
+                        columName.Add("Город");
+                        activeColumns.Add("CityName");
+                        columName.Add("Населённый пункт");
+                        activeColumns.Add("LocationName");
+                        columName.Add("Индекс");
+                        activeColumns.Add("AddrInd");
+                        columName.Add("Улица");
+                        activeColumns.Add("AddrStreet");
+                        columName.Add("Дом");
+                        activeColumns.Add("AddrHouse");
+                        columName.Add("Корпус");
+                        activeColumns.Add("AddrExt");
+                        columName.Add("Квартира");
+                        activeColumns.Add("AddrFlat");
+                    }
+
                     if (key.Name == "selectRegOnDate")
                     {
                         columName.Add("Дата постановки на учет");
@@ -127,16 +145,6 @@ namespace HIVBackend.Controllers
                         activeColumns.Add("InfectCourseLong");
                     }
 
-                    if (key.Name == "selectShowIllnes")
-                    {
-                        columName.Add("Индикаторная болезнь");
-                        activeColumns.Add("ShowIllnessLong");
-                        columName.Add("Дата вторичного заболивания с");
-                        activeColumns.Add("StartDate");
-                        columName.Add("Дата вторичного заболивания по");
-                        activeColumns.Add("EndDate");
-                    }
-
                     if (key.Name == "selectTransfArea")
                     {
                         columName.Add("Дата передачи в район");
@@ -157,64 +165,46 @@ namespace HIVBackend.Controllers
                         activeColumns.Add("FlgHeadPhysician");
                     }
 
-                    if (key.Name == "selectRegDate")
+                    if (key.Name == "selectTransfFeder")
                     {
-                        columName.Add("Дата записи");
-                        activeColumns.Add("RegDate");
+                        columName.Add("Дата передачи в субъект федерации");
+                        activeColumns.Add("TransfFederDate");
                     }
 
-                    if (key.Name == "selectCheckDate")
+                    if (key.Name == "selectDateHospIn")
                     {
-                        columName.Add("Дата приема на выезде");
-                        activeColumns.Add("CheckDate");
+                        columName.Add("Дата госп");
+                        activeColumns.Add("DateHospIn");
                     }
 
-                    if (key.Name == "selectDoctor")
+                    if (key.Name == "selectDateHospOut")
                     {
-                        columName.Add("Специалист");
-                        activeColumns.Add("DoctorLong");
+                        columName.Add("Дата выписки");
+                        activeColumns.Add("DateHospOut");
                     }
 
-                    if (key.Name == "selectCardNo")
+                    if (key.Name == "selectLpu")
                     {
-                        columName.Add("№ карты");
-                        activeColumns.Add("CardNo");
+                        columName.Add("МО");
+                        activeColumns.Add("LpuLong");
                     }
 
-                    if (key.Name == "selectArt")
+                    if (key.Name == "selectHospCourse")
                     {
-                        columName.Add("АРТ");
-                        activeColumns.Add("ArvtLong");
+                        columName.Add("Причина госпитализацииН");
+                        activeColumns.Add("HospCourseLong");
                     }
 
-                    if (key.Name == "selectAddr")
+                    if (key.Name == "selectHospResult")
                     {
-                        columName.Add("Город");
-                        activeColumns.Add("CityName");
-                        columName.Add("Населённый пункт");
-                        activeColumns.Add("LocationName");
-                        columName.Add("Индекс");
-                        activeColumns.Add("AddrInd");
-                        columName.Add("Улица");
-                        activeColumns.Add("AddrStreet");
-                        columName.Add("Дом");
-                        activeColumns.Add("AddrHouse");
-                        columName.Add("Корпус");
-                        activeColumns.Add("AddrExt");
-                        columName.Add("Квартира");
-                        activeColumns.Add("AddrFlat");
-                    }
-
-                    if (key.Name == "selectRegCheck")
-                    {
-                        columName.Add("Явка");
-                        activeColumns.Add("RegCheck");
+                        columName.Add("Исход госпитализации");
+                        activeColumns.Add("HospResultLong");
                     }
                 }
             }
 
 
-            var qryWhere = _context.QrySearchVisits.Where(e =>
+            var qryWhere = _context.QrySearchHosps.Where(e =>
                         (form.dateInpStart.Length != 0 ? e.InputDate >= DateOnly.Parse(form.dateInpStart) : true) &&
                         (form.dateInpEnd.Length != 0 ? e.InputDate <= DateOnly.Parse(form.dateInpEnd) : true) &&
                         (form.patientId.Length != 0 ? e.PatientId == int.Parse(form.patientId) : true) &&
@@ -233,6 +223,11 @@ namespace HIVBackend.Controllers
                         (form.regionPreset == "Иногородние" ? e.RegtypeId == 2 : true) &&
                         (form.regionPreset == "Иностранные" ? e.RegtypeId == 3 : true) &&
                         (form.country[0] != "Все" ? form.country.Contains(e.CountryLong) : true) &&
+                        (form.city.Length != 0 ? e.CityName.ToLower().StartsWith(form.city.ToLower()) : true) &&
+                        (form.location.Length != 0 ? e.LocationName.ToLower().StartsWith(form.location.ToLower()) : true) &&
+                        (form.indx.Length != 0 ? e.AddrInd.ToLower().StartsWith(form.indx.ToLower()) : true) &&
+                        (form.street.Length != 0 ? e.AddrStreet.ToLower().StartsWith(form.street.ToLower()) : true) &&
+                        (form.home.Length != 0 ? e.AddrHouse.ToLower().StartsWith(form.home.ToLower()) : true) &&
                         (form.dateRegOnStart.Length != 0 ? e.RegOnDate >= DateOnly.Parse(form.dateRegOnStart) : true) &&
                         (form.dateRegOnEnd.Length != 0 ? e.RegOnDate <= DateOnly.Parse(form.dateRegOnEnd) : true) &&
                         (form.dateUnRegStart.Length != 0 ? e.RegOffDate >= DateOnly.Parse(form.dateUnRegStart) : true) &&
@@ -240,9 +235,6 @@ namespace HIVBackend.Controllers
                         (form.stage[0] != "Все" ? form.stage.Contains(e.DiagnosisLong) : true) &&
                         (form.checkCourse[0] != "Все" ? form.checkCourse.Contains(e.CheckCourseLong) : true) &&
                         (form.infectCourse[0] != "Все" ? form.infectCourse.Contains(e.InfectCourseLong) : true) &&
-                        (form.showIllnes[0] != "Все" ? form.showIllnes.Contains(e.ShowIllnessLong) : true) &&
-                        (form.dateShowIllnesStart.Length != 0 ? e.StartDate >= DateOnly.Parse(form.dateShowIllnesStart) : true) &&
-                        (form.dateShowIllnesEnd.Length != 0 ? e.StartDate <= DateOnly.Parse(form.dateShowIllnesEnd) : true) &&
                         (form.transfAreaYNA == "Да" ? e.TransfAreaDate != null : true) &&
                         (form.transfAreaYNA == "Нет" ? e.TransfAreaDate == null : true) &&
                         (form.dateTransfAreaStart.Length != 0 ? e.TransfAreaDate >= DateOnly.Parse(form.dateTransfAreaStart) : true) &&
@@ -255,18 +247,16 @@ namespace HIVBackend.Controllers
                         (form.frYNA == "Нет" ? (e.FlgZamMedPart == false || e.FlgZamMedPart == null) : true) &&
                         (form.zavApoYNA == "Да" ? e.FlgHeadPhysician == true : true) &&
                         (form.zavApoYNA == "Нет" ? (e.FlgHeadPhysician == false || e.FlgHeadPhysician == null) : true) &&
-                        (form.regDateStart.Length != 0 ? e.RegDate >= DateOnly.Parse(form.regDateStart) : true) &&
-                        (form.regDateEnd.Length != 0 ? e.RegDate <= DateOnly.Parse(form.regDateEnd) : true) &&
-                        (form.checkDateStart.Length != 0 ? e.CheckDate >= DateOnly.Parse(form.checkDateStart) : true) &&
-                        (form.checkDateEnd.Length != 0 ? e.CheckDate <= DateOnly.Parse(form.checkDateEnd) : true) &&
-                        (form.doctor[0] != "Все" ? form.doctor.Contains(e.DoctorLong) : true) &&
-                        (form.cardNo.Length != 0 ? e.CardNo.ToLower().StartsWith(form.cardNo.ToLower()) : true) &&
-                        (form.art[0] != "Все" ? form.art.Contains(e.ArvtLong) : true) &&
-                        (form.regCheck == "Да" ? e.RegCheck == true : true) &&
-                        (form.regCheck == "Нет" ? e.RegCheck == false : true)
+                        (form.dateHospInStart.Length != 0 ? e.DateHospIn >= DateOnly.Parse(form.dateHospInStart) : true) &&
+                        (form.dateHospInEnd.Length != 0 ? e.DateHospIn <= DateOnly.Parse(form.dateHospInEnd) : true) &&
+                        (form.dateHospOutStart.Length != 0 ? e.DateHospOut >= DateOnly.Parse(form.dateHospOutStart) : true) &&
+                        (form.dateHospOutEnd.Length != 0 ? e.DateHospOut <= DateOnly.Parse(form.dateHospOutEnd) : true) &&
+                        (form.lpu[0] != "Все" ? form.lpu.Contains(e.LpuLong) : true) &&
+                        (form.hospCourse[0] != "Все" ? form.hospCourse.Contains(e.HospCourseLong) : true) &&
+                        (form.hospResult[0] != "Все" ? form.hospResult.Contains(e.HospResultLong) : true)
                             );
 
-            var lambda = new CreateLambda<QrySearchVisit>().CreateLambdaSelect(activeColumns);
+            var lambda = new CreateLambda<QrySearchHosp>().CreateLambdaSelect(activeColumns);
             var selected = qryWhere.Select(lambda);
             var resQry = selected.GroupBy(item => item, new DictionaryEqualityComparer()).Select(e => e.First()).ToList();
             int resCount = resQry.Count();
