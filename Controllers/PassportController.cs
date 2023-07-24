@@ -31,7 +31,7 @@ namespace HIVBackend.Controllers
             Passport pas = new();
 
             pas.PatientId = patient.PatientId;
-            pas.Region = _context.TblRegions.FirstOrDefault(e => e.RegionId == patient.RegionId).RegionLong;
+            pas.Region = _context.TblRegions.FirstOrDefault(e => e.RegionId == patient.RegionId)?.RegionLong;
             pas.CityName = patient.CityName;
             pas.LocationName = patient.LocationName;
             pas.Index = patient.AddrInd;
@@ -39,7 +39,7 @@ namespace HIVBackend.Controllers
             pas.AddrHouse = patient.AddrHouse;
             pas.AddrExt = patient.AddrExt;
             pas.AddrFlat = patient.AddrFlat;
-            pas.RegionFact = _context.TblRegions.FirstOrDefault(e => e.RegionId == patient.FactRegionId).RegionLong;
+            pas.RegionFact = _context.TblRegions.FirstOrDefault(e => e.RegionId == patient.FactRegionId)?.RegionLong;
             pas.CityNameFact = patient.FactCityName;
             pas.LocationNameFact = patient.FactLocationName;
             pas.IndexFact = patient.FactAddrInd;
