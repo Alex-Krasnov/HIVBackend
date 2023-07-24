@@ -392,7 +392,7 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult DelPatientPatient(int patientId)
         {
-            TblPatientCard item = new(){ PatientId = patientId };
+            TblPatientCard item = _context.TblPatientCards.First(e => e.PatientId == patientId);//new(){ PatientId = patientId };
             _context.TblPatientCards.Attach(item);
             item.IsActive = false;
             _context.SaveChanges();

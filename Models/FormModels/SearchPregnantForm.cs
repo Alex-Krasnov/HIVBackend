@@ -95,5 +95,6 @@ namespace HIVBackend.Models.FormModels
         public Boolean selectAclMcnCode { get; set; }
 
         public int Page { get; set; }
+        public Boolean Excel { get; set; }
     }
 }

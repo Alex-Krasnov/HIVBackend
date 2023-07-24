@@ -86,5 +86,6 @@ namespace HIVBackend.Models.FormModels
         public Boolean selectForm309 { get; set; }
 
         public int Page { get; set; }
+        public Boolean Excel { get; set; }
     }
 }
