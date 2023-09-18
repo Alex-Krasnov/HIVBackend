@@ -485,7 +485,7 @@ namespace HIVBackend.Controllers
                         (form.factRegionPreset == "Московская обл." ? e.FactRegtypeId == 1 : true) &&
                         (form.factRegionPreset == "Иногородние" ? e.FactRegtypeId == 2 : true) &&
                         (form.factRegionPreset == "Иностранные" ? e.FactRegtypeId == 3 : true)
-                            );
+                            ).OrderBy(e => e.FamilyName).ThenBy(e => e.FirstName).ThenBy(e => e.ThirdName);
 
             var lambda = new CreateLambda<QrySearchMainInf>().CreateLambdaSelect(activeColumns);
             var selected = qryWhere.Select(lambda);
@@ -502,7 +502,8 @@ namespace HIVBackend.Controllers
 
                 var createExcel = new CreateExcel();
                 string fileName = $"res_search_{token.Claims.First().Value}_{DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss")}.xlsx";
-                string path = Path.Combine(Environment.CurrentDirectory, @"wwwroot", fileName);
+                string path = Path.Combine(Environment.CurrentDirectory, fileName);
+                //string path = Path.Combine(Environment.CurrentDirectory, @"wwwroot", fileName);
 
                 if (System.IO.File.Exists(path))
                     System.IO.File.Delete(path);
@@ -520,10 +521,7 @@ namespace HIVBackend.Controllers
                 return Ok(new { columName, resCount });
             }
 
-            var resPage = resQry.Select((x, i) => new { Index = i, Value = x })
-                        .GroupBy(x => x.Index / pageSize)
-                        .Select(x => x.Select(v => v.Value).ToList())
-                        .ToList().ElementAt(form.Page - 1);
+            var resPage = resQry.Skip(pageSize * (form.Page - 1)).Take(pageSize).ToList();
 
             return Ok(new { columName, resPage, resCount });
 

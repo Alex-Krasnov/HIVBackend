@@ -542,7 +542,7 @@ namespace HIVBackend.Controllers
                         (form.pavNotInjDateEnd.Length != 0 ? e.DateStartPavNotInj <= DateOnly.Parse(form.pavNotInjDateEnd) : true) &&
                         (form.timeInfectDateStart.Length != 0 ? e.EpidemInfectStart >= DateOnly.Parse(form.timeInfectDateStart) : true) &&
                         (form.timeInfectDateEnd.Length != 0 ? e.EpidemInfectStart <= DateOnly.Parse(form.timeInfectDateEnd) : true)
-                            );
+                            ).OrderBy(e => e.FamilyName).ThenBy(e => e.FirstName).ThenBy(e => e.ThirdName);
 
             var lambda = new CreateLambda<QrySearchEpid>().CreateLambdaSelect(activeColumns);
             var selected = qryWhere.Select(lambda);
@@ -559,7 +559,7 @@ namespace HIVBackend.Controllers
 
                 var createExcel = new CreateExcel();
                 string fileName = $"res_search_{token.Claims.First().Value}_{DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss")}.xlsx";
-                string path = Path.Combine(Environment.CurrentDirectory, @"wwwroot", fileName);
+                string path = Path.Combine(Environment.CurrentDirectory, fileName);
 
                 if (System.IO.File.Exists(path))
                     System.IO.File.Delete(path);
@@ -576,10 +576,7 @@ namespace HIVBackend.Controllers
             if (resCount == 0)
                 return Ok(new { columName, resCount });
 
-            var resPage = resQry.Select((x, i) => new { Index = i, Value = x })
-                        .GroupBy(x => x.Index / pageSize)
-                        .Select(x => x.Select(v => v.Value).ToList())
-                        .ToList().ElementAt(form.Page - 1);
+            var resPage = resQry.Skip(pageSize * (form.Page - 1)).Take(pageSize).ToList();
 
             return Ok(new { columName, resPage, resCount });
 

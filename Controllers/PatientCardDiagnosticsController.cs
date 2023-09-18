@@ -39,7 +39,7 @@ namespace HIVBackend.Controllers
             List<TblPatientAclResult>? patientVirusLoads = _context.TblPatientAclResults
                 .Where(e => e.PatientId == patientId && (e.AclTestCode == "П0030" || e.AclTestCode == "П0060"))?.ToList();
             List<TblPatientAclResult>? patientVirusLoadQuals = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode == "П0050")?.ToList();
-            List<TblPatientVirusLoad>? patientVirusLoadsOld = _context.TblPatientVirusLoads.Where(e => e.PatientId == patientId).ToList();
+            List<TblPatientVirusLoad>? patientVirusLoadsOld = _context.TblPatientVirusLoads.Where(e => e.PatientId == patientId).OrderBy(e => e.DefineVirusDate).ToList();
             List<TblPatientAclResult>? patientCMVs = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode == "Р0001")?.ToList();
             List<TblPatientAclResult>? patientIHLs = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode == "ИХЛ01")?.ToList();
 
@@ -78,15 +78,6 @@ namespace HIVBackend.Controllers
                                 {
                                     e.Key
                                 };
-                
-                //_context.TblPatientAclResults
-                //.Where(e => e.PatientId == patientId && (
-                //e.AclTestCode == "И0015" 
-                //|| e.AclTestCode == "И0025"
-                //|| e.AclTestCode == "И0030"
-                //|| e.AclTestCode == "И0035"
-                //|| e.AclTestCode == "И0040"
-                //))?.Select(e => e.AclSampleDate).ToList();
 
             List<TblPatientAclResult>? imStatCD348s15 = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode == "И0015")?.ToList();
             List<TblPatientAclResult>? imStatCD348s25 = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode == "И0025")?.ToList();
@@ -160,6 +151,7 @@ namespace HIVBackend.Controllers
                     ResultDescr = item.AclResult
                 });
             }
+
             foreach (var item in patientVirusLoadsOld)
             {
                 virusLoads.Add(new()
@@ -169,7 +161,6 @@ namespace HIVBackend.Controllers
                     ResultDescr = _context.TblVloadResults.FirstOrDefault(e => e.VloadResultId == item.VloadResultId)?.VloadResultLong
                 });
             }
-
 
             foreach (var item in patientVirusLoadQuals)
             {
@@ -205,10 +196,10 @@ namespace HIVBackend.Controllers
             patientCardDiagnostics.PatientFio = patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName;
             patientCardDiagnostics.ImStats = imStats.OrderBy(e => e.Date).ToList();
             patientCardDiagnostics.ImStatCD348s = imStatCD348s.OrderBy(e => e.Date).ToList();
-            patientCardDiagnostics.VirusLoads = virusLoads;
-            patientCardDiagnostics.VirusLoadsQuals = virusLoadsQuals;
-            patientCardDiagnostics.CMVs = cMVs;
-            patientCardDiagnostics.IHLs = iHLs;
+            patientCardDiagnostics.VirusLoads = virusLoads.OrderBy(e => e.Date).ToList();
+            patientCardDiagnostics.VirusLoadsQuals = virusLoadsQuals.OrderBy(e => e.Date).ToList();
+            patientCardDiagnostics.CMVs = cMVs.OrderBy(e => e.Date).ToList();
+            patientCardDiagnostics.IHLs = iHLs.OrderBy(e => e.Date).ToList();
 
             return Ok(patientCardDiagnostics);
         }

@@ -62,31 +62,6 @@ namespace HIVBackend.Controllers
                                 e.Key
                             };
 
-            //(i.AclTestCode == "Б0001"
-            //                || i.AclTestCode == "Б0005"
-            //                || i.AclTestCode == "Б0010"
-            //                || i.AclTestCode == "Б0015"
-            //                || i.AclTestCode == "Б0020"
-            //                || i.AclTestCode == "Б0025"
-            //                || i.AclTestCode == "Б0030"
-            //                || i.AclTestCode == "Б0035"
-            //                || i.AclTestCode == "Б0040"
-            //                || i.AclTestCode == "Б0045"
-            //                || i.AclTestCode == "Б0050"
-            //                || i.AclTestCode == "Б0055"
-            //                || i.AclTestCode == "Б0060"
-            //                || i.AclTestCode == "Б0065"
-            //                || i.AclTestCode == "Б0070"
-            //                || i.AclTestCode == "Б0075"
-            //                || i.AclTestCode == "Б0080"
-            //                || i.AclTestCode == "Б0085"
-            //                || i.AclTestCode == "Б0090"
-            //                || i.AclTestCode == "Б0095"
-            //                || i.AclTestCode == "Б0100"
-            //                || i.AclTestCode == "Б0105"
-            //                || i.AclTestCode == "Б0110"
-            //                || i.AclTestCode == "Б0115")
-
             var patientGE = from i in _context.TblPatientAclResults
                             where i.PatientId == patientId &&
                             (i.AclTestCode.Contains("Г0001")
@@ -119,30 +94,6 @@ namespace HIVBackend.Controllers
                                 e.Key
                             };
 
-            //(i.AclTestCode == "Г0001"
-            //                || i.AclTestCode == "Г0005"
-            //                || i.AclTestCode == "Г0010"
-            //                || i.AclTestCode == "Г0015"
-            //                || i.AclTestCode == "Г0020"
-            //                || i.AclTestCode == "Г0025"
-            //                || i.AclTestCode == "Г0030"
-            //                || i.AclTestCode == "Г0035"
-            //                || i.AclTestCode == "Г0040"
-            //                || i.AclTestCode == "Г0045"
-            //                || i.AclTestCode == "Г0050"
-            //                || i.AclTestCode == "Г0055"
-            //                || i.AclTestCode == "Г0060"
-            //                || i.AclTestCode == "Г0065"
-            //                || i.AclTestCode == "Г0070"
-            //                || i.AclTestCode == "Г0075"
-            //                || i.AclTestCode == "Г0080"
-            //                || i.AclTestCode == "Г0085"
-            //                || i.AclTestCode == "Г0090"
-            //                || i.AclTestCode == "Г0095"
-            //                || i.AclTestCode == "Г0100"
-            //                || i.AclTestCode == "Г0105"
-            //                || i.AclTestCode == "Г0110"
-            //                || i.AclTestCode == "Г0115")
             List<TblPatientAclResult> b001 = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode.Contains("Б0001")).ToList();
             List<TblPatientAclResult> b005 = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode.Contains("Б0005")).ToList();
             List<TblPatientAclResult> b010 = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode.Contains("Б0010")).ToList();

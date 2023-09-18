@@ -50,7 +50,7 @@ namespace HIVBackend.Controllers
                           join region in _context.TblRegions on p.RegionId equals region.RegionId into regions
                           from r in regions.DefaultIfEmpty()
                           where (p.IsActive == true &&
-                        (form.PatientId.Length != 0 ? p.PatientId == int.Parse(form.PatientId) : true) &&
+                        (form.PatientId != null && form.PatientId.Length != 0 ? p.PatientId == int.Parse(form.PatientId) : true) &&
                         (form.FamilyName != null ? p.FamilyName.ToLower().StartsWith(form.FamilyName.ToLower()) : true) &&
                         (form.FirstName != null ? p.FirstName.ToLower().StartsWith(form.FirstName.ToLower()) : true) &&
                         (form.ThirdName != null ? p.ThirdName.ToLower().StartsWith(form.ThirdName.ToLower()) : true) &&
@@ -84,10 +84,7 @@ namespace HIVBackend.Controllers
                 return Ok(new { columName, resCount });
             }
 
-            var resPage = resQry.Select((x, i) => new { Index = i, Value = x })
-                        .GroupBy(x => x.Index / pageSize)
-                        .Select(x => x.Select(v => v.Value).ToList())
-                        .ToList().ElementAt(form.Page - 1);
+            var resPage = resQry.Skip(pageSize * (form.Page - 1)).Take(pageSize).ToList();
 
             return Ok(new { columName, resPage, resCount });
         }

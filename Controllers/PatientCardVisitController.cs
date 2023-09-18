@@ -80,9 +80,9 @@ namespace HIVBackend.Controllers
             patientCardVisit.ListSpec = _context.TblSpecs.Select(e => e.SpecLong)?.ToList();
             patientCardVisit.ListRegTime = _context.TblRegTimes.Select(e => e.RegTimeLong)?.ToList();
 
-            patientCardVisit.Checks = checks;
-            patientCardVisit.ChecksOut = checksOut;
-            patientCardVisit.Registries = registries;
+            patientCardVisit.Checks = checks.OrderBy(e => e.CheckDate).ToList();
+            patientCardVisit.ChecksOut = checksOut.OrderBy(e => e.CheckDate).ToList();
+            patientCardVisit.Registries = registries.OrderBy(e => e.RegDate).ToList();
 
             return Ok(patientCardVisit);
         }

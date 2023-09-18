@@ -162,14 +162,14 @@ namespace HIVBackend.Controllers
 
             patientCardDiagnosticConcomitant.PatientId = patient.PatientId;
             patientCardDiagnosticConcomitant.PatientFio = patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName;
-            patientCardDiagnosticConcomitant.HepCPcrs = HepCPcrs;
-            patientCardDiagnosticConcomitant.HepBPcrs = HepBPcrs;
-            patientCardDiagnosticConcomitant.HepCIfas = HepCIfas;
-            patientCardDiagnosticConcomitant.HepBIfas = HepBIfas;
-            patientCardDiagnosticConcomitant.SiphilisIfas = SiphilisIfas;
-            patientCardDiagnosticConcomitant.ToxIggs = ToxIggs;
-            patientCardDiagnosticConcomitant.ToxIgms = ToxIgms;
-            patientCardDiagnosticConcomitant.Vpchs = Vpchs;
+            patientCardDiagnosticConcomitant.HepCPcrs = HepCPcrs.OrderBy(e => e.Date).ToList();
+            patientCardDiagnosticConcomitant.HepBPcrs = HepBPcrs.OrderBy(e => e.Date).ToList();
+            patientCardDiagnosticConcomitant.HepCIfas = HepCIfas.OrderBy(e => e.Date).ToList();
+            patientCardDiagnosticConcomitant.HepBIfas = HepBIfas.OrderBy(e => e.Date).ToList();
+            patientCardDiagnosticConcomitant.SiphilisIfas = SiphilisIfas.OrderBy(e => e.Date).ToList();
+            patientCardDiagnosticConcomitant.ToxIggs = ToxIggs.OrderBy(e => e.Date).ToList();
+            patientCardDiagnosticConcomitant.ToxIgms = ToxIgms.OrderBy(e => e.Date).ToList();
+            patientCardDiagnosticConcomitant.Vpchs = Vpchs.OrderBy(e => e.Date).ToList();
 
             return Ok(patientCardDiagnosticConcomitant);
         }
