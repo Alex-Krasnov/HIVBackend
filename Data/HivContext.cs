@@ -284,6 +284,8 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<QrySearchCovid> QrySearchCovids { get; set; }
 
+    public virtual DbSet<QryRegistry> QryRegistrys { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "192.168.27.1";
@@ -5233,8 +5235,6 @@ public partial class HivContext : DbContext
             entity.Property(e => e.OutpatTreatYn)
                 .HasColumnName("outpat_treat_yn");
 
-
-
             entity.Property(e => e.DeathCovidYn)
                 .HasColumnName("death_covid_yn");
 
@@ -5279,6 +5279,61 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.CourseVarCovidName)
                 .HasColumnName("course_COVID_name");
+        });
+
+        modelBuilder.Entity<QryRegistry>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.ToTable("qryRegistry");
+
+            entity.Property(e => e.PatientId)
+                .HasColumnName("patient_id");
+
+            entity.Property(e => e.CardNo)
+                .HasColumnName("card_no");
+
+            entity.Property(e => e.FamilyName)
+                .HasColumnName("family_name");
+
+            entity.Property(e => e.FirstName)
+                .HasColumnName("first_name");
+
+            entity.Property(e => e.ThirdName)
+                .HasColumnName("third_name");
+
+            entity.Property(e => e.RegionLong)
+                .HasColumnName("region_long");
+
+            entity.Property(e => e.RegionLongFact)
+                .HasColumnName("region_long_fact");
+
+            entity.Property(e => e.CountryLong)
+                .HasColumnName("country_long");
+
+            entity.Property(e => e.CityName)
+                .HasColumnName("city_name");
+
+            entity.Property(e => e.LocationName)
+                .HasColumnName("location_name");
+
+            entity.Property(e => e.AddrStreet)
+                .HasColumnName("addr_street");
+
+            entity.Property(e => e.AddrHouse)
+                .HasColumnName("addr_house");
+
+            entity.Property(e => e.Archive)
+                .HasColumnName("archive");
+
+            entity.Property(e => e.FioChange)
+                .HasColumnName("fio_change");
+
+            entity.Property(e => e.RegDate)
+                .HasColumnName("reg_date");
+
+            entity.Property(e => e.DocId)
+                .HasColumnName("reg_doctor_id");
         });
 
         OnModelCreatingPartial(modelBuilder);
