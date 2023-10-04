@@ -12,7 +12,6 @@ string[] arrOrigins = { "https://localhost:4200", "http://localhost:4200", "http
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 string connection = builder.Configuration.GetConnectionString("DefaultConnection");
 builder.Services.AddDbContext<HivContext>(options => options.UseNpgsql(connection));
 

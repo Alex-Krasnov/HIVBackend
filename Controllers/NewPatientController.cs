@@ -22,7 +22,7 @@ namespace HIVBackend.Controllers
         public IActionResult CreatePatient()
         {
             int MaxPatientId = _context.TblPatientCards.Max(e => e.PatientId)+1;
-            TblPatientCard Patient = new() { PatientId = MaxPatientId, IsActive = true};
+            TblPatientCard Patient = new() { PatientId = MaxPatientId, IsActive = true, InputDate = DateOnly.FromDateTime(DateTime.Now)};
             _context.TblPatientCards.Add(Patient);
             _context.SaveChanges();
             return Ok(MaxPatientId);

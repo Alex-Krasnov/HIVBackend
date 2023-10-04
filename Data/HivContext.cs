@@ -284,13 +284,11 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<QrySearchCovid> QrySearchCovids { get; set; }
 
-    //protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    //    => optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Database=HIV;Username=vs_test;Password=4100");
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "192.168.27.1";
         var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
+        host = "localhost";
 
         var connectionString = $"Host={host};Port={port};Database=HIV;Username=vs_test;Password=4100";
 
