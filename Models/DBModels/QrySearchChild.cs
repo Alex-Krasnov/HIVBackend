@@ -35,6 +35,9 @@ public partial class QrySearchChild
     public string? SexShort { get; set; }
     public string? CardNo { get; set; }
     public int? MotherPatientId { get; set; }
+    public string? MotherFamilyName { get; set; }
+    public string? MotherFirstName { get; set; }
+    public string? MotherThirdName { get; set; }
     public int? FatherPatientId { get; set; }
     public string? CityName { get; set; }
     public string? LocationName { get; set; }

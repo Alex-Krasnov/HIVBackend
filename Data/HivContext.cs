@@ -290,7 +290,7 @@ public partial class HivContext : DbContext
     {
         var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "192.168.27.1";
         var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
-        host = "localhost";
+        //host = "localhost";
 
         var connectionString = $"Host={host};Port={port};Database=HIV;Username=vs_test;Password=4100";
 
@@ -3965,6 +3965,15 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.MotherPatientId)
                 .HasColumnName("mother_patient_id");
+
+            entity.Property(e => e.MotherFamilyName)
+                .HasColumnName("mother_family_name");
+
+            entity.Property(e => e.MotherFirstName)
+                .HasColumnName("mother_first_name");
+
+            entity.Property(e => e.MotherThirdName)
+                .HasColumnName("mother_third_name");
 
             entity.Property(e => e.FatherPatientId)
                 .HasColumnName("father_patient_id");

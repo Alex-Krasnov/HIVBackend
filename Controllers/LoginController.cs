@@ -7,6 +7,7 @@ using HIVBackend.Data;
 using HIVBackend.Services;
 using HIVBackend.Models;
 using HIVBackend.Models.FormModels;
+using Microsoft.AspNetCore.Cors;
 
 namespace HIVBackend.Controllers
 {

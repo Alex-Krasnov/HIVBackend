@@ -212,8 +212,8 @@ namespace HIVBackend.Controllers
 
             patientCardAcl.PatientId = patient.PatientId;
             patientCardAcl.PatientFio = patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName;
-            patientCardAcl.Bhs = bh;
-            patientCardAcl.Ges = ge;
+            patientCardAcl.Bhs = bh.OrderByDescending(e => e.Date).ToList();
+            patientCardAcl.Ges = ge.OrderByDescending(e => e.Date).ToList();
             return Ok(patientCardAcl);
         }
     }

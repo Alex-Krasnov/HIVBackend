@@ -150,7 +150,7 @@ namespace HIVBackend.Controllers
             patientCardMain.ListDieCourseLong = _context.TblTempDieCureMkb10lists.Select(e => new Selector2Col{ Short = e.DieCourseShort, Long = e.DieCourseLong })?.ToList();
 
             patientCardMain.ListVulnerableGroup = _context.TblListVulnerableGroups.Select(e => e.VulnerableGroupName)?.ToList();
-            patientCardMain.ListARVT = _context.TblArvts.Select(e => e.ArvtShort)?.ToList();
+            patientCardMain.ListARVT = _context.TblArvts.Select(e => e.ArvtLong)?.ToList();
             patientCardMain.ListInvalid = _context.TblInvalids.Select(e => e.InvalidLong)?.ToList();
             patientCardMain.ListCheckPlace = _context.TblCheckPlaces.Select(e => e.CheckPlaceLong)?.ToList();
             patientCardMain.ListRes = _context.TblIbResults.Select(e => e.IbResultShort)?.ToList();

@@ -169,7 +169,7 @@ namespace HIVBackend.Controllers
             if (data.Str == null || data.Str?.Length == 0)
                 return Ok(true);
 
-            var inList = _context.TblArvts.Any(e => e.ArvtShort == data.Str);
+            var inList = _context.TblArvts.Any(e => e.ArvtLong == data.Str);
             return Ok(inList);
         }
 

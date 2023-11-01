@@ -206,6 +206,13 @@ namespace HIVBackend.Controllers
                     {
                         columName.Add("Зарег. мать");
                         activeColumns.Add("MotherPatientId");
+                        columName.Add("Зарег. мать фамилия");
+                        activeColumns.Add("MotherFamilyName");
+                        columName.Add("Зарег. мать имя");
+                        activeColumns.Add("MotherFirstName");
+                        columName.Add("Зарег. мать отчество");
+                        activeColumns.Add("MotherThirdName");
+
                         columName.Add("Зарег. отец");
                         activeColumns.Add("FatherPatientId");
                     }
