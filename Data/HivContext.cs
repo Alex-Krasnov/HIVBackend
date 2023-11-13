@@ -280,7 +280,7 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<QrySearchHosp> QrySearchHosps { get; set; }
 
-    public virtual DbSet<QrySearchNonresident> QrySearchNonresidents { get; set; }
+    public virtual DbSet<QrySearchNonresident> QrySearchNonresidents { get; set; } 
 
     public virtual DbSet<QrySearchCovid> QrySearchCovids { get; set; }
 

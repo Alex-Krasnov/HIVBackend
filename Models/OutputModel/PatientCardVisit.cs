@@ -10,7 +10,6 @@
         public List<string>? ListCab { get; set; }
         public List<string>? ListRegTime { get; set; }
 
-        public List<FrmPatientCheck>? Checks { get; set; }
         public List<FrmPatientCheck>? ChecksOut { get; set; }
         public List<FrmRegistry>? Registries { get; set; }
     }
