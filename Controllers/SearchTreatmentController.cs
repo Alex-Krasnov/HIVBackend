@@ -349,7 +349,7 @@ namespace HIVBackend.Controllers
                         (form.sex.Length != 0 ? e.SexShort == form.sex : true) &&
                         (form.birthDateStart.Length != 0 ? e.BirthDate >= DateOnly.Parse(form.birthDateStart) : true) &&
                         (form.birthDateEnd.Length != 0 ? e.BirthDate <= DateOnly.Parse(form.birthDateEnd) : true) &&
-                        (form.regionFact[0] != "Все" ? form.regionFact.Contains(e.RegionLong) : true) &&
+                        (form.regionFact[0] != "Все" ? form.regionFact.Contains(e.RegionLongFact) : true) &&
                         (form.factRegionPreset == "Московская обл." ? e.FactRegtypeId == 1 : true) &&
                         (form.factRegionPreset == "Иногородние" ? e.FactRegtypeId == 2 : true) &&
                         (form.factRegionPreset == "Иностранные" ? e.FactRegtypeId == 3 : true) &&

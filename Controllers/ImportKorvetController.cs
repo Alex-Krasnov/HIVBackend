@@ -59,7 +59,7 @@ namespace HIVBackend.Controllers
 
 
                     SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                    Row endRow = (Row)sheetData.Where( e => e.InnerText.Contains("ИТОГО:")).First();
+                    Row endRow = (Row)sheetData.Where( e => e.InnerText.Contains("ИТОГО:"))?.First();
                     numEndRow = int.Parse(endRow.RowIndex);
 
                     foreach (Row row in sheetData.Descendants<Row>())

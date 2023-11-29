@@ -290,7 +290,7 @@ public partial class HivContext : DbContext
     {
         var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "192.168.27.1";
         var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
-        //host = "localhost";
+        host = "localhost";
 
         var connectionString = $"Host={host};Port={port};Database=HIV;Username=vs_test;Password=4100";
 
@@ -4198,18 +4198,6 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.RangeTherapyLong)
                 .HasColumnName("range_therapy_long");
-
-            entity.Property(e => e.VlDate)
-                .HasColumnName("vl_date");
-
-            entity.Property(e => e.VlResult)
-                .HasColumnName("vl_result");
-
-            entity.Property(e => e.ImDate)
-                .HasColumnName("im_date");
-
-            entity.Property(e => e.ImResult)
-                .HasColumnName("i0025");
         });
 
         modelBuilder.Entity<QrySearchAnalyse>(entity =>

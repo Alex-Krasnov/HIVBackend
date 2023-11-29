@@ -276,7 +276,7 @@ namespace HIVBackend.Controllers
                         (form.birthDateEnd.Length != 0 ? e.BirthDate <= DateOnly.Parse(form.birthDateEnd) : true) &&
                         (form.ageDayStart.Length != 0 ? e.AgeDay >= int.Parse(form.birthDateEnd) : true) &&
                         (form.ageDayEnd.Length != 0 ? e.AgeDay <= int.Parse(form.ageDayEnd) : true) &&
-                        (form.regionFact[0] != "Все" ? form.regionFact.Contains(e.RegionLong) : true) &&
+                        (form.regionFact[0] != "Все" ? form.regionFact.Contains(e.RegionLongFact) : true) &&
                         (form.factRegionPreset == "Московская обл." ? e.FactRegtypeId == 1 : true) &&
                         (form.factRegionPreset == "Иногородние" ? e.FactRegtypeId == 2 : true) &&
                         (form.factRegionPreset == "Иностранные" ? e.FactRegtypeId == 3 : true) &&
