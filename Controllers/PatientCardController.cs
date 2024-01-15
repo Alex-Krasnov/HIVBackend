@@ -10,7 +10,7 @@ namespace HIVBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    //[Authorize]
+    [Authorize]
     public class PatientCardController : ControllerBase
     {
         private readonly HivContext _context;
@@ -346,7 +346,7 @@ namespace HIVBackend.Controllers
                 ShowIllnessId = _context.TblShowIllnesses.First(e => e.ShowIllnessLong == desease.Deseas).ShowIllnessId
             };
 
-            _context.TblPatientShowIllnesses.Attach(item);
+            //_context.TblPatientShowIllnesses.Attach(item);
             _context.TblPatientShowIllnesses.Add(item);
             _context.SaveChanges();
             return Ok();

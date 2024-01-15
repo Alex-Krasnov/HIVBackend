@@ -47,7 +47,7 @@ namespace HIVBackend.Controllers
                                       e.Key
                                   };
             List<TblPatientAclResult> patientHepCPcrs3 = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode == "П0025").ToList();
-            List<TblPatientAclResult> patientHepCPcrs2 = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode == "П0020").ToList();
+            List<TblPatientAclResult> patientHepCPcrs2 = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && (e.AclTestCode == "П0020" || e.AclTestCode == "П0070")).ToList();
             List<TblPatientHepatitResult> patientHepCPcrsOld = _context.TblPatientHepatitResults.Where(e => e.PatientId == patientId).ToList();
             List<TblPatientAclResult> patientHepBPcrs = _context.TblPatientAclResults.Where(e => e.PatientId == patientId && e.AclTestCode == "П0015").ToList();
             List<TblPatientHepatitResult2> patientHepBPcrsOld = _context.TblPatientHepatitResult2s.Where(e => e.PatientId == patientId).ToList();

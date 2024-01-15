@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml.ExtendedProperties;
 using DocumentFormat.OpenXml.Math;
+using DocumentFormat.OpenXml.Office2010.Excel;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
+using System.Linq;
 using System.Text;
 using System.Xml.Linq;
 
@@ -38,7 +40,7 @@ namespace HIVBackend.Controllers
         public IActionResult SetFile(IFormFile file, [FromForm] string finSource)
         {
             const int firstRow = 27;
-            int numEndRow;
+            int numEndRow = 0;
             List<string> errList = new();
 
             if (file == null && file.Length == 0)
@@ -56,19 +58,34 @@ namespace HIVBackend.Controllers
                 {
                     WorkbookPart workbookPart = spreadsheetDocument.WorkbookPart;
                     WorksheetPart worksheetPart = workbookPart.WorksheetParts.First();
-
-
                     SheetData sheetData = worksheetPart.Worksheet.Elements<SheetData>().First();
-                    Row endRow = (Row)sheetData.Where( e => e.InnerText.Contains("ИТОГО:"))?.First();
-                    numEndRow = int.Parse(endRow.RowIndex);
+                    SharedStringTable sharedStringTable = spreadsheetDocument.WorkbookPart.SharedStringTablePart.SharedStringTable;
 
-                    foreach (Row row in sheetData.Descendants<Row>())
+                    foreach (var item in sheetData.Elements<Row>())
+                    {
+                        var b = item.ChildElements.ElementAt(0).InnerText;
+                        int indStr;
+                        bool isInt = int.TryParse(item.ChildElements.ElementAt(0).InnerText, out indStr);
+                        if (!isInt)
+                            continue;
+
+                        if (sharedStringTable.Elements<SharedStringItem>().ElementAt(indStr).InnerText.Contains("ИТОГО:"))
+                        {
+                            numEndRow = int.Parse(item.RowIndex);
+                            break;
+                        }
+                    }
+                    
+                    //numEndRow = 100;//int.Parse(endRow.RowIndex);
+
+                    foreach (Row row in sheetData.Elements<Row>())
                     {
                         if (row.RowIndex <= firstRow)
                             continue;
 
                         DateOnly dateIn;
-                        bool isDateIn = DateOnly.TryParse(row.ChildElements[2].InnerText, out dateIn); // c-2 - date inp
+                        string dateInStr = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[2].InnerText)).InnerText;
+                        bool isDateIn = DateOnly.TryParse(dateInStr, out dateIn); // c-2 - date inp
                         if (!isDateIn)
                         {
                             errList.Add($"Cтрока {row.RowIndex} некорректная дата");
@@ -76,15 +93,16 @@ namespace HIVBackend.Controllers
                         }
 
 
-                        int? doctorId = _context.TblDoctors.Where(e => e.Ext1Pcod == row.ChildElements[4].InnerText.Substring(0, 4)).FirstOrDefault()?.DoctorId; // e-4 - doctor
+                        string docCode = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[4].InnerText)).InnerText.Substring(0, 4);
+                        int? doctorId = _context.TblDoctors.Where(e => e.Ext1Pcod == docCode).FirstOrDefault()?.DoctorId; // e-4 - doctor
                         if (doctorId == null)
                         {
                             errList.Add($"Cтрока {row.RowIndex} неверный код врача");
                             continue;
                         }
-
-                        var snils = row.ChildElements[16].InnerText.Replace("-", "").Replace(" ", ""); // q-16 - snils
-                        var fioPatient = row.ChildElements[8].InnerText.ToLower(); // i-8 - fio patient
+                        
+                        var snils = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[16].InnerText)).InnerText.Replace("-", "").Replace(" ", ""); // q-16 - snils
+                        var fioPatient = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[8].InnerText)).InnerText.ToLower(); // i-8 - fio patient
                         int? patientId = _context.TblPatientCards.FirstOrDefault(e => e.Snils.Replace("-", "").Replace(" ", "") == (string)snils)?.PatientId;
                         if (patientId == null)
                         {
@@ -92,17 +110,18 @@ namespace HIVBackend.Controllers
                             continue;
                         }
 
-                        string serNum = row.ChildElements[19].InnerText; // t-19 - ser num
+                        string serNum = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[19].InnerText)).InnerText; // t-19 - ser num
                         var ser = serNum.Substring(0, 5);
-                        var num = serNum.Substring(6, serNum.Length-7);
+                        var num = serNum.Substring(6, serNum.Length - 7);//
 
-                        int? medicineId = _context.TblMedicines.Where(e => e.MedicineLong == row.ChildElements[21].InnerText).FirstOrDefault()?.MedicineId; // v-21 - medicine
+                        string medicineName = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[21].InnerText)).InnerText;
+                        int? medicineId = _context.TblMedicines.Where(e => e.MedicineLong == medicineName).FirstOrDefault()?.MedicineId; // v-21 - medicine
                         if (medicineId == null)
                         {
                             int maxId = _context.TblMedicines.Max(e => e.MedicineId) + 1;
                             TblMedicine item = new() { 
                                 MedicineId = maxId,
-                                MedicineLong = row.ChildElements[21].InnerText,
+                                MedicineLong = medicineName,
                                 User1 = "base",
                                 Datetime1 = DateOnly.FromDateTime(DateTime.Now)
                             };
@@ -112,7 +131,8 @@ namespace HIVBackend.Controllers
                         }
 
                         DateOnly dateOut;
-                        bool isDateOut = DateOnly.TryParse(row.ChildElements[25].InnerText, out dateOut); // z-25 - date out
+                        string dateOutStr = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[25].InnerText)).InnerText;
+                        bool isDateOut = DateOnly.TryParse(dateOutStr, out dateOut); // z-25 - date out
                         if (isDateOut)
                             dateOut = dateIn;
 

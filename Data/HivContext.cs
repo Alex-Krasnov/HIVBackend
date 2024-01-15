@@ -286,11 +286,12 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<QryRegistry> QryRegistrys { get; set; }
 
+    public virtual DbSet<TblPatientFiles> TblPatientFileses { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "192.168.27.1";
+        var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
         var port = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
-        host = "localhost";
 
         var connectionString = $"Host={host};Port={port};Database=HIV;Username=vs_test;Password=4100";
 
@@ -5331,6 +5332,19 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.DocId)
                 .HasColumnName("reg_doctor_id");
+        });
+
+        modelBuilder.Entity<TblPatientFiles>(entity =>
+        {
+            entity.HasKey(e => e.FilePath);
+
+            entity.ToTable("tblPatientFiles");
+
+            entity.Property(e => e.PatientId)
+                .HasColumnName("patient_id");
+
+            entity.Property(e => e.FilePath)
+                .HasColumnName("file_path");
         });
 
         OnModelCreatingPartial(modelBuilder);

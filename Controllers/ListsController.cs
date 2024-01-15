@@ -210,6 +210,9 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult GetInListDeseases(InList data)
         {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
             var inList = _context.TblShowIllnesses.Any(e => e.ShowIllnessLong == data.Str);
             return Ok(inList);
         }
