@@ -2,11 +2,10 @@
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml;
 using HIVBackend.Data;
-using HIVBackend.Models.DBModuls;
-using HIVBackend.Models.OutputModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using HIVBackend.Models.FormModels;
+using HIVBackend.Services;
 
 namespace HIVBackend.Controllers
 {
@@ -15,71 +14,37 @@ namespace HIVBackend.Controllers
     public class ReferalAnalysisController : ControllerBase
     {
         private readonly HivContext _context;
-        private readonly IWebHostEnvironment _appEnvironment;
-        public ReferalAnalysisController(HivContext context, IWebHostEnvironment appEnvironment)
+        public ReferalAnalysisController(HivContext context)
         {
             _context = context;
-            _appEnvironment = appEnvironment;
         }
 
-        [HttpGet]
-        //[Authorize(Roles = "User")]
-        public IActionResult Get(int patientId)
+        [HttpGet, Route("GetDataForReferalAnalysis")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetDataForReferalAnalysis()
         {
-            GenerateWordFile();
-            return Ok();
+            List<string?> listResearch = _context.TblResearches.OrderBy(e => e.SortNum).Select(e => e.ResearchLong).ToList();
+            var listDoc = _context.TblDoctors.OrderBy(e => e.DoctorLong).Select(e => e.DoctorLong).ToList();
+            return Ok(new { listResearch = listResearch, listDoc = listDoc });
         }
 
-        private void GenerateWordFile()
+        [HttpPost, Route("GetReferalAnalysis")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetReferalAnalysis(ReferalAnalysis referalAnalysis)
         {
+            var createFile = new ReferalAnalysisCreateWord();
+            string fileName = $"referal_analysis_{referalAnalysis.PatientId}.docx";
+            string path = Path.Combine(Environment.CurrentDirectory, fileName);
 
-            string path_from = "D:\\work\\HIV\\HIVBackend\\HIVBackend\\ReportAnalyzes.docx";
-            // Create a document by supplying the filepath. 
-            using (WordprocessingDocument wordDocument = WordprocessingDocument.Create(path_from, WordprocessingDocumentType.Document))
-            {
-                MainDocumentPart mainPart = wordDocument.AddMainDocumentPart();
-                mainPart.Document = new Document();
-                Body body = mainPart.Document.AppendChild(new Body());
+            if (System.IO.File.Exists(path))
+                System.IO.File.Delete(path);
 
-                //// Добавляем стили
-                //StylesPart stylesPart = mainPart.AddNewPart<StylesPart>();
-                //stylesPart.Styles = new Styles();
+            createFile.GenerateWordFile(referalAnalysis.PatientId, referalAnalysis.DocName, referalAnalysis.ListResearch, _context, path);
 
-                //// Добавляем стиль для заголовка
-                //Style headingStyle = new Style()
-                //{
-                //    Type = StyleValues.Paragraph,
-                //    StyleId = "Heading1",
-                //    CustomStyle = true,
-                //    StyleName = new StyleName() { Val = "Heading 1" },
-                //    BasedOn = new BasedOn() { Val = "Normal" },
-                //    NextParagraphStyle = new NextParagraphStyle() { Val = "Normal" }
-                //};
+            string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
+            byte[] fileBytes = System.IO.File.ReadAllBytes(path);
 
-                Paragraph para1 = body.AppendChild(new Paragraph(
-                    new Run(new Text("Направление на анализы"))));
-
-                Paragraph para2 = body.AppendChild(new Paragraph(
-                    new Run(new Text($"Дата забора материала: {DateTime.Now.ToString("dd.MM.yyyy")}"))));
-
-                Paragraph para3 = body.AppendChild(new Paragraph(
-                    new Run(new Text("ФИО: Иванов Иван Иванович"))));
-
-                Paragraph para4 = body.AppendChild(new Paragraph(
-                    new Run(new Text("Пол: м"))));
-
-                Paragraph para5 = body.AppendChild(new Paragraph(
-                    new Run(new Text("Ид пациента: 1611"))));
-
-                Paragraph para6 = body.AppendChild(new Paragraph(
-                    new Run(new Text("Дата рождения: 11.01.2023"))));
-
-                Paragraph para7 = body.AppendChild(new Paragraph(
-                    new Run(new Text("ФИО лечешего врача: Иванов Иван Иванович"))));
-
-                Paragraph para8 = body.AppendChild(new Paragraph(
-                    new Run(new Text("Наименование тестов:"))));
-            }
+            return File(fileBytes, contentType, "referal_analysis.docx");
         }
     }
 }

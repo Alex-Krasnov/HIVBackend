@@ -12,4 +12,5 @@ public partial class TblResearch
     public string? User1 { get; set; }
 
     public DateOnly? Datetime1 { get; set; }
+    public int? SortNum { get; set; }
 }

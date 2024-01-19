@@ -3193,6 +3193,7 @@ public partial class HivContext : DbContext
             entity.Property(e => e.User1)
                 .HasMaxLength(50)
                 .HasColumnName("user1");
+            entity.Property(e => e.SortNum).HasColumnName("sort_num");
         });
 
         modelBuilder.Entity<TblResist>(entity =>
