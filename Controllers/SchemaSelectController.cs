@@ -33,7 +33,7 @@ namespace HIVBackend.Controllers
                     Id = item.MedforschemaId
                 });
             }
-            return Ok(list);
+            return Ok(list.OrderBy(e => e.MedicineName));
         }
 
         [HttpPost, Route("GetSchema")]

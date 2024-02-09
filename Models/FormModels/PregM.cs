@@ -12,7 +12,7 @@
         public string? BirthType { get; set; }
         public string? ChildCount { get; set; }
         public int? ChildId { get; set; }
-        public int? StartMonth { get; set; }
+        public string? StartMonth { get; set; }
         public string? ChildFamilyName { get; set; }
         public string? ChildFirstName { get; set; }
         public string? ChildThirdName { get; set; }

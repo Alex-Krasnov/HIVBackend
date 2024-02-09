@@ -9,7 +9,7 @@ public partial class TblPatientPregnantM
 
     public short PregId { get; set; }
 
-    public short? MedicineStMonthNo { get; set; }
+    public DateOnly? MedicineStMonthNo { get; set; }
 
     public int? ChildPatientId { get; set; }
 

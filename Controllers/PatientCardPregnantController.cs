@@ -100,7 +100,7 @@ namespace HIVBackend.Controllers
                 BirthTypeId = _context.TblBirthTypes.FirstOrDefault(e => e.BirthTypeLong == preg.BirthType)?.BirthTypeId,
                 ChildCountId = _context.TblChildCounts.FirstOrDefault(e => e.ChildCountLong == preg.ChildCount)?.ChildCountId,
                 ChildPatientId = preg.ChildId,
-                MedicineStMonthNo = (short?)preg.StartMonth,
+                MedicineStMonthNo = preg.StartMonth != null && preg.StartMonth?.Length != 0 ? DateOnly.Parse(preg.StartMonth) : null,
                 ChildFamilyName = preg.ChildFamilyName,
                 ChildFirstName = preg.ChildFirstName,
                 ChildThirdName = preg.ChildThirdName,
@@ -141,7 +141,7 @@ namespace HIVBackend.Controllers
                 _context.Entry(item).Property(e => e.ChildCountId).IsModified = true;
                 item.ChildPatientId = preg.ChildId;
                 _context.Entry(item).Property(e => e.ChildPatientId).IsModified = true;
-                item.MedicineStMonthNo = (short?)preg.StartMonth;
+                item.MedicineStMonthNo = preg.StartMonth != null && preg.StartMonth?.Length != 0 ? DateOnly.Parse(preg.StartMonth) : null;
                 _context.Entry(item).Property(e => e.MedicineStMonthNo).IsModified = true;
                 item.ChildFamilyName = preg.ChildFamilyName;
                 _context.Entry(item).Property(e => e.ChildFamilyName).IsModified = true;
@@ -177,7 +177,7 @@ namespace HIVBackend.Controllers
                 BirthTypeId = _context.TblBirthTypes.FirstOrDefault(e => e.BirthTypeLong == preg.BirthType)?.BirthTypeId,
                 ChildCountId = _context.TblChildCounts.FirstOrDefault(e => e.ChildCountLong == preg.ChildCount)?.ChildCountId,
                 ChildPatientId = preg.ChildId,
-                MedicineStMonthNo = (short?)preg.StartMonth,
+                MedicineStMonthNo = preg.StartMonth != null && preg.StartMonth?.Length != 0 ? DateOnly.Parse(preg.StartMonth) : null,
                 ChildFamilyName = preg.ChildFamilyName,
                 ChildFirstName = preg.ChildFirstName,
                 ChildThirdName = preg.ChildThirdName,

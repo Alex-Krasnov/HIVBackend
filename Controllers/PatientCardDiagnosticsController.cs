@@ -57,7 +57,6 @@ namespace HIVBackend.Controllers
 
             foreach (var item in imStat1)
             {
-                var a  = imStat3?.FirstOrDefault(e => e.AclSampleDate == item.Key)?.AclResult;
                 imStats.Add(new()
                 {
                     Date = DateOnly.FromDateTime(item.Key),

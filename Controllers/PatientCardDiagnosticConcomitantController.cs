@@ -40,7 +40,8 @@ namespace HIVBackend.Controllers
             var patientHepCPcrs = from i in _context.TblPatientAclResults
                                   where i.PatientId == patientId &&
                                   (i.AclTestCode == "П0025"
-                                  || i.AclTestCode == "П0020")
+                                  || i.AclTestCode == "П0020"
+                                  || i.AclTestCode == "П0070")
                                   group i by i.AclSampleDate into e
                                   select new
                                   {

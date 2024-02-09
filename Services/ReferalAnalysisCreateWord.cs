@@ -1,4 +1,4 @@
-﻿using DocumentFormat.OpenXml.Packaging;
+﻿    using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using DocumentFormat.OpenXml;
 using HIVBackend.Data;
@@ -27,7 +27,8 @@ namespace HIVBackend.Services
                     Type = StyleValues.Paragraph,
                     StyleId = "minSpacing",
                     CustomStyle = true,
-                    Default = true
+                    Default = true,
+                    StyleRunProperties = new StyleRunProperties(new FontSize() { Val = "28" })
                 };
                 styles.AddChild(style);
                 styles.Save(part);
@@ -37,29 +38,29 @@ namespace HIVBackend.Services
                     new Run(new RunProperties(new Bold()), new Text("Направление на анализы"))));
 
                 Paragraph para2 = body.AppendChild(new Paragraph());
-                para2.AddChild(new Run(new RunProperties(new Bold()), new Text("Дата забора материала: ")));
-                para2.Append(new Run(new Text(DateTime.Now.ToString("dd.MM.yyyy"))));
+                para2.AddChild(new Run(new Text("Дата забора материала: ")));
+                para2.Append(new Run(new RunProperties(new Bold()), new Text(DateTime.Now.ToString("dd.MM.yyyy"))));
 
                 Paragraph para3 = body.AppendChild(new Paragraph());
-                para3.AddChild(new Run(new RunProperties(new Bold()), new Text("ФИО: ")));
-                para3.Append(new Run(new Text(patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName)));
+                para3.AddChild(new Run(new Text($"ФИО: ")));
+                para3.Append(new Run(new RunProperties(new Bold()), new Text(patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName)));
 
 
                 Paragraph para4 = body.AppendChild(new Paragraph());
-                para4.AddChild(new Run(new RunProperties(new Bold()), new Text("Пол: ")));
-                para4.Append(new Run(new Text(_context.TblSexes.Where(e => e.SexId == patient.SexId).FirstOrDefault()?.SexShort)));
+                para4.AddChild(new Run(new Text("Пол: ")));
+                para4.Append(new Run(new RunProperties(new Bold()), new Text(_context.TblSexes.Where(e => e.SexId == patient.SexId).FirstOrDefault()?.SexShort)));
 
                 Paragraph para5 = body.AppendChild(new Paragraph());
-                para5.AddChild(new Run(new RunProperties(new Bold()), new Text("Ид пациента: ")));
-                para5.Append(new Run(new Text(patient.PatientId.ToString())));
+                para5.AddChild(new Run(new Text("Ид пациента: ")));
+                para5.Append(new Run(new RunProperties(new Bold()), new Text(patient.PatientId.ToString())));
 
                 Paragraph para6 = body.AppendChild(new Paragraph());
-                para6.AddChild(new Run(new RunProperties(new Bold()), new Text("Дата рождения: ")));
-                para6.Append(new Run(new Text(patient.BirthDate.ToString())));
+                para6.AddChild(new Run(new Text("Дата рождения: ")));
+                para6.Append(new Run(new RunProperties(new Bold()), new Text(patient.BirthDate.ToString())));
 
                 Paragraph para7 = body.AppendChild(new Paragraph());
-                para7.AddChild(new Run(new RunProperties(new Bold()), new Text("ФИО лечащего врача: ")));
-                para7.Append(new Run(new Text(docName)));
+                para7.AddChild(new Run(new Text("ФИО лечащего врача: ")));
+                para7.Append(new Run(new RunProperties(new Bold()), new Text(docName)));
 
                 Paragraph para8 = body.AppendChild(new Paragraph(
                     new Run(new RunProperties(new Bold()), new Text("Наименование тестов:"))));
@@ -106,7 +107,7 @@ namespace HIVBackend.Services
                 {
                     var tr = new TableRow();
                     var tc = new TableCell();
-                    tc.Append(new Paragraph(new Run(new Text(item))));
+                    tc.Append(new Paragraph(new Run(new RunProperties(new Bold()), new Text(item))));
                     tr.Append(tc);
                     table.Append(tr);
                 }
