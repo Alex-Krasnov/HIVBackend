@@ -5,6 +5,7 @@ using HIVBackend.Data;
 using HIVBackend.Models.OutputModel;
 using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
+using Microsoft.AspNetCore.Components.Forms;
 
 namespace HIVBackend.Controllers
 {
@@ -210,12 +211,8 @@ namespace HIVBackend.Controllers
             DateOnly? blotDate = null;
             try { blotDate = DateOnly.Parse(blot.BlotDate); } catch { }
 
-            TblPatientBlot item = new()
-            {
-                PatientId = blot.PatientId,
-                BlotId = (int)blot.BlotIdOld
-            };
-            _context.TblPatientBlots.Attach(item);
+            var item = _context.TblPatientBlots.Where(e => e.PatientId == blot.PatientId && e.BlotId == (int)blot.BlotIdOld).First();
+            var datetime1 = item.Datetime1;
 
             if ((int)blot.BlotIdOld == blot.BlotId)
             {
@@ -228,11 +225,9 @@ namespace HIVBackend.Controllers
                 item.First1 = blot.First1;
                 item.Last1 = blot.Last1;
                 item.FlgIfa = blot.FlgIfa;
-                item.Datetime1 = DateOnly.FromDateTime(DateTime.Now);
                 _context.SaveChanges();
                 return Ok();
             }
-
             _context.TblPatientBlots.Remove(item);
             _context.SaveChanges();
             item = new()
@@ -246,7 +241,7 @@ namespace HIVBackend.Controllers
                 First1 = blot.First1,
                 Last1 = blot.Last1,
                 FlgIfa = blot.FlgIfa,
-                Datetime1 = DateOnly.FromDateTime(DateTime.Now)
+                Datetime1 = datetime1
             };
             _context.TblPatientBlots.Add(item);
             _context.SaveChanges();
