@@ -1186,9 +1186,10 @@ public partial class HivContext : DbContext
 
         modelBuilder.Entity<TblListEpidDoctor>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblListEpidDoctors");
+            entity.HasKey(e => e.IdDoctor);
+
+            entity.ToTable("tblListEpidDoctors");
+
 
             entity.Property(e => e.DoctorName)
                 .HasMaxLength(50)
@@ -1199,6 +1200,8 @@ public partial class HivContext : DbContext
                 .IsFixedLength()
                 .HasColumnName("doctor_snils");
             entity.Property(e => e.IdDoctor).HasColumnName("id_doctor");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         modelBuilder.Entity<TblListFamilyStatus>(entity =>
