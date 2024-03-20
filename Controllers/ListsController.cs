@@ -334,7 +334,7 @@ namespace HIVBackend.Controllers
             if (data.Str == null || data.Str?.Length == 0)
                 return Ok(true);
 
-            var inList = _context.TblListEmloyments.Any(e => e.EmploymentName == data.Str);
+            var inList = _context.TblListEmployments.Any(e => e.EmploymentName == data.Str);
             return Ok(inList);
         }
 

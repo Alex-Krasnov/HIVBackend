@@ -150,7 +150,7 @@ namespace HIVBackend.Controllers
             patientCardEpid.NumMail = patient.NumMail;
             patientCardEpid.EduName = _context.TblListEducations.FirstOrDefault(e => e.EducationId == patient.EduId)?.EduName;
             patientCardEpid.FamilyStatusName = _context.TblListFamilyStatuses.FirstOrDefault(e => e.FamilyStatusId == patient.FamilyStatusId)?.FammilyStatusName;
-            patientCardEpid.EmploymentName = _context.TblListEmloyments.FirstOrDefault(e => e.EmploymentId == patient.EmploymentId)?.EmploymentName;
+            patientCardEpid.EmploymentName = _context.TblListEmployments.FirstOrDefault(e => e.EmploymentId == patient.EmploymentId)?.EmploymentName;
             patientCardEpid.TransName = _context.TblListTrans.FirstOrDefault(e => e.TransId == patient.TransId)?.TransName;
             patientCardEpid.EpidemCom = patient.EpidemDescr;
             patientCardEpid.TransmitionMechName = _context.TblListTransmisionMeches.FirstOrDefault(e => e.TransmissionMechId == patient.TransmitionMechId)?.TransmisiomMechName;
@@ -163,7 +163,7 @@ namespace HIVBackend.Controllers
             patientCardEpid.ListYn = _context.TblListYns.Select(e => e.YNName)?.ToList();
             patientCardEpid.ListEdu = _context.TblListEducations.Select(e => e.EduName)?.ToList();
             patientCardEpid.ListFamilyStatus = _context.TblListFamilyStatuses.Select(e => e.FammilyStatusName)?.ToList();
-            patientCardEpid.ListEmloyment = _context.TblListEmloyments.Select(e => e.EmploymentName)?.ToList();
+            patientCardEpid.ListEmloyment = _context.TblListEmployments.Select(e => e.EmploymentName)?.ToList();
             patientCardEpid.ListTrans = _context.TblListTrans.Select(e => e.TransName)?.ToList();
             patientCardEpid.ListVac = _context.TblListVacs.Select(e => e.VacName)?.ToList();
             patientCardEpid.ListCovidMKB = _context.TblListMkb10Covids.Select(e => e.Mkb10LongName)?.ToList();
@@ -584,7 +584,7 @@ namespace HIVBackend.Controllers
             if (patient.EmploymentName != null)
                 if (patient.EmploymentName.Length != 0)
                 {
-                    var id = _context.TblListEmloyments.First(e => e.EmploymentName == patient.EmploymentName)?.EmploymentId;
+                    var id = _context.TblListEmployments.First(e => e.EmploymentName == patient.EmploymentName)?.EmploymentId;
                     if (id != item.EmploymentId)
                         item.EmploymentId = id;
                 }

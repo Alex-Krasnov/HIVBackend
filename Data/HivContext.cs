@@ -102,7 +102,7 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<TblListEducation> TblListEducations { get; set; }
 
-    public virtual DbSet<TblListEmloyment> TblListEmloyments { get; set; }
+    public virtual DbSet<TblListEmployment> TblListEmployments { get; set; }
 
     public virtual DbSet<TblListEpidDoctor> TblListEpidDoctors { get; set; }
 
@@ -1167,9 +1167,11 @@ public partial class HivContext : DbContext
                 .HasMaxLength(50)
                 .IsFixedLength()
                 .HasColumnName("edu_name");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
-        modelBuilder.Entity<TblListEmloyment>(entity =>
+        modelBuilder.Entity<TblListEmployment>(entity =>
         {
             entity.HasKey(e => e.EmploymentId);
 
@@ -1182,6 +1184,8 @@ public partial class HivContext : DbContext
                 .HasMaxLength(50)
                 .IsFixedLength()
                 .HasColumnName("employment_name");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         modelBuilder.Entity<TblListEpidDoctor>(entity =>
@@ -1217,6 +1221,8 @@ public partial class HivContext : DbContext
                 .HasMaxLength(50)
                 .IsFixedLength()
                 .HasColumnName("fammily_status_name");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         modelBuilder.Entity<TblListFullMkb10>(entity =>
@@ -1309,28 +1315,30 @@ public partial class HivContext : DbContext
 
         modelBuilder.Entity<TblListPlaceCheck>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblListPlaceCheck");
+            entity.HasKey(e => e.PlaceCheckId);
+            entity.ToTable("tblListPlaceCheck");
 
             entity.Property(e => e.PlaceCheckId).HasColumnName("place_check_id");
             entity.Property(e => e.PlaceCheckName)
                 .HasMaxLength(100)
                 .IsFixedLength()
                 .HasColumnName("place_check_name");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         modelBuilder.Entity<TblListSituationDetect>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblListSituationDetect");
+            entity.HasKey(e => e.SituationDetectId);
+            entity.ToTable("tblListSituationDetect");
 
             entity.Property(e => e.SituationDetectId).HasColumnName("situation_detect_id");
             entity.Property(e => e.SituationDetectName)
                 .HasMaxLength(75)
                 .IsFixedLength()
                 .HasColumnName("situation_detect_name");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         modelBuilder.Entity<TblListTran>(entity =>
@@ -1350,15 +1358,16 @@ public partial class HivContext : DbContext
 
         modelBuilder.Entity<TblListTransmisionMech>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblListTransmisionMech");
+            entity.HasKey(e => e.TransmissionMechId);
+            entity.ToTable("tblListTransmisionMech");
 
             entity.Property(e => e.TransmisiomMechName)
                 .HasMaxLength(100)
                 .IsFixedLength()
                 .HasColumnName("transmisiom_mech_name");
             entity.Property(e => e.TransmissionMechId).HasColumnName("transmission_mech_id");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         modelBuilder.Entity<TblListVac>(entity =>
@@ -1374,19 +1383,22 @@ public partial class HivContext : DbContext
                 .HasMaxLength(100)
                 .IsFixedLength()
                 .HasColumnName("vac_name");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         modelBuilder.Entity<TblListVulnerableGroup>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("tblListVulnerableGroup");
+            entity.HasKey(e => e.VulnerableGroupId);
+            entity.ToTable("tblListVulnerableGroup");
 
             entity.Property(e => e.VulnerableGroupId).HasColumnName("vulnerable_group_id");
             entity.Property(e => e.VulnerableGroupName)
                 .HasMaxLength(100)
                 .IsFixedLength()
                 .HasColumnName("vulnerable_group_name");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         modelBuilder.Entity<TblListYn>(entity =>
@@ -3415,6 +3427,8 @@ public partial class HivContext : DbContext
                 .HasMaxLength(10)
                 .IsFixedLength()
                 .HasColumnName("die_course_short");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         modelBuilder.Entity<TblUser>(entity =>

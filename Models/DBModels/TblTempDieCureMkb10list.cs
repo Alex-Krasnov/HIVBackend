@@ -12,4 +12,8 @@ public partial class TblTempDieCureMkb10list
     public string? DieCourseLong { get; set; }
 
     public int? DethtypeId { get; set; }
+
+    public string? User { get; set; }
+
+    public DateOnly? Datetime { get; set; }
 }

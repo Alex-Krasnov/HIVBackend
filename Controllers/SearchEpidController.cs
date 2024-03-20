@@ -47,7 +47,7 @@ namespace HIVBackend.Controllers
             outModel.ListAids12 = _context.TblAids12s.Select(e => e.Aids12Long).OrderBy(e => e).ToList();
             outModel.ListEducation = _context.TblListEducations.Select(e => e.EduName).OrderBy(e => e).ToList();
             outModel.ListFamilyStatus = _context.TblListFamilyStatuses.Select(e => e.FammilyStatusName).OrderBy(e => e).ToList();
-            outModel.ListEmployment = _context.TblListEmloyments.Select(e => e.EmploymentName).OrderBy(e => e).ToList();
+            outModel.ListEmployment = _context.TblListEmployments.Select(e => e.EmploymentName).OrderBy(e => e).ToList();
             outModel.ListTrans = _context.TblListTrans.Select(e => e.TransName).OrderBy(e => e).ToList();
             outModel.ListPlaceCheck = _context.TblListPlaceChecks.Select(e => e.PlaceCheckName).OrderBy(e => e).ToList();
             outModel.ListSituationDetected = _context.TblListSituationDetects.Select(e => e.SituationDetectName).OrderBy(e => e).ToList();
