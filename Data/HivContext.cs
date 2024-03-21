@@ -1175,7 +1175,7 @@ public partial class HivContext : DbContext
         {
             entity.HasKey(e => e.EmploymentId);
 
-            entity.ToTable("tblListEmloyment");
+            entity.ToTable("tblListEmployment");
 
             entity.Property(e => e.EmploymentId)
                 .ValueGeneratedNever()

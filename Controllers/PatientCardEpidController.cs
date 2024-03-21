@@ -163,7 +163,7 @@ namespace HIVBackend.Controllers
             patientCardEpid.ListYn = _context.TblListYns.Select(e => e.YNName)?.ToList();
             patientCardEpid.ListEdu = _context.TblListEducations.Select(e => e.EduName)?.ToList();
             patientCardEpid.ListFamilyStatus = _context.TblListFamilyStatuses.Select(e => e.FammilyStatusName)?.ToList();
-            patientCardEpid.ListEmloyment = _context.TblListEmployments.Select(e => e.EmploymentName)?.ToList();
+            patientCardEpid.ListEmployment = _context.TblListEmployments.Select(e => e.EmploymentName)?.ToList();
             patientCardEpid.ListTrans = _context.TblListTrans.Select(e => e.TransName)?.ToList();
             patientCardEpid.ListVac = _context.TblListVacs.Select(e => e.VacName)?.ToList();
             patientCardEpid.ListCovidMKB = _context.TblListMkb10Covids.Select(e => e.Mkb10LongName)?.ToList();

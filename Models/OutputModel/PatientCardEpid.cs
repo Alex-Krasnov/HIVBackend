@@ -21,7 +21,7 @@
         public List<string>? ListYn { get; set; }
         public List<string>? ListEdu { get; set; }
         public List<string>? ListFamilyStatus { get; set; }
-        public List<string>? ListEmloyment { get; set; }
+        public List<string>? ListEmployment { get; set; }
         public List<string>? ListTrans { get; set; }
         public List<string>? ListVac { get; set; }
         public List<string>? ListCovidMKB { get; set; }
