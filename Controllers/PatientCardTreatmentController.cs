@@ -195,13 +195,8 @@ namespace HIVBackend.Controllers
             DateOnly startDate = DateOnly.Parse(cureSchema.StartDate),
                  startDateOld = DateOnly.Parse(cureSchema.StartDateOld);
 
-            TblPatientCureSchema item = new()
-            {
-                PatientId = cureSchema.PatientId,
-                CureSchemaId = cureSchemaIdOld,
-                StartDate = startDateOld
-            };
-            _context.TblPatientCureSchemas.Attach(item);
+            TblPatientCureSchema item = _context.TblPatientCureSchemas
+                .First(e => e.PatientId == cureSchema.PatientId && cureSchemaId == cureSchemaIdOld && startDate == startDateOld);
 
             if (cureSchemaId == cureSchemaIdOld && startDate == startDateOld)
             {

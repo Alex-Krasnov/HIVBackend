@@ -17,5 +17,8 @@ public partial class TblMedicineForSchema
 
     public DateOnly? Datetime1 { get; set; }
 
-    public virtual ICollection<TblSchemaMedicineR> TblSchemaMedicineRs { get; } = new List<TblSchemaMedicineR>();
+    public List<TblCureSchema> tblCureSchemas { get; } = new();
+    public List<TblSchemaMedicineR> tblSchemaMedicineRs { get; } = new();
+
+    //public virtual ICollection<TblSchemaMedicineR> TblSchemaMedicineRs { get; } = new List<TblSchemaMedicineR>();
 }

@@ -2,11 +2,10 @@
   "profiles": {
     "HIVBackend": {
       "commandName": "Project",
-      "launchBrowser": false,
-      "externalUrlConfiguration": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Production"
       },
+      "externalUrlConfiguration": true,
       "dotnetRunMessages": false
     },
     "HIVBackend_dev": {
@@ -17,6 +16,15 @@
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
       "dotnetRunMessages": true
+    },
+    "Container (Dockerfile)": {
+      "commandName": "Docker",
+      "launchBrowser": true,
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}/swagger",
+      "environmentVariables": {
+        "ASPNETCORE_URLS": "http://+:80"
+      },
+      "publishAllPorts": true
     }
   },
   "$schema": "https://json.schemastore.org/launchsettings.json"

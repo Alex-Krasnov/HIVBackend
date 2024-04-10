@@ -13,7 +13,7 @@ public partial class TblSchemaMedicineR
 
     public DateOnly? Datetime1 { get; set; }
 
-    public virtual TblCureSchema CureSchema { get; set; } = null!;
+    public TblCureSchema CureSchema { get; set; } = null!;
 
-    public virtual TblMedicineForSchema Medicine { get; set; } = null!;
+    public TblMedicineForSchema Medicine { get; set; } = null!;
 }

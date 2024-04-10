@@ -17,6 +17,9 @@ public partial class TblCureSchema
 
     public int? CureSchemaNoact { get; set; }
 
+    public List<TblMedicineForSchema> tblMedicineForSchemas { get; } = new();
+    public List<TblSchemaMedicineR> tblSchemaMedicineRs { get; } = new();
+
     public virtual ICollection<TblPatientCureSchema> TblPatientCureSchemas { get; } = new List<TblPatientCureSchema>();
 
     public virtual ICollection<TblPatientPregnantM> TblPatientPregnantMPhpschemaId1Navigations { get; } = new List<TblPatientPregnantM>();
@@ -25,5 +28,5 @@ public partial class TblCureSchema
 
     public virtual ICollection<TblPatientPregnantM> TblPatientPregnantMPhpschemaId3Navigations { get; } = new List<TblPatientPregnantM>();
 
-    public virtual ICollection<TblSchemaMedicineR> TblSchemaMedicineRs { get; } = new List<TblSchemaMedicineR>();
+    //public virtual ICollection<TblSchemaMedicineR> TblSchemaMedicineRs { get; } = new List<TblSchemaMedicineR>();
 }

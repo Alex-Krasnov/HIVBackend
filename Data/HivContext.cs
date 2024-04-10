@@ -767,6 +767,9 @@ public partial class HivContext : DbContext
         modelBuilder.Entity<TblCureSchema>(entity =>
         {
             entity.HasKey(e => e.CureSchemaId);
+            entity.HasMany(e => e.tblMedicineForSchemas)
+            .WithMany(e => e.tblCureSchemas)
+            .UsingEntity<TblSchemaMedicineR>();
 
             entity.ToTable("tblCureSchema");
 
@@ -3268,14 +3271,14 @@ public partial class HivContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("user1");
 
-            entity.HasOne(d => d.CureSchema).WithMany(p => p.TblSchemaMedicineRs)
-                .HasForeignKey(d => d.CureSchemaId)
-                .HasConstraintName("FK_tblSchemaMedicineR_tblCureSchema");
+            //entity.HasOne(d => d.CureSchema).WithMany(p => p.TblSchemaMedicineRs)
+            //    .HasForeignKey(d => d.CureSchemaId)
+            //    .HasConstraintName("FK_tblSchemaMedicineR_tblCureSchema");
 
-            entity.HasOne(d => d.Medicine).WithMany(p => p.TblSchemaMedicineRs)
-                .HasForeignKey(d => d.MedicineId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblSchemaMedicineR_tblMedicine");
+            //entity.HasOne(d => d.Medicine).WithMany(p => p.TblSchemaMedicineRs)
+            //    .HasForeignKey(d => d.MedicineId)
+            //    .OnDelete(DeleteBehavior.ClientSetNull)
+            //    .HasConstraintName("FK_tblSchemaMedicineR_tblMedicine");
         });
 
         modelBuilder.Entity<TblSecDi>(entity =>
@@ -4214,6 +4217,18 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.ArvtLong)
                 .HasColumnName("arvt_long");
+
+            entity.Property(e => e.ImDate)
+                .HasColumnName("im_date");
+
+            entity.Property(e => e.ImResult)
+                .HasColumnName("i0025");
+
+            entity.Property(e => e.VlDate)
+                .HasColumnName("vl_date");
+
+            entity.Property(e => e.VlResult)
+                .HasColumnName("vl_result");
 
             entity.Property(e => e.RangeTherapyLong)
                 .HasColumnName("range_therapy_long");
