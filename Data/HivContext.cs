@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using HIVBackend.Models.DBModels;
 using HIVBackend.Models.DBModuls;
 using Microsoft.EntityFrameworkCore;
 
@@ -287,6 +288,12 @@ public partial class HivContext : DbContext
     public virtual DbSet<QryRegistry> QryRegistrys { get; set; }
 
     public virtual DbSet<TblPatientFiles> TblPatientFileses { get; set; }
+
+    public virtual DbSet<TblPatientCall> TblPatientCalls { get; set; }
+
+    public virtual DbSet<TblListCallStatus> TblListCallStatuses { get; set; }
+
+    public virtual DbSet<TblPatientEpidChild> TblPatientEpidChildren { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
@@ -5378,6 +5385,61 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.FilePath)
                 .HasColumnName("file_path");
+        });
+
+        modelBuilder.Entity<TblListCallStatus>(entity =>
+        {
+            entity.HasKey(e => e.CallStatusId);
+
+            entity.ToTable("tblListCallStatus");
+
+            entity.Property(e => e.CallStatusId).HasColumnName("call_status_id");
+            entity.Property(e => e.ShortName).HasColumnName("short_name");
+            entity.Property(e => e.LongName).HasColumnName("long_name");
+        });
+
+        modelBuilder.Entity<TblPatientCall>(entity =>
+        {
+            entity.HasKey(e => e.PatientCallId);
+
+            entity.ToTable("tblPatientCall");
+
+            entity.Property(e => e.PatientCallId).HasColumnName("patient_call_id");
+            entity.Property(e => e.CallStatusId).HasColumnName("call_status_id");
+            entity.Property(e => e.PatientId).HasColumnName("patient_id");
+            entity.Property(e => e.CallDate).HasColumnName("call_date");
+
+            entity.HasOne(d => d.TblListCallStatus).WithMany(p => p.TblPatientCalls)
+                .HasForeignKey(d => d.CallStatusId)
+                .HasConstraintName("tblpatientcall_tbllistcallstatus_fk");
+
+            entity.HasOne(d => d.TblPatientCard).WithMany(p => p.TblPatientCalls)
+                .HasForeignKey(d => d.PatientId)
+                .HasConstraintName("tblpatientcall_tblpatientcard_fk");
+        });
+
+        modelBuilder.Entity<TblPatientEpidChild>(entity =>
+        {
+            entity.HasKey(e => e.PatientEpidChildId);
+
+            entity.ToTable("tblPatientEpidChild");
+
+            entity.Property(e => e.PatientEpidChildId).HasColumnName("patient_epid_child_id");
+            entity.Property(e => e.PatientId).HasColumnName("patient_id");
+            entity.Property(e => e.SexId).HasColumnName("sex_id");
+            entity.Property(e => e.BirthDate).HasColumnName("child_birth_date");
+            entity.Property(e => e.ChildFamilyName).HasColumnName("child_family_name");
+            entity.Property(e => e.ChildFirstName).HasColumnName("child_first_name");
+            entity.Property(e => e.ChildThirdName).HasColumnName("child_third_name");
+            entity.Property(e => e.Exam).HasColumnName("exam");
+
+            entity.HasOne(d => d.TblSex).WithMany(p => p.TblPatientEpidChildren)
+                .HasForeignKey(d => d.SexId)
+                .HasConstraintName("_tblPatientEpidChild__tblSex_FK");
+
+            entity.HasOne(d => d.TblPatientCard).WithMany(p => p.TblPatientEpidChildren)
+                .HasForeignKey(d => d.PatientId)
+                .HasConstraintName("_tblPatientEpidChild__tblPatientCard_FK");
         });
 
         OnModelCreatingPartial(modelBuilder);

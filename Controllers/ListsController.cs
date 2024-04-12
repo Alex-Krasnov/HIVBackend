@@ -889,5 +889,16 @@ namespace HIVBackend.Controllers
             var inList = yna.Any(e => data.Str.Contains(e));
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListCallStatuses")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListCallStatuses(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListCallStatuses.Any(e => e.LongName == data.Str);
+            return Ok(inList);
+        }
     }
 }

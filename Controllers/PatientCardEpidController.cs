@@ -1,4 +1,5 @@
 ﻿using HIVBackend.Data;
+using HIVBackend.Models.DBModels;
 using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
@@ -31,6 +32,8 @@ namespace HIVBackend.Controllers
             List<FrmPav> pavNotInj = new();
             List<FrmCovidVac> covidVac = new();
             List<FrmCovid> covid = new();
+            List<FrmEpidChild> epidChildren = new();
+            List<FrmCallStatus> callStatuses = new();
 
             TblPatientCard patient = _context.TblPatientCards.Where(e => e.PatientId == patientId && e.IsActive == true).ToList().FirstOrDefault();
             if (patient is null)
@@ -44,6 +47,8 @@ namespace HIVBackend.Controllers
             List<TblPatientContactPavNotInj>? patientPavNotInj = _context.TblPatientContactPavNotInjs.Where(e => e.PatientId == patientId)?.ToList();
             List<TblCovidVac>? patientCovidVac = _context.TblCovidVacs.Where(e => e.PatientId == patientId)?.ToList();
             List<TblCovid>? patientCovid = _context.TblCovids.Where(e => e.PatientId == patientId)?.ToList();
+            List<TblPatientCall>? patientCall = _context.TblPatientCalls.Where(e => e.PatientId == patientId)?.ToList();
+            List<TblPatientEpidChild>? patientEpidChildren = _context.TblPatientEpidChildren.Where(e => e.PatientId == patientId)?.ToList();
 
             foreach (var item in patientConstantContact)
             {
@@ -142,6 +147,30 @@ namespace HIVBackend.Controllers
                 });
             }
 
+            foreach (var item in patientEpidChildren)
+            {
+                epidChildren.Add(new()
+                {
+                    Id = item.PatientEpidChildId,
+                    BirthDate = item.BirthDate,
+                    FamilyName = item.ChildFamilyName,
+                    FirstName = item.ChildFirstName,
+                    ThirdName = item.ChildThirdName,
+                    Exam = item.Exam,
+                    SexName = _context.TblSexes.FirstOrDefault(e => e.SexId == item.SexId)?.SexShort
+                });
+            }
+
+            foreach (var item in patientCall)
+            {
+                callStatuses.Add(new()
+                {
+                    Id = item.PatientCallId,
+                    CallDate = item.CallDate,
+                    CallStatus = _context.TblListCallStatuses.FirstOrDefault(e => e.CallStatusId == item.CallStatusId)?.LongName
+                });
+            }
+
             PatientCardEpid patientCardEpid = new();
 
             patientCardEpid.PatientId = patient.PatientId;
@@ -158,18 +187,22 @@ namespace HIVBackend.Controllers
             patientCardEpid.EpidTimeInfectStart = patient.EpidemTimeInfectStart;
             patientCardEpid.EpidTimeInfectEnd = patient.EpidemTimeInfectEnd;
             patientCardEpid.EpidDocName = _context.TblListEpidDoctors.FirstOrDefault(e => e.IdDoctor == patient.EpidDocId)?.DoctorName;
+            patientCardEpid.MaxIdEpidChil = _context.TblPatientEpidChildren.Max(e => e.PatientEpidChildId);
+            patientCardEpid.MaxIdCall = _context.TblPatientCalls.Max(e => e.PatientCallId);
 
-            patientCardEpid.ListTypeContacts = _context.TblInfectCourses.Where(e => e.InfectCourseId == 100 || e.InfectCourseId == 104).Select(e => e.InfectCourseLong)?.ToList();
-            patientCardEpid.ListYn = _context.TblListYns.Select(e => e.YNName)?.ToList();
-            patientCardEpid.ListEdu = _context.TblListEducations.Select(e => e.EduName)?.ToList();
-            patientCardEpid.ListFamilyStatus = _context.TblListFamilyStatuses.Select(e => e.FammilyStatusName)?.ToList();
-            patientCardEpid.ListEmployment = _context.TblListEmployments.Select(e => e.EmploymentName)?.ToList();
-            patientCardEpid.ListTrans = _context.TblListTrans.Select(e => e.TransName)?.ToList();
-            patientCardEpid.ListVac = _context.TblListVacs.Select(e => e.VacName)?.ToList();
-            patientCardEpid.ListCovidMKB = _context.TblListMkb10Covids.Select(e => e.Mkb10LongName)?.ToList();
-            patientCardEpid.ListTransmitionMech = _context.TblListTransmisionMeches.Select(e => e.TransmisiomMechName)?.ToList();
-            patientCardEpid.ListSituationDetect = _context.TblListSituationDetects.Select(e => e.SituationDetectName)?.ToList();
-            patientCardEpid.ListEpidDoc = _context.TblListEpidDoctors.Select(e => e.DoctorName)?.ToList();
+            patientCardEpid.ListTypeContacts = _context.TblInfectCourses.Where(e => e.InfectCourseId == 100 || e.InfectCourseId == 104).Select(e => e.InfectCourseLong)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListYn = _context.TblListYns.Select(e => e.YNName)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListEdu = _context.TblListEducations.Select(e => e.EduName)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListFamilyStatus = _context.TblListFamilyStatuses.Select(e => e.FammilyStatusName)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListEmployment = _context.TblListEmployments.Select(e => e.EmploymentName)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListTrans = _context.TblListTrans.Select(e => e.TransName)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListVac = _context.TblListVacs.Select(e => e.VacName)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListCovidMKB = _context.TblListMkb10Covids.Select(e => e.Mkb10LongName)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListTransmitionMech = _context.TblListTransmisionMeches.Select(e => e.TransmisiomMechName)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListSituationDetect = _context.TblListSituationDetects.Select(e => e.SituationDetectName)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListEpidDoc = _context.TblListEpidDoctors.Select(e => e.DoctorName)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListSex = _context.TblSexes.Select(e => e.SexShort)?.OrderBy(e => e).ToList();
+            patientCardEpid.ListCallStatus = _context.TblListCallStatuses.Select(e => e.LongName)?.OrderBy(e => e).ToList();
 
             patientCardEpid.ConstantContact = constantContact;
             patientCardEpid.RandomContact = randomContact;
@@ -179,6 +212,8 @@ namespace HIVBackend.Controllers
             patientCardEpid.PavNotInj = pavNotInj;
             patientCardEpid.CovidVac = covidVac;
             patientCardEpid.Covid = covid;
+            patientCardEpid.EpidChild = epidChildren;
+            patientCardEpid.CallStatuses = callStatuses;
 
             return Ok(patientCardEpid);
         }
@@ -488,6 +523,132 @@ namespace HIVBackend.Controllers
             _context.Entry(item).Property(e => e.DVac2).IsModified = true;
             item.VacName = _context.TblListVacs.FirstOrDefault(e => e.VacName == covidVac.VacName)?.VacId;
             _context.Entry(item).Property(e => e.VacName).IsModified = true;
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpDelete, Route("DelEpidChild")]
+        [Authorize(Roles = "User")]
+        public IActionResult DelEpidChild(int id)
+        {
+            TblPatientEpidChild item = new()
+            {
+                PatientEpidChildId = id
+            };
+
+            _context.TblPatientEpidChildren.Attach(item);
+            _context.TblPatientEpidChildren.Remove(item);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost, Route("CreateEpidChild")]
+        [Authorize(Roles = "User")]
+        public IActionResult CreateEpidChild(EpidChild epidChild)
+        {
+            int maxId = _context.TblPatientEpidChildren.Max(e => e.PatientEpidChildId) + 1;
+            TblPatientEpidChild item = new()
+            {
+                PatientEpidChildId = maxId,
+                BirthDate = epidChild.BirthDate != null && epidChild.BirthDate?.Length != 0 ? DateOnly.Parse(epidChild.BirthDate) : null,
+                PatientId = epidChild.PatientId,
+                SexId = _context.TblSexes.FirstOrDefault(e => e.SexShort == epidChild.SexName)?.SexId,
+                ChildFamilyName = epidChild.ChildFamilyName,
+                ChildFirstName = epidChild.ChildFirstName,
+                ChildThirdName = epidChild.ChildThirdName,
+                Exam = epidChild.Exam
+            };
+
+            _context.TblPatientEpidChildren.Attach(item);
+            _context.TblPatientEpidChildren.Add(item);
+            _context.SaveChanges();
+            return Ok(maxId);
+        }
+
+        [HttpPost, Route("UpdateEpidChild")]
+        [Authorize(Roles = "User")]
+        public IActionResult UpdateEpidChild(EpidChild epidChild)
+        {
+            TblPatientEpidChild item = new()
+            {
+                PatientEpidChildId = (int)epidChild.Id
+            };
+            _context.TblPatientEpidChildren.Attach(item);
+
+            item.SexId = _context.TblSexes.FirstOrDefault(e => e.SexShort == epidChild.SexName)?.SexId;
+            _context.Entry(item).Property(e => e.SexId).IsModified = true;
+
+            item.ChildFamilyName = epidChild.ChildFamilyName;
+            _context.Entry(item).Property(e => e.ChildFamilyName).IsModified = true;
+
+            item.ChildFirstName = epidChild.ChildFirstName;
+            _context.Entry(item).Property(e => e.ChildFirstName).IsModified = true;
+
+            item.ChildThirdName = epidChild.ChildThirdName;
+            _context.Entry(item).Property(e => e.ChildThirdName).IsModified = true;
+
+            item.BirthDate = epidChild.BirthDate != null && epidChild.BirthDate?.Length != 0 ? DateOnly.Parse(epidChild.BirthDate) : null;
+            _context.Entry(item).Property(e => e.BirthDate).IsModified = true;
+
+            item.Exam = epidChild.Exam;
+            _context.Entry(item).Property(e => e.Exam).IsModified = true;
+
+
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpDelete, Route("DelCall")]
+        [Authorize(Roles = "User")]
+        public IActionResult DelCall(int id)
+        {
+            TblPatientCall item = new()
+            {
+                CallStatusId = id
+            };
+
+            _context.TblPatientCalls.Attach(item);
+            _context.TblPatientCalls.Remove(item);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost, Route("CreateCall")]
+        [Authorize(Roles = "User")]
+        public IActionResult CreateCall(PatientCall call)
+        {
+            int maxId = _context.TblPatientCalls.Max(e => e.PatientCallId) + 1;
+            TblPatientCall item = new()
+            {
+                PatientCallId = maxId,
+                CallDate = call.CallDate != null && call.CallDate?.Length != 0 ? DateOnly.Parse(call.CallDate) : null,
+                PatientId = call.PatientId,
+                CallStatusId = _context.TblListCallStatuses.FirstOrDefault(e => e.LongName == call.CallStatusName)?.CallStatusId
+            };
+
+            _context.TblPatientCalls.Attach(item);
+            _context.TblPatientCalls.Add(item);
+            _context.SaveChanges();
+            return Ok(maxId);
+        }
+
+        [HttpPost, Route("UpdateCall")]
+        [Authorize(Roles = "User")]
+        public IActionResult UpdateCall(PatientCall call)
+        {
+            TblPatientCall item = new()
+            {
+                PatientCallId = (int)call.Id
+            };
+            _context.TblPatientCalls.Attach(item);
+
+            item.CallStatusId = _context.TblListCallStatuses.FirstOrDefault(e => e.LongName == call.CallStatusName)?.CallStatusId;
+            _context.Entry(item).Property(e => e.CallStatusId).IsModified = true;
+
+            item.CallDate = call.CallDate != null && call.CallDate?.Length != 0 ? DateOnly.Parse(call.CallDate) : null;
+            _context.Entry(item).Property(e => e.CallDate).IsModified = true;
+
+
             _context.SaveChanges();
             return Ok();
         }

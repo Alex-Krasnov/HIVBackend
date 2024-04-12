@@ -16,6 +16,8 @@
         public DateOnly? EpidTimeInfectStart { get; set; }
         public DateOnly? EpidTimeInfectEnd { get; set; }
         public string? EpidDocName { get; set; }
+        public int MaxIdEpidChil { get; set; }
+        public int MaxIdCall { get; set; }
 
         public List<string>? ListTypeContacts { get; set; }
         public List<string>? ListYn { get; set; }
@@ -28,6 +30,8 @@
         public List<string>? ListTransmitionMech { get; set; }
         public List<string>? ListSituationDetect { get; set; }
         public List<string>? ListEpidDoc { get; set; }
+        public List<string>? ListSex { get; set; }
+        public List<string>? ListCallStatus { get; set; }
 
         public List<FrmPatientContact>? ConstantContact { get; set; }
         public List<FrmPatientContact>? RandomContact { get; set; }
@@ -37,6 +41,8 @@
         public List<FrmPav>? PavNotInj { get; set; }
         public List<FrmCovidVac>? CovidVac { get; set; }
         public List<FrmCovid>? Covid { get; set; }
+        public List<FrmEpidChild>? EpidChild { get; set; }
+        public List<FrmCallStatus>? CallStatuses { get; set; }
     }
     public class FrmPatientContact
     {
@@ -79,5 +85,23 @@
         public DateOnly? DNegativeRes { get; set; }
         public string? CovidMKB { get; set; }
 
+    }
+
+    public class FrmEpidChild
+    {
+        public int Id { get; set; }
+        public DateOnly? BirthDate { get; set; }
+        public string? SexName { get; set; }
+        public string? FamilyName { get; set; }
+        public string? FirstName { get; set; }
+        public string? ThirdName { get; set; }
+        public bool Exam { get; set; }
+    }
+
+    public class FrmCallStatus
+    {
+        public int Id { get; set; }
+        public DateOnly? CallDate { get; set; }
+        public string? CallStatus { get; set; }
     }
 }
