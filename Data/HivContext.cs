@@ -5396,6 +5396,8 @@ public partial class HivContext : DbContext
             entity.Property(e => e.CallStatusId).HasColumnName("call_status_id");
             entity.Property(e => e.ShortName).HasColumnName("short_name");
             entity.Property(e => e.LongName).HasColumnName("long_name");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         modelBuilder.Entity<TblPatientCall>(entity =>

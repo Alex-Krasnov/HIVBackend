@@ -212,8 +212,8 @@ namespace HIVBackend.Controllers
             patientCardEpid.PavNotInj = pavNotInj;
             patientCardEpid.CovidVac = covidVac;
             patientCardEpid.Covid = covid;
-            patientCardEpid.EpidChild = epidChildren;
-            patientCardEpid.CallStatuses = callStatuses;
+            patientCardEpid.EpidChild = epidChildren.OrderBy(e => e.Id).ToList();
+            patientCardEpid.CallStatuses = callStatuses.OrderBy(e => e.Id).ToList();
 
             return Ok(patientCardEpid);
         }
