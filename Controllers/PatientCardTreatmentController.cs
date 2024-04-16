@@ -85,7 +85,7 @@ namespace HIVBackend.Controllers
             patientCardTreatment.ListHospResults = _context.TblHospResults.Select(e => e.HospResultLong)?.ToList();
 
             patientCardTreatment.CorrespIllnesses = correspIllnesses;
-            patientCardTreatment.CureSchemas = cureSchemas;
+            patientCardTreatment.CureSchemas = cureSchemas.OrderBy(e => e.StartDate).ToList();
             patientCardTreatment.HospResultRs = hospResultRs;
 
             return Ok(patientCardTreatment);
@@ -196,7 +196,7 @@ namespace HIVBackend.Controllers
                  startDateOld = DateOnly.Parse(cureSchema.StartDateOld);
 
             TblPatientCureSchema item = _context.TblPatientCureSchemas
-                .First(e => e.PatientId == cureSchema.PatientId && cureSchemaId == cureSchemaIdOld && startDate == startDateOld);
+                .First(e => e.PatientId == cureSchema.PatientId && e.CureSchemaId == cureSchemaIdOld && startDate == startDateOld);
 
             if (cureSchemaId == cureSchemaIdOld && startDate == startDateOld)
             {
@@ -206,7 +206,7 @@ namespace HIVBackend.Controllers
                 item.ProtNum = cureSchema.ProtNum;
                 item.LastYn = cureSchema.Last;
                 item.RangeTherapyId = _context.TblRangeTherapies.FirstOrDefault(e => e.RangeTherapyLong == cureSchema.RangeTherapyName)?.RangeTherapyId;
-                //item.User1 = ;
+                item.User1 = User.Identity?.Name;
                 item.Datetime1 = DateOnly.FromDateTime(DateTime.Now);
                 _context.SaveChanges();
                 return Ok();
