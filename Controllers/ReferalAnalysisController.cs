@@ -39,7 +39,7 @@ namespace HIVBackend.Controllers
             if (System.IO.File.Exists(path))
                 System.IO.File.Delete(path);
 
-            createFile.GenerateWordFile(referalAnalysis.PatientId, referalAnalysis.DocName, referalAnalysis.ListResearch, _context, path);
+            createFile.GenerateWordFile(referalAnalysis.PatientId, referalAnalysis.DocName, referalAnalysis.ListResearch, _context, path, referalAnalysis.IsExtended);
 
             string contentType = "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
             byte[] fileBytes = System.IO.File.ReadAllBytes(path);

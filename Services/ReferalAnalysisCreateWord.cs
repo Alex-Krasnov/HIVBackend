@@ -7,7 +7,7 @@ namespace HIVBackend.Services
 {
     public class ReferalAnalysisCreateWord
     {
-        public void GenerateWordFile(int patientId, string docName, List<string> research, HivContext _context, string path)
+        public void GenerateWordFile(int patientId, string docName, List<string> research, HivContext _context, string path, bool isExtended)
         {
             var patient = _context.TblPatientCards.Where(e => e.PatientId == patientId).First();
 
@@ -168,50 +168,54 @@ namespace HIVBackend.Services
                 Paragraph para10 = body.AppendChild(new Paragraph(
                    new Run(new RunProperties(new Bold()), new Text())));
 
-                Paragraph para11 = body.AppendChild(new Paragraph(
-                   new Run(new RunProperties(new Bold()), new Text("Направление на диспансеризацию"))));
-
-                Paragraph para12 = body.AppendChild(new Paragraph());
-                para12.AddChild(new Run(new Text($"ФИО: ")));
-                para12.Append(new Run(new RunProperties(new Bold()), new Text(patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName)));
-
-                Paragraph para13 = body.AppendChild(new Paragraph());
-                para13.AddChild(new Run(new Text("Пол: ")));
-                para13.Append(new Run(new RunProperties(new Bold()), new Text(_context.TblSexes.Where(e => e.SexId == patient.SexId).FirstOrDefault()?.SexShort)));
-
-                Paragraph para14 = body.AppendChild(new Paragraph());
-                para14.AddChild(new Run(new Text("Ид пациента: ")));
-                para14.Append(new Run(new RunProperties(new Bold()), new Text(patient.PatientId.ToString())));
-
-                Paragraph para15 = body.AppendChild(new Paragraph());
-                para15.AddChild(new Run(new Text("Дата рождения: ")));
-                para15.Append(new Run(new RunProperties(new Bold()), new Text(patient.BirthDate.ToString())));
-
-                Paragraph para16 = body.AppendChild(new Paragraph());
-                para16.AddChild(new Run(new Text("ФИО лечащего врача: ")));
-                para16.Append(new Run(new RunProperties(new Bold()), new Text(docName)));
-
-
-                table1.AppendChild<TableProperties>(props1);
-                TableRow tr0 = new();
-                TableCell tc01 = new(new Paragraph(new Run(new RunProperties(new Bold()), new Text("Каб№"))));
-                TableCell tc02 = new(new Paragraph(new Run(new RunProperties(new Bold()), new Text("Специалист"))));
-                TableCell tc03 = new(new Paragraph(new Run(new RunProperties(new Bold()), new Text("Выполнить"))));
-                TableCell tc04 = new(new Paragraph(new Run(new RunProperties(new Bold()), new Text("Выполнено"))));
-                tr0.Append(tc01, tc02, tc03, tc04);
-                table1.Append(tr0);
-
-                foreach (var item in referralExamination)
+                if (isExtended)
                 {
-                    TableRow tr = new();
-                    TableCell tc1 = new(new Paragraph(new Run(new Text(item.Key))));
-                    TableCell tc2 = new(new Paragraph(new Run(new Text(item.Value))));
-                    TableCell tc3 = new(new Paragraph(new Run(new Text())));
-                    TableCell tc4 = new(new Paragraph(new Run(new Text())));
-                    tr.Append(tc1, tc2, tc3, tc4);
-                    table1.Append(tr);
+                    Paragraph para11 = body.AppendChild(new Paragraph(
+                        new Run(new RunProperties(new Bold()), new Text("Направление на диспансеризацию"))));
+
+                    Paragraph para12 = body.AppendChild(new Paragraph());
+                    para12.AddChild(new Run(new Text($"ФИО: ")));
+                    para12.Append(new Run(new RunProperties(new Bold()), new Text(patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName)));
+
+                    Paragraph para13 = body.AppendChild(new Paragraph());
+                    para13.AddChild(new Run(new Text("Пол: ")));
+                    para13.Append(new Run(new RunProperties(new Bold()), new Text(_context.TblSexes.Where(e => e.SexId == patient.SexId).FirstOrDefault()?.SexShort)));
+
+                    Paragraph para14 = body.AppendChild(new Paragraph());
+                    para14.AddChild(new Run(new Text("Ид пациента: ")));
+                    para14.Append(new Run(new RunProperties(new Bold()), new Text(patient.PatientId.ToString())));
+
+                    Paragraph para15 = body.AppendChild(new Paragraph());
+                    para15.AddChild(new Run(new Text("Дата рождения: ")));
+                    para15.Append(new Run(new RunProperties(new Bold()), new Text(patient.BirthDate.ToString())));
+
+                    Paragraph para16 = body.AppendChild(new Paragraph());
+                    para16.AddChild(new Run(new Text("ФИО лечащего врача: ")));
+                    para16.Append(new Run(new RunProperties(new Bold()), new Text(docName)));
+
+
+                    table1.AppendChild<TableProperties>(props1);
+                    TableRow tr0 = new();
+                    TableCell tc01 = new(new Paragraph(new Run(new RunProperties(new Bold()), new Text("Каб№"))));
+                    TableCell tc02 = new(new Paragraph(new Run(new RunProperties(new Bold()), new Text("Специалист"))));
+                    TableCell tc03 = new(new Paragraph(new Run(new RunProperties(new Bold()), new Text("Выполнить"))));
+                    TableCell tc04 = new(new Paragraph(new Run(new RunProperties(new Bold()), new Text("Выполнено"))));
+                    tr0.Append(tc01, tc02, tc03, tc04);
+                    table1.Append(tr0);
+
+                    foreach (var item in referralExamination)
+                    {
+                        TableRow tr = new();
+                        TableCell tc1 = new(new Paragraph(new Run(new Text(item.Key))));
+                        TableCell tc2 = new(new Paragraph(new Run(new Text(item.Value))));
+                        TableCell tc3 = new(new Paragraph(new Run(new Text())));
+                        TableCell tc4 = new(new Paragraph(new Run(new Text())));
+                        tr.Append(tc1, tc2, tc3, tc4);
+                        table1.Append(tr);
+                    }
+                    body.AppendChild(table1);
+
                 }
-                body.AppendChild(table1);
             }
         }
     }
