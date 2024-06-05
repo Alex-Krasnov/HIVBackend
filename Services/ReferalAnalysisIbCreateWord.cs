@@ -87,7 +87,7 @@ namespace HIVBackend.Services
 
                 Paragraph para9 = body.AppendChild(new Paragraph());
                 para9.AddChild(new Run(new Text("Адрес фактический: ")));
-                para9.Append(new Run(new RunProperties(new Bold()), new Text(addr)));
+                para9.Append(new Run(new RunProperties(new Bold()), new Text(addrFact)));
 
                 Paragraph para10 = body.AppendChild(new Paragraph());
                 para10.AddChild(new Run(new Text("ФИО лечащего врача: ")));

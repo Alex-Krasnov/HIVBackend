@@ -6,6 +6,7 @@ using DocumentFormat.OpenXml.Spreadsheet;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HIVBackend.Data;
 using HIVBackend.Models.DBModuls;
+using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -150,7 +151,30 @@ namespace HIVBackend.Controllers
 
                     if (_context.TblPatientPrescrMs.Any(e => e.PatientId == patientId && e.PrescrSer == ser && e.PrescrNum == num))
                     {
-                        errList.Add($"Cтрока {row.RowIndex} такой первичный ключ уже существует");
+                        var item = _context.TblPatientPrescrMs.First(e => e.PatientId == patientId && e.PrescrSer == ser && e.PrescrNum == num);
+
+                        item.DoctorId = doctorId;
+                        _context.Entry(item).Property(e => e.DoctorId).IsModified = true;
+                        item.PrescrDate = dateIn;
+                        _context.Entry(item).Property(e => e.PrescrDate).IsModified = true;
+                        item.Datetime1 = DateOnly.FromDateTime(DateTime.Now);
+                        _context.Entry(item).Property(e => e.Datetime1).IsModified = true;
+                        item.FinSourceId = finSourceId;
+                        _context.Entry(item).Property(e => e.FinSourceId).IsModified = true;
+                        item.MedicineId = medicineId;
+                        _context.Entry(item).Property(e => e.MedicineId).IsModified = true;
+                        item.PackNumber = count;
+                        _context.Entry(item).Property(e => e.PackNumber).IsModified = true;
+                        item.GiveMedId = medicineId;
+                        _context.Entry(item).Property(e => e.GiveMedId).IsModified = true;
+                        item.GiveDate = dateOut;
+                        _context.Entry(item).Property(e => e.GiveDate).IsModified = true;
+                        item.GivePackNum = count;
+                        _context.Entry(item).Property(e => e.GivePackNum).IsModified = true;
+                        item.KorvetDateImp = DateOnly.FromDateTime(DateTime.Now);
+                        _context.Entry(item).Property(e => e.KorvetDateImp).IsModified = true;
+
+                        errList.Add($"Cтрока {row.RowIndex} такой первичный ключ уже существует, запись обновлена");
                         continue;
                     }
 
