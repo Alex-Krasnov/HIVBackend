@@ -1,4 +1,5 @@
 ﻿using HIVBackend.Data;
+using HIVBackend.Models.DBModels;
 using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
@@ -26,6 +27,7 @@ namespace HIVBackend.Controllers
             List<FrmCorrespIllnesses> correspIllnesses = new();
             List<FrmCureSchemas> cureSchemas = new();
             List<FrmHospResultRs> hospResultRs = new();
+            List<FrmHepC> hepCs = new();
 
             TblPatientCard patient = _context.TblPatientCards.Where(e => e.PatientId == patientId && e.IsActive == true).ToList().FirstOrDefault();
             if (patient is null)
@@ -34,6 +36,8 @@ namespace HIVBackend.Controllers
             List<TblPatientCorrespIllness>? patientCorrespIllness = _context.TblPatientCorrespIllnesses.Where(e => e.PatientId == patientId)?.ToList();
             List<TblPatientCureSchema>? patientCureSchema = _context.TblPatientCureSchemas.Where(e => e.PatientId == patientId)?.ToList();
             List<TblPatientHospResultR>? patientHospResultR = _context.TblPatientHospResultRs.Where(e => e.PatientId == patientId)?.ToList();
+            List<TblHepC>? tblHepCs = _context.TblHepCs.Where(e => e.PatientId == patientId)?.ToList();
+
 
             foreach (var item in patientCorrespIllness)
             {
@@ -65,6 +69,17 @@ namespace HIVBackend.Controllers
                     HospResult = _context.TblHospResults.FirstOrDefault(e => e.HospResultId == item.HospResultId)?.HospResultLong
                 });
             }
+            foreach (var item in tblHepCs)
+            {
+                hepCs.Add(new()
+                {
+                    Id = item.Id,
+                    DateStart = item.DateStart,
+                    DateEnd = item.DateEnd,
+                    Descr = item.Descr,
+                    DateCreate = item.DateCreate
+                });
+            }
 
             PatientCardTreatment patientCardTreatment = new();
 
@@ -74,6 +89,8 @@ namespace HIVBackend.Controllers
             patientCardTreatment.StageCom = patient.StageDescr;
             patientCardTreatment.PatientCom = patient.PatientDescr;
             patientCardTreatment.InvalidName = _context.TblInvalids.FirstOrDefault(e => e.InvalidId == patient.InvalidId)?.InvalidLong;
+            patientCardTreatment.HepBdate = patient.HepBDate;
+            patientCardTreatment.HepBDescr = patient.HepBDescr;
 
             patientCardTreatment.ListInvalids = _context.TblInvalids.Select(e => e.InvalidLong)?.ToList();
             patientCardTreatment.ListCorrespIllness = _context.TblCorrespIllnesses.Select(e => e.CorrespIllnessLong)?.ToList();
@@ -87,6 +104,7 @@ namespace HIVBackend.Controllers
             patientCardTreatment.CorrespIllnesses = correspIllnesses;
             patientCardTreatment.CureSchemas = cureSchemas.OrderBy(e => e.StartDate).ToList();
             patientCardTreatment.HospResultRs = hospResultRs;
+            patientCardTreatment.hepCs = hepCs;
 
             return Ok(patientCardTreatment);
         }
@@ -317,6 +335,56 @@ namespace HIVBackend.Controllers
             return Ok();
         }
 
+        [HttpDelete, Route("DelHepC")]
+        [Authorize(Roles = "User")]
+        public IActionResult DelHepC(int Id)
+        {
+            var item = _context.TblHepCs.First(e => e.Id == Id);
+            _context.TblHepCs.Attach(item);
+            _context.TblHepCs.Remove(item);
+            _context.SaveChanges();
+            return Ok();
+        }
+
+        [HttpPost, Route("CreateHepC")]
+        [Authorize(Roles = "User")]
+        public IActionResult CreateHepC(HepC hepC)
+        {
+            var maxId = _context.TblHepCs.Max(e => e.Id);
+            TblHepC item = new()
+            {
+                Id = maxId + 1,
+                PatientId = hepC.PatientId,
+                DateStart = hepC.DateStart,
+                DateEnd = hepC.DateEnd,
+                Descr = hepC.Descr,
+                User = User.Identity?.Name,
+                DateCreate = DateOnly.FromDateTime(DateTime.Now)
+            };
+
+            _context.TblHepCs.Attach(item);
+            _context.TblHepCs.Add(item);
+            _context.SaveChanges();
+            return Ok(maxId + 1);
+        }
+
+        [HttpPost, Route("UpdateHepC")]
+        [Authorize(Roles = "User")]
+        public IActionResult UpdateHepC(HepC hepC)
+        {
+            var item = _context.TblHepCs.First(e => e.Id == hepC.Id);
+
+            item.DateStart = hepC.DateStart;
+            _context.Entry(item).Property(e => e.DateStart).IsModified = true;
+            item.DateEnd = hepC.DateEnd;
+            _context.Entry(item).Property(e => e.DateEnd).IsModified = true;
+            item.Descr = hepC.Descr;
+            _context.Entry(item).Property(e => e.Descr).IsModified = true;
+
+            _context.SaveChanges();
+            return Ok();
+        }
+
         [HttpPost, Route("UpdatePatient")]
         [Authorize(Roles = "User")]
         public IActionResult UpdatePatient(PatientCardTreatmentForm patient)
@@ -331,6 +399,12 @@ namespace HIVBackend.Controllers
             _context.Entry(item).Property(e => e.PatientDescr).IsModified = true;
             item.StageDescr = patient.StageCom;
             _context.Entry(item).Property(e => e.StageDescr).IsModified = true;
+            item.StageDescr = patient.StageCom;
+            _context.Entry(item).Property(e => e.StageDescr).IsModified = true;
+            item.HepBDate = patient.HepBDate;
+            _context.Entry(item).Property(e => e.HepBDate).IsModified = true;
+            item.HepBDescr = patient.HepBDescr;
+            _context.Entry(item).Property(e => e.HepBDescr).IsModified = true;
 
             if (patient.Invalid != null)
                 if (patient.Invalid.Length != 0)

@@ -10,6 +10,8 @@ namespace HIVBackend.Models.OutputModel
         public string? StageCom { get; set; }
         public string? PatientCom { get; set; }
         public string? InvalidName { get; set; }
+        public DateOnly? HepBdate { get; set; }
+        public string? HepBDescr { get; set; }
 
         public List<string>? ListInvalids { get; set; }
         public List<string>? ListCorrespIllness { get; set; }
@@ -23,6 +25,7 @@ namespace HIVBackend.Models.OutputModel
         public List<FrmCorrespIllnesses>? CorrespIllnesses { get; set; }
         public List<FrmCureSchemas>? CureSchemas { get; set; }
         public List<FrmHospResultRs>? HospResultRs { get; set; }
+        public List<FrmHepC>? hepCs { get; set; }
     }
     public class FrmCorrespIllnesses
     {
@@ -47,5 +50,13 @@ namespace HIVBackend.Models.OutputModel
         public string? HospCourseName { get; set; }
         public DateOnly? DateHospOut { get; set; }
         public string? HospResult { get; set; }
+    }
+    public class FrmHepC
+    {
+        public int Id { get; set; }
+        public DateOnly DateStart { get; set; }
+        public DateOnly? DateEnd { get; set; }
+        public string? Descr { get; set; }
+        public DateOnly? DateCreate { get; set; }
     }
 }

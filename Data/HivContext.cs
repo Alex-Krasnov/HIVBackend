@@ -295,6 +295,8 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<TblPatientEpidChild> TblPatientEpidChildren { get; set; }
 
+    public virtual DbSet<TblHepC> TblHepCs { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
@@ -1887,6 +1889,8 @@ public partial class HivContext : DbContext
                 .HasColumnName("weight_old");
             entity.Property(e => e.IsActive)
                 .HasColumnName("is_active");
+            entity.Property(e => e.HepBDate).HasColumnName("hep_b_date");
+            entity.Property(e => e.HepBDescr).HasColumnName("hep_b_descr");
 
             entity.HasOne(d => d.Aids12).WithMany(p => p.TblPatientCards)
                 .HasForeignKey(d => d.Aids12Id)
@@ -5442,6 +5446,25 @@ public partial class HivContext : DbContext
             entity.HasOne(d => d.TblPatientCard).WithMany(p => p.TblPatientEpidChildren)
                 .HasForeignKey(d => d.PatientId)
                 .HasConstraintName("_tblPatientEpidChild__tblPatientCard_FK");
+        });
+
+        modelBuilder.Entity<TblHepC>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.ToTable("tblHepC");
+
+            entity.Property(e => e.Id).HasColumnName("id");
+            entity.Property(e => e.PatientId).HasColumnName("patient_id");
+            entity.Property(e => e.DateStart).HasColumnName("date_start");
+            entity.Property(e => e.DateEnd).HasColumnName("date_end");
+            entity.Property(e => e.DateCreate).HasColumnName("date_create");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Descr).HasColumnName("descr");
+
+            entity.HasOne(d => d.Patient).WithMany(p => p.TblHepCs)
+                .HasForeignKey(d => d.PatientId)
+                .HasConstraintName("tblhepc_tblpatientcard_fk");
         });
 
         OnModelCreatingPartial(modelBuilder);

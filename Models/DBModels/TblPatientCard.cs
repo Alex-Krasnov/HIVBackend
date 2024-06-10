@@ -286,6 +286,10 @@ public partial class TblPatientCard
 
     public virtual TblInvalid? Invalid { get; set; }
 
+    public DateOnly? HepBDate { get; set; }
+
+    public string? HepBDescr { get; set; }
+
     public virtual ICollection<TblPatientCard> InverseFatherPatient { get; } = new List<TblPatientCard>();
 
     public virtual ICollection<TblPatientCard> InverseMotherPatient { get; } = new List<TblPatientCard>();
@@ -355,4 +359,6 @@ public partial class TblPatientCard
     public virtual ICollection<TblPatientCall> TblPatientCalls { get; } = new List<TblPatientCall>();
 
     public virtual ICollection<TblPatientEpidChild> TblPatientEpidChildren { get; } = new List<TblPatientEpidChild>();
+
+    public virtual ICollection<TblHepC> TblHepCs  { get; } = new List<TblHepC>();
 }
