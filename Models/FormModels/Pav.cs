@@ -3,7 +3,7 @@
     public class Pav
     {
         public int? DrugId { get; set; }
-        public int PatientId { get; set; } 
+        public int PatientId { get; set; }
         public string? YnName { get; set; }
         public string? DrugName { get; set; }
         public string? DateStart { get; set; }

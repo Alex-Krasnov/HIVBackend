@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
-namespace HIVBackend.Models.FormModels
+﻿namespace HIVBackend.Models.FormModels
 {
     public class LoginForm
     {

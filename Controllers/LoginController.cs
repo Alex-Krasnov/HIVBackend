@@ -1,13 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using HIVBackend.Models.DBModuls;
-using HIVBackend.Data;
-using HIVBackend.Services;
+﻿using HIVBackend.Data;
 using HIVBackend.Models;
+using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
-using Microsoft.AspNetCore.Cors;
+using HIVBackend.Services;
+using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace HIVBackend.Controllers
 {
@@ -26,8 +23,8 @@ namespace HIVBackend.Controllers
         [Route("Login")]
         public IActionResult Post(LoginForm userLog)
         {
-            if (userLog.username is null || userLog.password is null) 
-                    return BadRequest("Invalid client request");
+            if (userLog.username is null || userLog.password is null)
+                return BadRequest("Invalid client request");
 
             TblUser? user = _context.TblUsers.FirstOrDefault(e => e.Uid == userLog.username && e.Pwd == userLog.password);
 

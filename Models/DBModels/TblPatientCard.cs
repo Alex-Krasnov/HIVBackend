@@ -1,6 +1,4 @@
 ﻿using HIVBackend.Models.DBModels;
-using System;
-using System.Collections.Generic;
 
 namespace HIVBackend.Models.DBModuls;
 
@@ -360,5 +358,5 @@ public partial class TblPatientCard
 
     public virtual ICollection<TblPatientEpidChild> TblPatientEpidChildren { get; } = new List<TblPatientEpidChild>();
 
-    public virtual ICollection<TblHepC> TblHepCs  { get; } = new List<TblHepC>();
+    public virtual ICollection<TblHepC> TblHepCs { get; } = new List<TblHepC>();
 }

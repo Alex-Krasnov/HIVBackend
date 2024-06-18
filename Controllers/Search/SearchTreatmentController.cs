@@ -4,10 +4,8 @@ using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
 using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Data;
 
 namespace HIVBackend.Controllers.Search

@@ -4,7 +4,7 @@
     {
         public string? PatientId { get; set; }
         public string? CardNo { get; set; }
-        public string? FamilyName { get; set;}
+        public string? FamilyName { get; set; }
         public string? FirstName { get; set; }
         public string? ThirdName { get; set; }
         public string? BirthDateStart { get; set; }

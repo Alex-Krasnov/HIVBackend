@@ -1,13 +1,11 @@
 ﻿using HIVBackend.Data;
-using HIVBackend.Services;
+using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
+using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
-using HIVBackend.Models.DBModuls;
-using System;
 
 namespace HIVBackend.Controllers.Search
 {

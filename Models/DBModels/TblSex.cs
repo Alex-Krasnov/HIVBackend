@@ -1,6 +1,4 @@
 ﻿using HIVBackend.Models.DBModels;
-using System;
-using System.Collections.Generic;
 
 namespace HIVBackend.Models.DBModuls;
 

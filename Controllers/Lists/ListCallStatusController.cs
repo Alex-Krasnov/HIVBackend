@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using HIVBackend.Data;
-using HIVBackend.Models.DBModuls;
-using HIVBackend.Models.FormModels;
+﻿using HIVBackend.Data;
 using HIVBackend.Models.DBModels;
+using HIVBackend.Models.FormModels;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
 namespace HIVBackend.Controllers.Lists
 {

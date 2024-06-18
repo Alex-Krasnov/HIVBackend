@@ -1,13 +1,8 @@
 ﻿using HIVBackend.Data;
-using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
-using HIVBackend.Models.OutputModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
-using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
-using Microsoft.EntityFrameworkCore;
 
 namespace HIVBackend.Controllers.Search
 {
@@ -57,7 +52,7 @@ namespace HIVBackend.Controllers.Search
                         (form.BirthDateStart != null ? p.BirthDate >= DateOnly.Parse(form.BirthDateStart) : true) &&
                         (form.BirthDateEnd != null ? p.BirthDate <= DateOnly.Parse(form.BirthDateEnd) : true) &&
                         (form.CardNo != null ? p.CardNo.ToLower().StartsWith(form.CardNo.ToLower()) : true)
-                    
+
                           orderby p.FamilyName, p.FirstName, p.ThirdName
                           select new Dictionary<string, object>{
                         { "PatientId", p.PatientId },

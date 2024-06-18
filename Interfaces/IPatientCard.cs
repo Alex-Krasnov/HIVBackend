@@ -1,6 +1,4 @@
-﻿using HIVBackend.Models.DBModuls;
-
-namespace HIVBackend.Interfaces
+﻿namespace HIVBackend.Interfaces
 {
     public interface IPatientCard
     {

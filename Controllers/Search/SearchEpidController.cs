@@ -4,7 +4,6 @@ using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
 using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HIVBackend.Controllers.Search
@@ -493,7 +492,7 @@ namespace HIVBackend.Controllers.Search
                         (form.hospCourse[0] != "Все" ? form.hospCourse.Contains(e.ShowIllnessLong) : true) &&
                         (form.age[0] != "Все" && form.age.Contains("> 60") != true ? ages.Contains(e.Age.ToString()) : true) &&
                         (form.age[0] != "Все" && form.age.Contains("> 60") ? ages.Contains(e.Age.ToString()) || e.Age >= 60 : true) &&
-                        (form.cardNo.Length != 0 ? e.CardNo.ToLower().StartsWith(form.cardNo.ToLower()) : true) &&
+                        (form.cardNo.Length != 0 ? e.CardNo.ToLower().Contains(form.cardNo.ToLower()) : true) &&
                         (form.art[0] != "Все" ? form.art.Contains(e.ArvtLong) : true) &&
                         (form.mkb10[0] != "Все" ? form.mkb10.Contains(e.CodeMkb10Long) : true) &&
                         (form.transfAreaYNA == "Да" ? e.TransfAreaDate != null : true) &&

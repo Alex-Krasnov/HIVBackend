@@ -1,13 +1,9 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
-using HIVBackend.Data;
+﻿using HIVBackend.Data;
 using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Globalization;
 
 namespace HIVBackend.Controllers
 {
@@ -28,7 +24,7 @@ namespace HIVBackend.Controllers
         {
             RegVisit outModel = new();
             outModel.Doctors = _context.TblDoctors.Where(e => e.DoctorLong != null).Select(e => e.DoctorLong)?.ToList();
-            outModel.Cabs = _context.TblCabinets.Where(e => e.CabinetLong  != null).Select(e => e.CabinetShort)?.ToList();
+            outModel.Cabs = _context.TblCabinets.Where(e => e.CabinetLong != null).Select(e => e.CabinetShort)?.ToList();
 
             return Ok(outModel);
         }
@@ -112,7 +108,7 @@ namespace HIVBackend.Controllers
         [Authorize(Roles = "User")]
         public IActionResult SetVisit(SetVisit form)
         {
-            TblPatientRegistry registry = new() 
+            TblPatientRegistry registry = new()
             {
                 RegDate = DateOnly.FromDateTime(form.Date),
                 RegCabinetId = form.CabId,

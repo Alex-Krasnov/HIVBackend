@@ -2,9 +2,7 @@
 using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.OutputModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 
 namespace HIVBackend.Controllers.PatientCard

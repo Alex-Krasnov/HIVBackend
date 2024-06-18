@@ -1,6 +1,4 @@
-﻿using HIVBackend.Models.DBModuls;
-
-namespace HIVBackend.Models.DBModels
+﻿namespace HIVBackend.Models.DBModels
 {
     public class TblListCallStatus
     {

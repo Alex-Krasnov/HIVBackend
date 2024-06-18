@@ -1,12 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.EntityFrameworkCore;
-using HIVBackend.Data;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
-using Microsoft.AspNetCore.Http.Features;
+﻿using HIVBackend.Data;
 using HIVBackend.Services;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System.Globalization;
+using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.WebHost.UseUrls();
@@ -36,9 +36,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddSwaggerGen();
 
-builder.Services.Configure<FormOptions>(options => 
+builder.Services.Configure<FormOptions>(options =>
 {
-    options.ValueCountLimit= int.MaxValue;
+    options.ValueCountLimit = int.MaxValue;
 });
 
 builder.Services.AddTransient<ITokenService, TokenService>();

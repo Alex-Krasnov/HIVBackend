@@ -1,7 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Web;
-using System;
-
-namespace HIVBackend.Models.FormModels
+﻿namespace HIVBackend.Models.FormModels
 {
     public class SearchAclForm
     {

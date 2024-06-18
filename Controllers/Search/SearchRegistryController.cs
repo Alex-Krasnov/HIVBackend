@@ -3,7 +3,6 @@ using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
 using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HIVBackend.Controllers.Search

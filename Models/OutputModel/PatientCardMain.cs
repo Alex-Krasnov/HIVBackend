@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HIVBackend.Models.OutputModel
+﻿namespace HIVBackend.Models.OutputModel
 {
     public class PatientCardMain
     {

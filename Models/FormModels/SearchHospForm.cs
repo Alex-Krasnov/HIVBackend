@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace HIVBackend.Models.FormModels
+﻿namespace HIVBackend.Models.FormModels
 {
     public class SearchHospForm
     {

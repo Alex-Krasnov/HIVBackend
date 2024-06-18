@@ -75,7 +75,7 @@
         public DateOnly? DVac1 { get; set; }
         public DateOnly? DVac2 { get; set; }
         public string? VacName { get; set; }
-        
+
     }
 
     public class FrmCovid

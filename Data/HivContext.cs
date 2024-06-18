@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using HIVBackend.Models.DBModels;
+﻿using HIVBackend.Models.DBModels;
 using HIVBackend.Models.DBModuls;
 using Microsoft.EntityFrameworkCore;
 
@@ -264,7 +262,7 @@ public partial class HivContext : DbContext
     public virtual DbSet<TblZzztempSnil> TblZzztempSnils { get; set; }
 
     public virtual DbSet<QrySearchMainInf> QrySearchMainInfs { get; set; }
-    
+
     public virtual DbSet<QrySearchPregnant> QrySearchPregnants { get; set; }
 
     public virtual DbSet<QrySearchChild> QrySearchChilds { get; set; }
@@ -281,7 +279,7 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<QrySearchHosp> QrySearchHosps { get; set; }
 
-    public virtual DbSet<QrySearchNonresident> QrySearchNonresidents { get; set; } 
+    public virtual DbSet<QrySearchNonresident> QrySearchNonresidents { get; set; }
 
     public virtual DbSet<QrySearchCovid> QrySearchCovids { get; set; }
 
@@ -4590,7 +4588,7 @@ public partial class HivContext : DbContext
                 .HasColumnName("reg_off_date");
 
             entity.Property(e => e.RegOff)
-                .HasColumnName("reg_off"); 
+                .HasColumnName("reg_off");
 
             entity.Property(e => e.DiagnosisLong)
                 .HasColumnName("diagnosis_long");

@@ -17,7 +17,7 @@
     public class Jail
     {
         public string JailName { get; set; }
-        public string? JailLeavName { get; set;}
+        public string? JailLeavName { get; set; }
         public DateOnly JailStart { get; set; }
         public DateOnly JailEnd { get; set; }
     }

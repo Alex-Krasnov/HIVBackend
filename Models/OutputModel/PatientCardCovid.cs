@@ -48,7 +48,7 @@
         public string? ClinVarCovid { get; set; }
         public string? SeverityCovid { get; set; }
         public string? CovidMKB10Short { get; set; }
-        public string? CovidMKB10Long{ get; set; }
+        public string? CovidMKB10Long { get; set; }
         public string? TubercuosisShort { get; set; }
         public string? TubercuosisLong { get; set; }
         public string? PneumoniaShort { get; set; }

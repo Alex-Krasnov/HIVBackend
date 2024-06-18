@@ -4,7 +4,6 @@ using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
 using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
 

@@ -2,7 +2,6 @@
 using HIVBackend.Models;
 using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace HIVBackend.Controllers

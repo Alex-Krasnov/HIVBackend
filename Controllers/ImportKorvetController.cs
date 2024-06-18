@@ -1,20 +1,11 @@
-﻿using DocumentFormat.OpenXml.ExtendedProperties;
-using DocumentFormat.OpenXml.Math;
-using DocumentFormat.OpenXml.Office2010.Excel;
-using DocumentFormat.OpenXml.Packaging;
+﻿using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
-using DocumentFormat.OpenXml.Wordprocessing;
 using HIVBackend.Data;
 using HIVBackend.Models.DBModuls;
-using HIVBackend.Models.FormModels;
-using HIVBackend.Models.OutputModel;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
-using System.Linq;
 using System.Text;
-using System.Xml.Linq;
 
 namespace HIVBackend.Controllers
 {
@@ -81,7 +72,7 @@ namespace HIVBackend.Controllers
                         break;
                     }
                 }
-                    
+
                 //numEndRow = 100;//int.Parse(endRow.RowIndex);
 
                 foreach (Row row in sheetData.Elements<Row>())
@@ -111,7 +102,7 @@ namespace HIVBackend.Controllers
                         errList.Add($"Cтрока {row.RowIndex} неверный код врача");
                         continue;
                     }
-                        
+
                     var snils = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[16].InnerText)).InnerText.Replace("-", "").Replace(" ", ""); // q-16 - snils
                     var fioPatient = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[8].InnerText)).InnerText.ToLower(); // i-8 - fio patient
                     int? patientId = _context.TblPatientCards.FirstOrDefault(e => e.Snils.Replace("-", "").Replace(" ", "") == (string)snils)?.PatientId;
@@ -130,7 +121,8 @@ namespace HIVBackend.Controllers
                     if (medicineId == null)
                     {
                         int maxId = _context.TblMedicines.Max(e => e.MedicineId) + 1;
-                        TblMedicine item = new() { 
+                        TblMedicine item = new()
+                        {
                             MedicineId = maxId,
                             MedicineLong = medicineName,
                             User1 = "base",
@@ -178,8 +170,8 @@ namespace HIVBackend.Controllers
                         continue;
                     }
 
-                    TblPatientPrescrM recipe = new() 
-                    { 
+                    TblPatientPrescrM recipe = new()
+                    {
                         PatientId = (int)patientId,
                         PrescrSer = ser,
                         PrescrNum = num,

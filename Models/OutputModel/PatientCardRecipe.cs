@@ -3,9 +3,9 @@
     public class PatientCardRecipe
     {
         public int PatientId { get; set; }
-        public string PatientFio { get; set;}
+        public string PatientFio { get; set; }
 
-        public List<string>? ListDoctor { get; set;}
+        public List<string>? ListDoctor { get; set; }
         public List<string>? ListMedicine { get; set; }
         public List<string>? ListFinSource { get; set; }
 
