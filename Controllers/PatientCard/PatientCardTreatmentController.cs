@@ -198,7 +198,8 @@ namespace HIVBackend.Controllers.PatientCard
                 SchemaDescr = cureSchema.SchemaCom,
                 CureChangeId = _context.TblCureChanges.FirstOrDefault(e => e.CureChangeLong == cureSchema.CureChangeName)?.CureChangeId,
                 ProtNum = cureSchema.ProtNum,
-                RangeTherapyId = _context.TblRangeTherapies.FirstOrDefault(e => e.RangeTherapyLong == cureSchema.RangeTherapyName)?.RangeTherapyId
+                RangeTherapyId = _context.TblRangeTherapies.FirstOrDefault(e => e.RangeTherapyLong == cureSchema.RangeTherapyName)?.RangeTherapyId,
+                LastYn = cureSchema.Last
             };
 
             _context.TblPatientCureSchemas.Attach(item);
