@@ -133,6 +133,23 @@ namespace HIVBackend.Controllers
                         medicineId = maxId;
                     }
 
+                    string giveMedicineName = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[27].InnerText)).InnerText;
+                    int? giveMedicineId = _context.TblMedicines.Where(e => e.MedicineLong == giveMedicineName).FirstOrDefault()?.MedicineId; // аа-27 - give medicine
+                    if (giveMedicineId == null)
+                    {
+                        int maxId = _context.TblMedicines.Max(e => e.MedicineId) + 1;
+                        TblMedicine item = new()
+                        {
+                            MedicineId = maxId,
+                            MedicineLong = giveMedicineName,
+                            User1 = "base",
+                            Datetime1 = DateOnly.FromDateTime(DateTime.Now)
+                        };
+                        _context.TblMedicines.Add(item);
+                        _context.SaveChanges();
+                        giveMedicineId = maxId;
+                    }
+
                     DateOnly dateOut;
                     string dateOutStr = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[25].InnerText)).InnerText;
                     bool isDateOut = DateOnly.TryParse(dateOutStr, out dateOut); // z-25 - date out
@@ -181,7 +198,7 @@ namespace HIVBackend.Controllers
                         FinSourceId = finSourceId,
                         MedicineId = medicineId,
                         PackNumber = count,
-                        GiveMedId = medicineId,
+                        GiveMedId = giveMedicineId,
                         GiveDate = dateOut,
                         GivePackNum = count,
                         KorvetDateImp = DateOnly.FromDateTime(DateTime.Now)
