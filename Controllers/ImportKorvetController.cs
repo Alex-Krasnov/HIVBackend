@@ -133,7 +133,7 @@ namespace HIVBackend.Controllers
                         medicineId = maxId;
                     }
 
-                    string giveMedicineName = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[27].InnerText)).InnerText;
+                    string giveMedicineName = sharedStringTable.Elements<SharedStringItem>().ElementAt(int.Parse(row.ChildElements[26].InnerText)).InnerText;
                     int? giveMedicineId = _context.TblMedicines.Where(e => e.MedicineLong == giveMedicineName).FirstOrDefault()?.MedicineId; // аа-27 - give medicine
                     if (giveMedicineId == null)
                     {
