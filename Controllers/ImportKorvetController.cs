@@ -73,7 +73,7 @@ namespace HIVBackend.Controllers
                     }
                 }
 
-                //numEndRow = 100;//int.Parse(endRow.RowIndex);
+                numEndRow = 100;//int.Parse(endRow.RowIndex);
 
                 foreach (Row row in sheetData.Elements<Row>())
                 {
@@ -174,7 +174,7 @@ namespace HIVBackend.Controllers
                         _context.Entry(item).Property(e => e.MedicineId).IsModified = true;
                         item.PackNumber = count;
                         _context.Entry(item).Property(e => e.PackNumber).IsModified = true;
-                        item.GiveMedId = medicineId;
+                        item.GiveMedId = giveMedicineId;
                         _context.Entry(item).Property(e => e.GiveMedId).IsModified = true;
                         item.GiveDate = dateOut;
                         _context.Entry(item).Property(e => e.GiveDate).IsModified = true;
@@ -182,6 +182,8 @@ namespace HIVBackend.Controllers
                         _context.Entry(item).Property(e => e.GivePackNum).IsModified = true;
                         item.KorvetDateImp = DateOnly.FromDateTime(DateTime.Now);
                         _context.Entry(item).Property(e => e.KorvetDateImp).IsModified = true;
+
+                        _context.SaveChanges();
 
                         errList.Add($"Cтрока {row.RowIndex} такой первичный ключ уже существует, запись обновлена");
                         continue;
