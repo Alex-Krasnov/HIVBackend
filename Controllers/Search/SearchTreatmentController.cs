@@ -1,4 +1,5 @@
-﻿using HIVBackend.Data;
+﻿using DocumentFormat.OpenXml.Presentation;
+using HIVBackend.Data;
 using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
+using System.Text;
 
 namespace HIVBackend.Controllers.Search
 {
@@ -59,419 +61,794 @@ namespace HIVBackend.Controllers.Search
         [Authorize(Roles = "User")]
         public IActionResult GetRes(SearchTreatmentForm form)
         {
+
+            #region базовые переменые 
+
             int pageSize = 100;
             List<string> columName = new() { "Ид пациента" };
+            StringBuilder selectGroupSrt = new();
+            StringBuilder joinStr = new();
+            StringBuilder whereStr = new();
+            selectGroupSrt.Append("\"tblPatientCard\".patient_id");
+            joinStr.Append(" FROM \"tblPatientCard\"");
+            whereStr.Append("WHERE true");
 
-            List<string> activeColumns = new() { "PatientId" };
+            #endregion
 
-            foreach (var key in typeof(SearchTreatmentForm).GetProperties())
+            #region Генерация строк SELECT GROUP BY и LEFT JOIN для запроса
+
+            foreach (var key in typeof(SearchTreatmentForm).GetProperties().Where(e => e.Name.StartsWith("select")))
             {
-                if (key.Name.StartsWith("select") && (bool)key.GetValue(form) == true)
+                if ((bool)key.GetValue(form) == true)
                 {
                     if (key.Name == "selectInpDate")
                     {
                         columName.Add("Дата ввода");
-                        activeColumns.Add("InputDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".input_date");
                     }
 
                     if (key.Name == "selectFio")
                     {
                         columName.Add("Фамилия");
-                        activeColumns.Add("FamilyName");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".family_name");
                         columName.Add("Имя");
-                        activeColumns.Add("FirstName");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".first_name");
                         columName.Add("Отчество");
-                        activeColumns.Add("ThirdName");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".third_name");
                     }
 
                     if (key.Name == "selectSex")
                     {
                         columName.Add("Пол");
-                        activeColumns.Add("SexShort");
+                        selectGroupSrt.AppendLine(",\"tblSex\".sex_short");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblSex", field: "sex_id", table: "tblPatientCard");
                     }
 
                     if (key.Name == "selectBirthDate")
                     {
                         columName.Add("Дата рождения");
-                        activeColumns.Add("BirthDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".birth_date");
                     }
 
                     if (key.Name == "selectRegion")
                     {
                         columName.Add("Регион");
-                        activeColumns.Add("RegionLong");
+                        selectGroupSrt.AppendLine(",\"tblRegion\".region_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard");
                     }
 
                     if (key.Name == "selectRegionFact")
                     {
                         columName.Add("Регион (факт.)");
-                        activeColumns.Add("RegionLongFact");
+                        selectGroupSrt.AppendLine(",\"tblRegionFact\".region_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard", alias: "tblRegionFact");
                     }
 
                     if (key.Name == "selectCountry")
                     {
                         columName.Add("Страна");
-                        activeColumns.Add("CountryLong");
+                        selectGroupSrt.AppendLine(",\"tblCountry\".country_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblCountry", field: "country_id", table: "tblPatientCard");
                     }
 
                     if (key.Name == "selectAddr")
                     {
                         columName.Add("Город");
-                        activeColumns.Add("CityName");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".city_name");
                         columName.Add("Населённый пункт");
-                        activeColumns.Add("LocationName");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".location_name");
                         columName.Add("Индекс");
-                        activeColumns.Add("AddrInd");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".addr_ind");
                         columName.Add("Улица");
-                        activeColumns.Add("AddrStreet");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".addr_street");
                         columName.Add("Дом");
-                        activeColumns.Add("AddrHouse");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".addr_house");
                         columName.Add("Корпус");
-                        activeColumns.Add("AddrExt");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".addr_ext");
                         columName.Add("Квартира");
-                        activeColumns.Add("AddrFlat");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".addr_flat");
                     }
 
                     if (key.Name == "selectRegOnDate")
                     {
                         columName.Add("Дата постановки на учет");
-                        activeColumns.Add("RegOnDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".reg_on_date");
                         columName.Add("Дата снятия с учета");
-                        activeColumns.Add("RegOffDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".reg_off_date");
                         columName.Add("Причина снятия с учета");
-                        activeColumns.Add("RegOff");
+                        selectGroupSrt.AppendLine(",\"regOff\".infect_course_long");
+                        joinStr.AddLeftJoinIfNotExistDiffField(
+                            joinTable: "tblInfectCourse", 
+                            fieldLeft: "reg_off_reason",
+                            fieldRight: "infect_course_id", 
+                            table: "tblPatientCard", 
+                            alias: "regOff");
                     }
 
                     if (key.Name == "selectStage")
                     {
                         columName.Add("Стадия");
-                        activeColumns.Add("DiagnosisLong");
+                        selectGroupSrt.AppendLine(",stage.diagnosis_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblCountry", field: "country_id", table: "tblPatientCard");
+
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientDiagnosis", field: "patient_id", table: "tblPatientCard", alias: "patientStage");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblDiagnosis", field: "diagnosis_id", table: "patientStage", alias: "stage");
                     }
 
                     if (key.Name == "selectDieDate")
                     {
                         columName.Add("Дата смерти");
-                        activeColumns.Add("DieDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".die_date");
                         columName.Add("Дата смерти от СПИДа");
-                        activeColumns.Add("DieAidsDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".die_aids_date");
                     }
 
                     if (key.Name == "selectDieCourse")
                     {
                         columName.Add("Причина смерти");
-                        activeColumns.Add("DieCourseLong");
+                        selectGroupSrt.AppendLine(",\"tblTempDieCureMKB10List\".die_course_long");
                         columName.Add("МКБ причина смерти");
-                        activeColumns.Add("DieCourseShort");
+                        selectGroupSrt.AppendLine(",\"tblTempDieCureMKB10List\".die_course_short");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
                     }
 
                     if (key.Name == "selectCheckCourse")
                     {
                         columName.Add("Причина обращения");
-                        activeColumns.Add("CheckCourseLong");
+                        selectGroupSrt.AppendLine(",\"tblCheckCourse\".check_course_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblCheckCourse", field: "check_course_id", table: "tblPatientCard");
                     }
 
                     if (key.Name == "selectInfectCourse")
                     {
                         columName.Add("Причина заражения");
-                        activeColumns.Add("InfectCourseLong");
+                        selectGroupSrt.AppendLine(",\"tblInfectCourse\".infect_course_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblInfectCourse", field: "infect_course_id", table: "tblPatientCard");
                     }
 
                     if (key.Name == "selectShowIllnes")
                     {
                         columName.Add("Индикаторная болезнь");
-                        activeColumns.Add("ShowIllnessLong");
+                        selectGroupSrt.AppendLine(",\"tblShowIllness\".show_illness_long");
+
                         columName.Add("Дата вторичного заболивания с");
-                        activeColumns.Add("StartDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientShowIllness\".start_date");
+
                         columName.Add("Дата вторичного заболивания по");
-                        activeColumns.Add("EndDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientShowIllness\".end_date");
+
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
                     }
 
                     if (key.Name == "selectTransfArea")
                     {
                         columName.Add("Дата передачи в район");
-                        activeColumns.Add("TransfAreaDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".transf_area_date");
                     }
 
                     if (key.Name == "selectFr")
                     {
                         columName.Add("Внесено в ФР");
-                        activeColumns.Add("FlgZamMedPart");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".flg_zam_med_part");
                         columName.Add("Зав АПО");
-                        activeColumns.Add("FlgHeadPhysician");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".flg_head_physician");
                     }
 
                     if (key.Name == "selectIb")
                     {
                         columName.Add("Результат референс");
-                        activeColumns.Add("IbResultShort");
+                        selectGroupSrt.AppendLine(",\"tblIbResult\".ib_result_short");
+
                         columName.Add("Дата референс");
-                        activeColumns.Add("BlotDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientBlot\".blot_date");
+
                         columName.Add("Номер");
-                        activeColumns.Add("BlotNo");
+                        selectGroupSrt.AppendLine(",\"tblPatientBlot\".blot_no");
+
                         columName.Add("Послед");
-                        activeColumns.Add("First1");
+                        selectGroupSrt.AppendLine(",\"tblPatientBlot\".first1");
+
                         columName.Add("Дата ввода");
-                        activeColumns.Add("Datetime1");
+                        selectGroupSrt.AppendLine(",\"tblPatientBlot\".datetime1");
+
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblIbResult", field: "ib_result_id", table: "tblPatientBlot");
                     }
 
                     if (key.Name == "selectUfsin")
                     {
                         columName.Add("Дата постановки на учет УФСИН");
-                        activeColumns.Add("UfsinDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".ufsin_date");
                     }
 
                     if (key.Name == "selectInvalid")
                     {
                         columName.Add("Группа инвалидности");
-                        activeColumns.Add("InvalidLong");
+                        selectGroupSrt.AppendLine(",\"tblInvalid\".invalid_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblInvalid", field: "invalid_id", table: "tblPatientCard");
                     }
 
                     if (key.Name == "selectCorrespIllnesses")
                     {
                         columName.Add("Сопутствующее заболевание");
-                        activeColumns.Add("CorrespIllnessLong");
+                        selectGroupSrt.AppendLine(",\"tblCorrespIllness\".corresp_illness_long");
+
                         columName.Add("Сопутствующее заболевание дата");
-                        activeColumns.Add("CorrespIllnessDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientCorrespIllness\".datetime1");
+
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCorrespIllness", field: "patient_id", table: "tblPatientCard");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblCorrespIllness", field: "corresp_illness_id", table: "tblPatientCorrespIllness");
+                    }
+
+                    if (key.Name == "selectSchemaDate")
+                    {
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+
+                        columName.Add("Дата назн.схемы");
+                        selectGroupSrt.AppendLine(",\"tblPatientCureSchema\".start_date");
                     }
 
                     if (key.Name == "selectSchema")
                     {
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+
                         columName.Add("Схема лечения");
-                        activeColumns.Add("CureSchemaLong");
+                        selectGroupSrt.AppendLine(",\"tblCureSchema\".cure_schema_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureSchema", field: "cure_schema_id", table: "tblPatientCureSchema");
                     }
 
                     if (key.Name == "selectSchemaMedecine")
                     {
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+
                         columName.Add("Схема лечения (препарат)");
-                        activeColumns.Add("MedforschemaLong");
-                    }
+                        selectGroupSrt.AppendLine(",\"tblMedicineForSchema\".medforschema_long");
 
-                    if (key.Name == "selectMedecine")
-                    {
-                        columName.Add("Препарат прописанный");
-                        activeColumns.Add("MedicineLong");
-                    }
-
-                    if (key.Name == "selectMedecineGive")
-                    {
-                        columName.Add("Препарат выданный");
-                        activeColumns.Add("GiveMedicineLong");
-                    }
-
-                    if (key.Name == "selectDoctor")
-                    {
-                        columName.Add("Персонал");
-                        activeColumns.Add("DoctorLong");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblSchemaMedicineR", field: "cure_schema_id", table: "tblPatientCureSchema");
+                        joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblMedicineForSchema",
+                                                               fieldLeft: "medicine_id",
+                                                               fieldRight: "medforschema_id",
+                                                               table: "tblSchemaMedicineR");
                     }
 
                     if (key.Name == "selectGiveDate")
                     {
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+
                         columName.Add("Дата выдачи препарата");
-                        activeColumns.Add("GiveDate");
+                        selectGroupSrt.AppendLine(",\"tblPatientPrescrM\".give_date");
+                    }
+
+                    if (key.Name == "selectDoctor")
+                    {
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+
+                        columName.Add("Персонал");
+                        selectGroupSrt.AppendLine(",\"tblDoctor\".doctor_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblDoctor", field: "doctor_id", table: "tblPatientPrescrM");
+                    }
+
+                    if (key.Name == "selectMedecine")
+                    {
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+
+                        columName.Add("Препарат прописанный");
+                        selectGroupSrt.AppendLine(",\"tblMedicine\".medicine_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblMedicine", field: "medicine_id", table: "tblPatientPrescrM");
+                    }
+
+                    if (key.Name == "selectMedecineGive")
+                    {
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+
+                        columName.Add("Препарат выданный");
+                        selectGroupSrt.AppendLine(",\"tblGiveMedicine\".medicine_long");
+                        joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblMedicine", 
+                                                               fieldLeft: "give_med_id",
+                                                               fieldRight: "medicine_id", 
+                                                               table: "tblPatientPrescrM",
+                                                               alias: "tblGiveMedicine");
                     }
 
                     if (key.Name == "selectSchemaChange")
                     {
                         columName.Add("Причина смены схемы леч.");
-                        activeColumns.Add("CureChangeLong");
+                        selectGroupSrt.AppendLine(",\"tblCureChange\".cure_change_long");
+
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureChange", field: "cure_change_id", table: "tblPatientCureSchema");
                     }
 
                     if (key.Name == "selectCardNo")
                     {
                         columName.Add("№ карты");
-                        activeColumns.Add("CardNo");
-                    }
-
-                    if (key.Name == "selectSchemaDate")
-                    {
-                        columName.Add("Дата назн.схемы");
-                        activeColumns.Add("SchemaStartDate");
-                    }
-
-                    if (key.Name == "selectFinSource")
-                    {
-                        columName.Add("Источник финансирования");
-                        activeColumns.Add("FinSourceLong");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".card_no");
                     }
 
                     if (key.Name == "selectArt")
                     {
                         columName.Add("АРТ");
-                        activeColumns.Add("ArvtLong");
+                        selectGroupSrt.AppendLine(",\"tblArvt\".arvt_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblArvt", field: "arvt_id", table: "tblPatientCard");
                     }
 
                     if (key.Name == "selectRangeTherapy")
                     {
                         columName.Add("Ряд терапии");
-                        activeColumns.Add("RangeTherapyLong");
+                        selectGroupSrt.AppendLine(",\"tblRangeTherapy\".range_therapy_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblRangeTherapy", field: "range_therapy_id", table: "tblPatientCureSchema");
                     }
 
-                    if (key.Name == "selectVlDate")
-                    {
-                        columName.Add("Дата опред.вир.нагр.");
-                        activeColumns.Add("VlDate");
-                    }
+                    #region Добавление результаток исследований TODO
+                    //if (key.Name == "selectVlDate")
+                    //{
+                    //    columName.Add("Дата опред.вир.нагр.");
+                    //    activeColumns.Add("VlDate");
+                    //}
 
-                    if (key.Name == "selectVlRes")
-                    {
-                        columName.Add("Вирусн.нагр.");
-                        activeColumns.Add("VlResult");
-                    }
+                    //if (key.Name == "selectVlRes")
+                    //{
+                    //    columName.Add("Вирусн.нагр.");
+                    //    activeColumns.Add("VlResult");
+                    //}
 
-                    if (key.Name == "selectImDate")
-                    {
-                        columName.Add("Дата опред.иммун.стат.");
-                        activeColumns.Add("ImDate");
-                    }
+                    //if (key.Name == "selectImDate")
+                    //{
+                    //    columName.Add("Дата опред.иммун.стат.");
+                    //    activeColumns.Add("ImDate");
+                    //}
 
-                    if (key.Name == "selectImRes")
-                    {
-                        columName.Add("CD4+(abc)");
-                        activeColumns.Add("ImResult");
-                    }
+                    //if (key.Name == "selectImRes")
+                    //{
+                    //    columName.Add("CD4+(abc)");
+                    //    activeColumns.Add("ImResult");
+                    //}
+                    #endregion
                 }
             }
 
-            int ResVlStart, ResVlEnd, ResImStart, ResImEnd;
-            bool IsVlStart = int.TryParse(form.resVlStart, out ResVlStart),
-            IsVlEnd = int.TryParse(form.resVlEnd, out ResVlEnd),
-            IsImStart = int.TryParse(form.resImStart, out ResImStart),
-            IsImEnd = int.TryParse(form.resImEnd, out ResImEnd);
+            #endregion
 
-            var qryWhere = _context.QrySearchTreatments.Where(e =>
-                        (form.dateInpStart.Length != 0 ? e.InputDate >= DateOnly.Parse(form.dateInpStart) : true) &&
-                        (form.dateInpEnd.Length != 0 ? e.InputDate <= DateOnly.Parse(form.dateInpEnd) : true) &&
-                        (form.patientId.Length != 0 ? e.PatientId == int.Parse(form.patientId) : true) &&
-                        (form.familyName.Length != 0 ? e.FamilyName.ToLower().StartsWith(form.familyName.ToLower()) : true) &&
-                        (form.firstName.Length != 0 ? e.FirstName.ToLower().StartsWith(form.firstName.ToLower()) : true) &&
-                        (form.thirdName.Length != 0 ? e.ThirdName.ToLower().StartsWith(form.thirdName.ToLower()) : true) &&
-                        (form.sex.Length != 0 ? e.SexShort == form.sex : true) &&
-                        (form.birthDateStart.Length != 0 ? e.BirthDate >= DateOnly.Parse(form.birthDateStart) : true) &&
-                        (form.birthDateEnd.Length != 0 ? e.BirthDate <= DateOnly.Parse(form.birthDateEnd) : true) &&
-                        (form.regionFact[0] != "Все" ? form.regionFact.Contains(e.RegionLongFact) : true) &&
-                        (form.factRegionPreset == "Московская обл." ? e.FactRegtypeId == 1 : true) &&
-                        (form.factRegionPreset == "Иногородние" ? e.FactRegtypeId == 2 : true) &&
-                        (form.factRegionPreset == "Иностранные" ? e.FactRegtypeId == 3 : true) &&
-                        (form.regionReg[0] != "Все" ? form.regionReg.Contains(e.RegionLong) : true) &&
-                        (form.regionPreset == "Московская обл." ? e.RegtypeId == 1 : true) &&
-                        (form.regionPreset == "Иногородние" ? e.RegtypeId == 2 : true) &&
-                        (form.regionPreset == "Иностранные" ? e.RegtypeId == 3 : true) &&
-                        (form.country[0] != "Все" ? form.country.Contains(e.CountryLong) : true) &&
-                        (form.city.Length != 0 ? e.CityName.ToLower().StartsWith(form.city.ToLower()) : true) &&
-                        (form.location.Length != 0 ? e.LocationName.ToLower().StartsWith(form.location.ToLower()) : true) &&
-                        (form.indx.Length != 0 ? e.AddrInd.ToLower().StartsWith(form.indx.ToLower()) : true) &&
-                        (form.street.Length != 0 ? e.AddrStreet.ToLower().StartsWith(form.street.ToLower()) : true) &&
-                        (form.home.Length != 0 ? e.AddrHouse.ToLower().StartsWith(form.home.ToLower()) : true) &&
-                        (form.dateRegOnStart.Length != 0 ? e.RegOnDate >= DateOnly.Parse(form.dateRegOnStart) : true) &&
-                        (form.dateRegOnEnd.Length != 0 ? e.RegOnDate <= DateOnly.Parse(form.dateRegOnEnd) : true) &&
-                        (form.dateUnRegStart.Length != 0 ? e.RegOffDate >= DateOnly.Parse(form.dateUnRegStart) : true) &&
-                        (form.dateUnRegEnd.Length != 0 ? e.RegOffDate <= DateOnly.Parse(form.dateUnRegEnd) : true) &&
-                        (form.unRegCourse.Length != 0 ? e.InfectCourseLong == form.unRegCourse : true) &&
-                        (form.stage[0] != "Все" ? form.stage.Contains(e.DiagnosisLong) : true) &&
-                        (form.dateDieStart.Length != 0 ? e.DieDate >= DateOnly.Parse(form.dateDieStart) : true) &&
-                        (form.dateDieEnd.Length != 0 ? e.DieDate <= DateOnly.Parse(form.dateDieEnd) : true) &&
-                        (form.dateDieAidsStart.Length != 0 ? e.DieAidsDate >= DateOnly.Parse(form.dateDieAidsStart) : true) &&
-                        (form.dateDieAidsEnd.Length != 0 ? e.DieAidsDate <= DateOnly.Parse(form.dateDieAidsEnd) : true) &&
-                        (form.dieCourse[0] != "Все" ? form.dieCourse.Contains(e.DieCourseLong) : true) &&
-                        (form.diePreset == "ВИЧ" ? e.DethtypeId == 1 || e.DethtypeId == 3 : true) &&
-                        (form.diePreset == "Не связанные с ВИЧ" ? e.DethtypeId == 2 : true) &&
-                        (form.diePreset == "СПИД" ? e.DethtypeId == 3 : true) &&
-                        (form.checkCourse[0] != "Все" ? form.checkCourse.Contains(e.CheckCourseLong) : true) &&
-                        (form.infectCourse[0] != "Все" ? form.infectCourse.Contains(e.InfectCourseLong) : true) &&
-                        (form.showIllnes[0] != "Все" ? form.showIllnes.Contains(e.ShowIllnessLong) : true) &&
-                        (form.dateShowIllnesStart.Length != 0 ? e.StartDate >= DateOnly.Parse(form.dateShowIllnesStart) : true) &&
-                        (form.dateShowIllnesEnd.Length != 0 ? e.StartDate <= DateOnly.Parse(form.dateShowIllnesEnd) : true) &&
-                        (form.transfAreaYNA == "Да" ? e.TransfAreaDate != null : true) &&
-                        (form.transfAreaYNA == "Нет" ? e.TransfAreaDate == null : true) &&
-                        (form.dateTransfAreaStart.Length != 0 ? e.TransfAreaDate >= DateOnly.Parse(form.dateTransfAreaStart) : true) &&
-                        (form.dateTransfAreaEnd.Length != 0 ? e.TransfAreaDate <= DateOnly.Parse(form.dateTransfAreaEnd) : true) &&
-                        (form.frYNA == "Да" ? e.FlgZamMedPart == true : true) &&
-                        (form.frYNA == "Нет" ? e.FlgZamMedPart == false || e.FlgZamMedPart == null : true) &&
-                        (form.zavApoYNA == "Да" ? e.FlgHeadPhysician == true : true) &&
-                        (form.zavApoYNA == "Нет" ? e.FlgHeadPhysician == false || e.FlgHeadPhysician == null : true) &&
-                        (form.ibRes.Length != 0 ? e.IbResultShort == form.ibRes : true) &&
-                        (form.dateIbResStart.Length != 0 ? e.BlotDate >= DateOnly.Parse(form.dateIbResStart) : true) &&
-                        (form.dateIbResEnd.Length != 0 ? e.BlotDate <= DateOnly.Parse(form.dateIbResEnd) : true) &&
-                        (form.ibNum.Length != 0 ? e.BlotNo == int.Parse(form.ibNum) : true) &&
-                        (form.dateInpIbStart.Length != 0 ? e.Datetime1 >= DateOnly.Parse(form.dateInpIbStart) : true) &&
-                        (form.dateInpIbEnd.Length != 0 ? e.Datetime1 <= DateOnly.Parse(form.dateInpIbEnd) : true) &&
-                        (form.ibSelect == "Первый" ? e.First1 == true : true) &&
-                        (form.ibSelect == "Последний" ? e.Last1 == true : true) &&
-                        (form.ibSelect == "Перв.и посл." ? e.Last1 == true || e.First1 == true : true) &&
-                        (form.ufsinYNA == "Да" ? e.UfsinDate != null : true) &&
-                        (form.ufsinYNA == "Нет" ? e.UfsinDate == null : true) &&
-                        (form.dateUfsinStart.Length != 0 ? e.UfsinDate >= DateOnly.Parse(form.dateUfsinStart) : true) &&
-                        (form.dateUfsinEnd.Length != 0 ? e.UfsinDate <= DateOnly.Parse(form.dateUfsinEnd) : true) &&
-                        (form.invalid[0] != "Все" ? form.invalid.Contains(e.InvalidLong) : true) &&
-                        (form.correspIllnesses[0] != "Все" ? form.correspIllnesses.Contains(e.CorrespIllnessLong) : true) &&
-                        (form.dateCorrespIllnessesStart.Length != 0 ? e.CorrespIllnessDate >= DateOnly.Parse(form.dateCorrespIllnessesStart) : true) &&
-                        (form.dateCorrespIllnessesEnd.Length != 0 ? e.CorrespIllnessDate <= DateOnly.Parse(form.dateCorrespIllnessesEnd) : true) &&
-                        (form.schema[0] != "Все" ? form.schema.Contains(e.CureSchemaLong) : true) &&
-                        (form.schemaLast == true ? e.SchemaLast == true : true) &&
-                        (form.schemaMedecine[0] != "Все" ? form.schemaMedecine.Contains(e.MedforschemaLong) : true) &&
-                        (form.medecine[0] != "Все" ? form.medecine.Contains(e.MedicineLong) : true) &&
-                        (form.medecineGive[0] != "Все" ? form.medecineGive.Contains(e.GiveMedicineLong) : true) &&
-                        (form.doctor[0] != "Все" ? form.doctor.Contains(e.DoctorLong) : true) &&
-                        (form.dateDieStart.Length != 0 ? e.GiveDate >= DateOnly.Parse(form.dateDieStart) : true) &&
-                        (form.dateGiveEnd.Length != 0 ? e.GiveDate <= DateOnly.Parse(form.dateGiveEnd) : true) &&
-                        (form.schemaChange[0] != "Все" ? form.schemaChange.Contains(e.CureChangeLong) : true) &&
-                        (form.cardNo.Length != 0 ? e.CardNo.ToLower().StartsWith(form.cardNo.ToLower()) : true) &&
-                        (form.dateSchemaStart.Length != 0 ? e.SchemaStartDate >= DateOnly.Parse(form.dateSchemaStart) : true) &&
-                        (form.dateSchemaEnd.Length != 0 ? e.SchemaStartDate <= DateOnly.Parse(form.dateSchemaEnd) : true) &&
-                        (form.finSource[0] != "Все" ? form.finSource.Contains(e.FinSourceLong) : true) &&
-                        (form.art[0] != "Все" ? form.art.Contains(e.ArvtLong) : true) &&
-                        (form.rangeTherapy[0] != "Все" ? form.rangeTherapy.Contains(e.RangeTherapyLong) : true) &&
-                        (form.dateVlStart.Length != 0 ? e.VlDate >= DateOnly.Parse(form.dateVlStart) : true) &&
-                        (form.dateVlEnd.Length != 0 ? e.VlDate <= DateOnly.Parse(form.dateVlEnd) : true) &&
-                        (form.resVlStart.Length != 0 && IsVlStart ? e.VlResult >= ResVlStart : true) &&
-                        (form.resVlEnd.Length != 0 && IsVlEnd ? e.VlResult <= ResVlEnd : true) &&
-                        (form.dateIMStart.Length != 0 ? e.ImDate >= DateOnly.Parse(form.dateIMStart) : true) &&
-                        (form.dateImEnd.Length != 0 ? e.ImDate <= DateOnly.Parse(form.dateImEnd) : true) &&
-                        (form.resImStart.Length != 0 && IsImStart ? e.ImResult >= ResImStart : true) &&
-                        (form.resImEnd.Length != 0 && IsImEnd ? e.ImResult <= ResImEnd : true)
-                            );
+            #region Генерация строки WHERE
 
-            var lambda = new CreateLambda<QrySearchTreatment>().CreateLambdaSelect(activeColumns);
-            var selected = qryWhere.Select(lambda);
-            var resQry = selected.GroupBy(item => item, new DictionaryEqualityComparer()).Select(e => e.First()).ToList();
-            int resCount = resQry.Count();
+            if (form.patientId.Length != 0)
+                whereStr.AddWhereSqlEqual("\"tblPatientCard\".patient_id", form.patientId);
 
-            if (form.Excel)
+            if (form.dateInpStart.Length != 0)
+                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".input_date", DateOnly.Parse(form.dateInpStart).ToString("dd-MM-yyyy"));
+
+            if (form.dateInpEnd.Length != 0)
+                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".input_date", DateOnly.Parse(form.dateInpEnd).ToString("dd-MM-yyyy"));
+
+            if (form.familyName.Length != 0)
+                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".family_name", form.familyName.ToLower());
+
+            if (form.firstName.Length != 0)
+                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".first_name", form.firstName.ToLower());
+
+            if (form.thirdName.Length != 0)
+                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".third_name", form.thirdName.ToLower());
+
+            if (form.sex.Length != 0)
             {
-                string authHeader = Request.Headers["Authorization"].First();
-                string jwt = authHeader.Substring("Bearer ".Length);
-                var jwtHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-                var token = jwtHandler.ReadJwtToken(jwt);
-
-
-                var createExcel = new CreateExcel();
-                string fileName = $"res_search_{token.Claims.First().Value}_{DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss")}.xlsx";
-                string path = Path.Combine(Environment.CurrentDirectory, @"wwwroot", fileName);
-
-                if (System.IO.File.Exists(path))
-                    System.IO.File.Delete(path);
-
-                createExcel.CreateSearchExcel(resQry, path, columName);
-
-                string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                byte[] fileBytes = System.IO.File.ReadAllBytes(path);
-
-                return File(fileBytes, contentType, "res_search.xlsx");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblSex", field: "sex_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlEqualString("\"tblSex\".sex_short", form.sex);
             }
 
+            if (form.birthDateStart.Length != 0)
+                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".birth_date", DateOnly.Parse(form.birthDateStart).ToString("dd-MM-yyyy"));
 
-            if (resCount == 0)
+            if (form.birthDateEnd.Length != 0)
+                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".birth_date", DateOnly.Parse(form.birthDateEnd).ToString("dd-MM-yyyy"));
+
+            if (form.regionReg[0] != "Все")
             {
-                return Ok(new { columName, resCount });
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlIn("\"tblRegion\".region_long", form.regionReg);
             }
 
-            var resPage = resQry.Select((x, i) => new { Index = i, Value = x })
-                        .GroupBy(x => x.Index / pageSize)
-                        .Select(x => x.Select(v => v.Value).ToList())
-                        .ToList().ElementAt(form.Page - 1);
+            if (form.regionPreset == "Московская обл.")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlEqual("\"tblRegion\".regtype_id", "1");
+            }
 
-            return Ok(new { columName, resPage, resCount });
+            if (form.regionPreset == "Иногородние")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlEqual("\"tblRegion\".regtype_id", "2");
+            }
 
+            if (form.regionPreset == "Иностранные")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlEqual("\"tblRegion\".regtype_id", "3");
+            }
+
+            if (form.regionFact[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard", alias: "tblRegionFact");
+                whereStr.AddWhereSqlIn("\"tblRegionFact\".region_long", form.regionFact);
+            }
+
+            if (form.factRegionPreset == "Московская обл.")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard", alias: "tblRegionFact");
+                whereStr.AddWhereSqlEqual("\"tblRegionFact\".regtype_id", "1");
+            }
+
+            if (form.factRegionPreset == "Иногородние")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard", alias: "tblRegionFact");
+                whereStr.AddWhereSqlEqual("\"tblRegionFact\".regtype_id", "2");
+            }
+
+            if (form.factRegionPreset == "Иностранные")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard", alias: "tblRegionFact");
+                whereStr.AddWhereSqlEqual("\"tblRegionFact\".regtype_id", "3");
+            }
+
+            if (form.country[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblCountry", field: "country_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlIn("\"tblCountry\".country_long", form.country);
+            }
+
+            if (form.city.Length != 0)
+                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".city_name", form.city.ToLower());
+
+            if (form.location.Length != 0)
+                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".location_name", form.location.ToLower());
+
+            if (form.indx.Length != 0)
+                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".addr_ind", form.indx.ToLower());
+
+            if (form.street.Length != 0)
+                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".addr_street", form.street.ToLower());
+
+            if (form.home.Length != 0)
+                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".addr_house", form.home.ToLower());
+
+            if (form.dateRegOnStart.Length != 0)
+                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".reg_on_date", DateOnly.Parse(form.dateRegOnStart).ToString("dd-MM-yyyy"));
+
+            if (form.dateRegOnEnd.Length != 0)
+                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".reg_on_date", DateOnly.Parse(form.dateRegOnEnd).ToString("dd-MM-yyyy"));
+
+            if (form.dateUnRegStart.Length != 0)
+                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".reg_off_date", DateOnly.Parse(form.dateUnRegStart).ToString("dd-MM-yyyy"));
+
+            if (form.dateUnRegEnd.Length != 0)
+                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".reg_off_date", DateOnly.Parse(form.dateUnRegEnd).ToString("dd-MM-yyyy"));
+
+            if (form.unRegCourse.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExistDiffField(
+                    joinTable: "tblInfectCourse",
+                    fieldLeft: "reg_off_reason",
+                    fieldRight: "infect_course_id",
+                    table: "tblPatientCard",
+                    alias: "regOff");
+                whereStr.AddWhereSqlEqualString("\"regOff\".infect_course_long", form.unRegCourse);
+            }
+
+            if (form.stage[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientDiagnosis", field: "patient_id", table: "tblPatientCard", alias: "patientStage");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblDiagnosis", field: "diagnosis_id", table: "patientStage", alias: "stage");
+                whereStr.AddWhereSqlIn("stage.diagnosis_long", form.stage);
+            }
+
+            if (form.dateDieStart.Length != 0)
+                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".die_date", DateOnly.Parse(form.dateDieStart).ToString("dd-MM-yyyy"));
+
+            if (form.dateDieEnd.Length != 0)
+                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".die_date", DateOnly.Parse(form.dateDieEnd).ToString("dd-MM-yyyy"));
+
+            if (form.dateDieAidsStart.Length != 0)
+                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".die_aids_date", DateOnly.Parse(form.dateDieAidsStart).ToString("dd-MM-yyyy"));
+
+            if (form.dateDieAidsEnd.Length != 0)
+                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".die_aids_date", DateOnly.Parse(form.dateDieAidsEnd).ToString("dd-MM-yyyy"));
+
+            if (form.dieCourse[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlIn("\"tblTempDieCureMKB10List\".die_course_long", form.dieCourse);
+            }
+
+            if (form.diePreset == "ВИЧ")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
+                whereStr.Append($" AND \"tblTempDieCureMKB10List\".\"Dethtype_id\" IN (1,3) ");
+            }
+
+            if (form.diePreset == "Не связанные с ВИЧ")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlEqual("\"tblTempDieCureMKB10List\".\"Dethtype_id\"", "2");
+            }
+
+            if (form.diePreset == "СПИД")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlEqual("\"tblTempDieCureMKB10List\".\"Dethtype_id\"", "3");
+            }
+
+            if (form.checkCourse[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblCheckCourse", field: "check_course_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlIn("\"tblCheckCourse\".check_course_long", form.checkCourse);
+            }
+
+            if (form.infectCourse[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblInfectCourse", field: "infect_course_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlIn("\"tblInfectCourse\".infect_course_long", form.infectCourse);
+            }
+
+            if (form.showIllnes[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
+                whereStr.AddWhereSqlIn("\"tblShowIllness\".show_illness_long", form.showIllnes);
+            }
+
+            if (form.dateShowIllnesStart.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
+                whereStr.AddWhereSqlDateMore("\"tblPatientShowIllness\".start_date", DateOnly.Parse(form.dateShowIllnesStart).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.dateShowIllnesEnd.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
+                whereStr.AddWhereSqlDateLess("\"tblPatientShowIllness\".end_date", DateOnly.Parse(form.dateShowIllnesEnd).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.transfAreaYNA == "Да")
+                whereStr.AddWhereSqlIsNotNull("\"tblPatientCard\".transf_area_date");
+
+            if (form.transfAreaYNA == "Нет")
+                whereStr.AddWhereSqlIsNull("\"tblPatientCard\".transf_area_date");
+
+            if (form.dateTransfAreaStart.Length != 0)
+                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".transf_area_date", DateOnly.Parse(form.dateTransfAreaStart).ToString("dd-MM-yyyy"));
+
+            if (form.dateTransfAreaEnd.Length != 0)
+                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".transf_area_date", DateOnly.Parse(form.dateTransfAreaEnd).ToString("dd-MM-yyyy"));
+
+            if (form.frYNA == "Да")
+                whereStr.AddWhereSqlTrue("\"tblPatientCard\".flg_zam_med_part");
+
+            if (form.frYNA == "Нет")
+                whereStr.AddWhereSqlFalseOrNull("\"tblPatientCard\".flg_zam_med_part");
+
+            if (form.zavApoYNA == "Да")
+                whereStr.AddWhereSqlTrue("\"tblPatientCard\".flg_head_physician");
+
+            if (form.zavApoYNA == "Нет")
+                whereStr.AddWhereSqlFalseOrNull("\"tblPatientCard\".flg_head_physician");
+
+            if (form.zavApoYNA == "Нет")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblIbResult", field: "ib_result_id", table: "tblPatientBlot");
+                whereStr.AddWhereSqlEqualString("\"tblIbResult\".ib_result_short", form.ibRes);
+            }
+
+            if (form.dateIbResStart.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlDateMore("\"tblPatientBlot\".blot_date", DateOnly.Parse(form.dateIbResStart).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.dateIbResEnd.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlDateLess("\"tblPatientBlot\".blot_date", DateOnly.Parse(form.dateIbResEnd).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.ibNum.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlEqual("\"tblPatientBlot\".blot_no", form.ibNum);
+            }
+
+            if (form.dateInpIbStart.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlDateMore("\"tblPatientBlot\".datetime1", DateOnly.Parse(form.dateInpIbStart).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.dateInpIbEnd.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlDateLess("\"tblPatientBlot\".datetime1", DateOnly.Parse(form.dateInpIbEnd).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.ibSelect == "Первый")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlTrue("\"tblPatientBlot\".first1");
+            }
+
+            if (form.ibSelect == "Последний")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlTrue("\"tblPatientBlot\".last1");
+            }
+
+            if (form.ibSelect == "Перв.и посл.")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlTrue("\"tblPatientBlot\".first1");
+                whereStr.AddWhereSqlTrue("\"tblPatientBlot\".last1");
+            }
+
+            if (form.ufsinYNA == "Да")
+                whereStr.AddWhereSqlIsNotNull("\"tblPatientCard\".ufsin_date");
+
+            if (form.ufsinYNA == "Нет")
+                whereStr.AddWhereSqlIsNull("\"tblPatientCard\".ufsin_date");
+
+            if (form.dateUfsinStart.Length != 0)
+                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".ufsin_date", DateOnly.Parse(form.dateUfsinStart).ToString("dd-MM-yyyy"));
+
+            if (form.dateUfsinEnd.Length != 0)
+                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".ufsin_date", DateOnly.Parse(form.dateUfsinEnd).ToString("dd-MM-yyyy"));
+
+            if (form.invalid[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblInvalid", field: "invalid_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlIn("\"tblInvalid\".invalid_long", form.invalid);
+            }
+
+            if (form.correspIllnesses[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCorrespIllness", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblCorrespIllness", field: "corresp_illness_id", table: "tblPatientCorrespIllness");
+                whereStr.AddWhereSqlIn("\"tblCorrespIllness\".corresp_illness_long", form.invalid);
+            }
+
+            if (form.dateCorrespIllnessesStart.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCorrespIllness", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlDateMore("\"tblPatientCorrespIllness\".datetime1", DateOnly.Parse(form.dateCorrespIllnessesStart).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.dateCorrespIllnessesEnd.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCorrespIllness", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlDateLess("\"tblPatientCorrespIllness\".datetime1", DateOnly.Parse(form.dateCorrespIllnessesEnd).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.schema[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureSchema", field: "cure_schema_id", table: "tblPatientCureSchema");
+                whereStr.AddWhereSqlIn("\"tblCureSchema\".cure_schema_long", form.schema);
+            }
+
+            if (form.schema[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureSchema", field: "cure_schema_id", table: "tblPatientCureSchema");
+                whereStr.AddWhereSqlIn("\"tblCureSchema\".cure_schema_long", form.schema);
+            }
+
+            if (form.schemaLast == true)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlTrue("\"tblPatientCureSchema\".\"lastYN\"");
+            }
+
+            if (form.schemaMedecine[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureSchema", field: "cure_schema_id", table: "tblPatientCureSchema");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblSchemaMedicineR", field: "cure_schema_id", table: "tblPatientCureSchema");
+                joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblMedicineForSchema",
+                                                       fieldLeft: "medicine_id",
+                                                       fieldRight: "medforschema_id",
+                                                       table: "tblSchemaMedicineR");
+                whereStr.AddWhereSqlIn("\"tblMedicineForSchema\".medforschema_long", form.schemaMedecine);
+            }
+
+            if (form.medecine[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblMedicine", field: "medicine_id", table: "tblPatientPrescrM");
+                whereStr.AddWhereSqlIn("\"tblMedicine\".medicine_long", form.medecine);
+            }
+
+            if (form.medecineGive[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblMedicine", field: "medicine_id", table: "tblPatientPrescrM");
+                whereStr.AddWhereSqlIn("\"tblGiveMedicine\".medicine_long", form.medecineGive);
+            }
+
+            if (form.doctor[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblDoctor", field: "doctor_id", table: "tblPatientPrescrM");
+                whereStr.AddWhereSqlIn("\"tblDoctor\".doctor_long", form.doctor);
+            }
+
+            if (form.dateGiveStart.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlDateMore("\"tblPatientPrescrM\".give_date", DateOnly.Parse(form.dateGiveStart).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.dateGiveEnd.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlDateLess("\"tblPatientPrescrM\".give_date", DateOnly.Parse(form.dateGiveEnd).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.schemaChange[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureChange", field: "cure_change_id", table: "tblPatientCureSchema");
+                whereStr.AddWhereSqlIn("\"tblCureChange\".cure_change_long", form.schemaChange);
+            }
+
+            if (form.schemaChange[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureChange", field: "cure_change_id", table: "tblPatientCureSchema");
+                whereStr.AddWhereSqlIn("\"tblCureChange\".cure_change_long", form.schemaChange);
+            }
+
+            if (form.cardNo.Length != 0)
+                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".card_no", form.cardNo);
+
+            if (form.dateSchemaStart.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlDateMore("\"tblPatientCureSchema\".start_date", DateOnly.Parse(form.dateSchemaStart).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.dateSchemaEnd.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlDateLess("\"tblPatientCureSchema\".start_date", DateOnly.Parse(form.dateSchemaEnd).ToString("dd-MM-yyyy"));
+            }
+
+            if (form.art[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblArvt", field: "arvt_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlIn("\"tblArvt\".arvt_long", form.art);
+            }
+
+            if (form.rangeTherapy[0] != "Все")
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRangeTherapy", field: "range_therapy_id", table: "tblPatientCureSchema");
+                whereStr.AddWhereSqlIn("\"tblRangeTherapy\".range_therapy_long", form.rangeTherapy);
+            }
+
+            //                //(form.dateVlStart.Length != 0 ? e.VlDate >= DateOnly.Parse(form.dateVlStart) : true) &&
+            //                //(form.dateVlEnd.Length != 0 ? e.VlDate <= DateOnly.Parse(form.dateVlEnd) : true) &&
+            //                //(form.resVlStart.Length != 0 && IsVlStart ? e.VlResult >= ResVlStart : true) &&
+            //                //(form.resVlEnd.Length != 0 && IsVlEnd ? e.VlResult <= ResVlEnd : true) &&
+            //                //(form.dateIMStart.Length != 0 ? e.ImDate >= DateOnly.Parse(form.dateIMStart) : true) &&
+            //                //(form.dateImEnd.Length != 0 ? e.ImDate <= DateOnly.Parse(form.dateImEnd) : true) &&
+            //                //(form.resImStart.Length != 0 && IsImStart ? e.ImResult >= ResImStart : true) &&
+            //                //(form.resImEnd.Length != 0 && IsImEnd ? e.ImResult <= ResImEnd : true)
+
+            #endregion
+
+            var searchRes = SerarchResService.GetSearchRes(selectGroupSrt, joinStr, whereStr, pageSize, form.Page);
+            searchRes.ColumName = columName;
+            return Ok(searchRes);
         }
     }
 }
