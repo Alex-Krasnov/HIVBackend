@@ -59,7 +59,8 @@ namespace HIVBackend.Services
 
             var qry = "SELECT " + selectGroupSrt.ToString()
                       + joinStr.ToString() + "\n"
-                      + whereStr.ToString() + "\n"
+                      + whereStr.ToString() + "\n" 
+                      + "Group by " + selectGroupSrt.ToString() + "\n"
                       + "ORDER BY \"tblPatientCard\".patient_id \n"
                       + $"LIMIT {pageSize} OFFSET {(page - 1) * pageSize}";
 
