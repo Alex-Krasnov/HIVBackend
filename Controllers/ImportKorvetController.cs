@@ -73,7 +73,7 @@ namespace HIVBackend.Controllers
                     }
                 }
 
-                numEndRow = 100;//int.Parse(endRow.RowIndex);
+                //numEndRow = 100;//int.Parse(endRow.RowIndex);
 
                 foreach (Row row in sheetData.Elements<Row>())
                 {
