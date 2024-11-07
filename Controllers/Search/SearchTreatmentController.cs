@@ -382,29 +382,50 @@ namespace HIVBackend.Controllers.Search
                     }
 
                     #region Добавление результаток исследований TODO
-                    //if (key.Name == "selectVlDate")
-                    //{
-                    //    columName.Add("Дата опред.вир.нагр.");
-                    //    activeColumns.Add("VlDate");
-                    //}
+                    if (key.Name == "selectVlDate")
+                    {
+                        columName.Add("Дата опред.вир.нагр.");
+                        selectGroupSrt.AppendLine(",\"vn\".acl_sample_date");
 
-                    //if (key.Name == "selectVlRes")
-                    //{
-                    //    columName.Add("Вирусн.нагр.");
-                    //    activeColumns.Add("VlResult");
-                    //}
+                        string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
 
-                    //if (key.Name == "selectImDate")
-                    //{
-                    //    columName.Add("Дата опред.иммун.стат.");
-                    //    activeColumns.Add("ImDate");
-                    //}
+                        if (!joinStr.ToString().Contains(str))
+                            joinStr.AppendLine(str);
 
-                    //if (key.Name == "selectImRes")
-                    //{
-                    //    columName.Add("CD4+(abc)");
-                    //    activeColumns.Add("ImResult");
-                    //}
+                    }
+
+                    if (key.Name == "selectVlRes")
+                    {
+                        columName.Add("Вирусн.нагр.");
+                        selectGroupSrt.AppendLine(",\"vn\".acl_result");
+
+                        string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+                        if (!joinStr.ToString().Contains(str))
+                            joinStr.AppendLine(str);
+                    }
+
+                    if (key.Name == "selectImDate")
+                    {
+                        columName.Add("Дата опред.иммун.стат.");
+                        selectGroupSrt.AppendLine(",\"im\".acl_sample_date");
+
+                        string str = $"LEFT JOIN \"tblPatientAclResult\" \"im\" ON \"tblPatientCard\".\"patient_id\" = \"im\".\"patient_id\" AND \"im\".\"acl_test_code\" = \'И0025\'";
+
+                        if (!joinStr.ToString().Contains(str))
+                            joinStr.AppendLine(str);
+                    }
+
+                    if (key.Name == "selectImRes")
+                    {
+                        columName.Add("CD4+(abc)");
+                        selectGroupSrt.AppendLine(",\"im\".acl_result");
+
+                        string str = $"LEFT JOIN \"tblPatientAclResult\" \"im\" ON \"tblPatientCard\".\"patient_id\" = \"im\".\"patient_id\" AND \"im\".\"acl_test_code\" = \'И0025\'";
+
+                        if (!joinStr.ToString().Contains(str))
+                            joinStr.AppendLine(str);
+                    }
                     #endregion
                 }
             }
@@ -835,18 +856,81 @@ namespace HIVBackend.Controllers.Search
                 whereStr.AddWhereSqlIn("\"tblRangeTherapy\".range_therapy_long", form.rangeTherapy);
             }
 
-            //                //(form.dateVlStart.Length != 0 ? e.VlDate >= DateOnly.Parse(form.dateVlStart) : true) &&
-            //                //(form.dateVlEnd.Length != 0 ? e.VlDate <= DateOnly.Parse(form.dateVlEnd) : true) &&
+            if (form.dateVlStart.Length != 0)
+            {
+                whereStr.AddWhereSqlDateMore("\"vn\".acl_sample_date", DateOnly.Parse(form.dateVlStart).ToString("dd-MM-yyyy"));
+
+                string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+                if (!joinStr.ToString().Contains(str))
+                    joinStr.AppendLine(str);
+            }
+
+            if (form.dateVlEnd.Length != 0)
+            {
+                whereStr.AddWhereSqlDateLess("\"vn\".acl_sample_date", DateOnly.Parse(form.dateVlEnd).ToString("dd-MM-yyyy"));
+
+                string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+                if (!joinStr.ToString().Contains(str))
+                    joinStr.AppendLine(str);
+            }
+
             //                //(form.resVlStart.Length != 0 && IsVlStart ? e.VlResult >= ResVlStart : true) &&
             //                //(form.resVlEnd.Length != 0 && IsVlEnd ? e.VlResult <= ResVlEnd : true) &&
-            //                //(form.dateIMStart.Length != 0 ? e.ImDate >= DateOnly.Parse(form.dateIMStart) : true) &&
-            //                //(form.dateImEnd.Length != 0 ? e.ImDate <= DateOnly.Parse(form.dateImEnd) : true) &&
+
+            if (form.dateIMStart.Length != 0)
+            {
+                whereStr.AddWhereSqlDateMore("\"im\".acl_sample_date", DateOnly.Parse(form.dateIMStart).ToString("dd-MM-yyyy"));
+
+                string str = $"LEFT JOIN \"tblPatientAclResult\" \"im\" ON \"tblPatientCard\".\"patient_id\" = \"im\".\"patient_id\" AND \"im\".\"acl_test_code\" = \'И0025\'";
+
+                if (!joinStr.ToString().Contains(str))
+                    joinStr.AppendLine(str);
+            }
+
+            if (form.dateImEnd.Length != 0)
+            {
+                whereStr.AddWhereSqlDateLess("\"im\".acl_sample_date", DateOnly.Parse(form.dateImEnd).ToString("dd-MM-yyyy"));
+
+                string str = $"LEFT JOIN \"tblPatientAclResult\" \"im\" ON \"tblPatientCard\".\"patient_id\" = \"im\".\"patient_id\" AND \"im\".\"acl_test_code\" = \'И0025\'";
+
+                if (!joinStr.ToString().Contains(str))
+                    joinStr.AppendLine(str);
+            }
+
             //                //(form.resImStart.Length != 0 && IsImStart ? e.ImResult >= ResImStart : true) &&
             //                //(form.resImEnd.Length != 0 && IsImEnd ? e.ImResult <= ResImEnd : true)
 
             #endregion
 
             var searchRes = SerarchResService.GetSearchRes(selectGroupSrt, joinStr, whereStr, pageSize, form.Page);
+
+
+            if (form.Excel)
+            {
+                string authHeader = Request.Headers["Authorization"].First();
+                string jwt = authHeader.Substring("Bearer ".Length);
+                var jwtHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+                var token = jwtHandler.ReadJwtToken(jwt);
+
+
+                var createExcel = new CreateExcel();
+                string fileName = $"res_search_{token.Claims.First().Value}_{DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss")}.xlsx";
+                string path = Path.Combine(Environment.CurrentDirectory, fileName);
+                //string path = Path.Combine(Environment.CurrentDirectory, @"wwwroot", fileName);
+
+                if (System.IO.File.Exists(path))
+                    System.IO.File.Delete(path);
+
+                createExcel.CreateSearchExcel(searchRes?.resPage, path, columName);
+
+                string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
+                byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+
+                return File(fileBytes, contentType, "res_search.xlsx");
+            }
+
             searchRes.ColumName = columName;
             return Ok(searchRes);
         }
