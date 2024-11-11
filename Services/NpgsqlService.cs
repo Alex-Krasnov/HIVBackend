@@ -17,7 +17,7 @@ namespace HIVBackend.Services
 
             var qry = "SELECT COUNT(DISTINCT(" + selectGroupSrt.ToString() + "))" + "\n"
                       + joinStr.ToString() + "\n"
-                      + whereStr.ToString() + "\n"
+                      + whereStr.ToString() + " AND is_active = true\n"
                       + "LIMIT 1000000";
 
             using (NpgsqlConnection connetion = new NpgsqlConnection(connectionString))
@@ -58,7 +58,7 @@ namespace HIVBackend.Services
 
             var qry = "SELECT " + selectGroupSrt.ToString()
                       + joinStr.ToString() + "\n"
-                      + whereStr.ToString() + "\n"
+                      + whereStr.ToString() + " AND is_active = true\n"
                       + "Group by " + selectGroupSrt.ToString() + "\n"
                       + "ORDER BY \"tblPatientCard\".patient_id \n";
 
@@ -78,7 +78,7 @@ namespace HIVBackend.Services
                         {
                             adapter.Fill(ds);
                         }
-                        catch (Npgsql.NpgsqlException ex) when (ex.InnerException.Message.Contains("Timeout during reading attempt"))
+                        catch (NpgsqlException ex) when (ex.InnerException.Message.Contains("Timeout during reading attempt"))
                         {
                             throw new Exception("Слишком сложный запрос. Уменьшите кол-во столбцов в выборке или увеличте кол-во условий!!!");
                         }

@@ -904,25 +904,14 @@ namespace HIVBackend.Controllers.Search
 
             if (form.Excel)
             {
-                string authHeader = Request.Headers["Authorization"].First();
-                string jwt = authHeader.Substring("Bearer ".Length);
-                var jwtHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
-                var token = jwtHandler.ReadJwtToken(jwt);
-
-                var excelRes = NpgsqlService.GetDBData(selectGroupSrt, joinStr, whereStr, pageSize, form.Page, true);
-
-                var createExcel = new CreateExcel();
-                string fileName = $"res_search_{token.Claims.First().Value}_{DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss")}.xlsx";
-                string path = Path.Combine(Environment.CurrentDirectory, fileName);
-                //string path = Path.Combine(Environment.CurrentDirectory, @"wwwroot", fileName);
-
-                if (System.IO.File.Exists(path))
-                    System.IO.File.Delete(path);
-
-                createExcel.CreateSearchExcel(NpgsqlService.DataSetToList(excelRes), path, columName);
-
                 string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
-                byte[] fileBytes = System.IO.File.ReadAllBytes(path);
+                byte[] fileBytes = SerarchResService.GetExcelRes(authHeader: Request.Headers["Authorization"].First(),
+                                                                 selectGroupSrt: selectGroupSrt,
+                                                                 joinStr: joinStr,
+                                                                 whereStr: whereStr,
+                                                                 pageSize: pageSize,
+                                                                 page: form.Page,
+                                                                 columName: columName);
 
                 return File(fileBytes, contentType, "res_search.xlsx");
             }
