@@ -1,5 +1,4 @@
 ﻿using Npgsql;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 
@@ -53,17 +52,19 @@ namespace HIVBackend.Services
         /// <summary>
         /// Получаем DataSet из базы
         /// </summary>
-        public static DataSet GetDBData(StringBuilder selectGroupSrt, StringBuilder joinStr, StringBuilder whereStr, int pageSize, int page)
+        public static DataSet GetDBData(StringBuilder selectGroupSrt, StringBuilder joinStr, StringBuilder whereStr, int pageSize, int page, bool isExcel = false)
         {
             DataSet ds = new();
 
             var qry = "SELECT " + selectGroupSrt.ToString()
                       + joinStr.ToString() + "\n"
-                      + whereStr.ToString() + "\n" 
+                      + whereStr.ToString() + "\n"
                       + "Group by " + selectGroupSrt.ToString() + "\n"
-                      + "ORDER BY \"tblPatientCard\".patient_id \n"
-                      + $"LIMIT {pageSize} OFFSET {(page - 1) * pageSize}";
+                      + "ORDER BY \"tblPatientCard\".patient_id \n";
 
+            if (!isExcel)
+                qry += $"LIMIT {pageSize} OFFSET {(page - 1) * pageSize}";
+            
             using (NpgsqlConnection connetion = new NpgsqlConnection(connectionString))
             {
                 connetion.Open();
@@ -92,6 +93,8 @@ namespace HIVBackend.Services
             }
             return ds;
         }
+
+
 
         /// <summary>
         /// Парсим DataSet в List<IDictionary<string, object>> 

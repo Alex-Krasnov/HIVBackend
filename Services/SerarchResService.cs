@@ -8,7 +8,7 @@ namespace HIVBackend.Services
         /// <summary>
         /// Получить объект для отправки на фронт
         /// </summary>
-        public static SearchRes GetSearchRes(StringBuilder selectGroupSrt, StringBuilder joinStr, StringBuilder whereStr, int pageSize, int page)
+        public static SearchRes GetSearchRes(StringBuilder selectGroupSrt, StringBuilder joinStr, StringBuilder whereStr, int pageSize, int page, bool isExcel = false)
         {
             //получаем количество строк с ограничинием в 1 млн, иначи все ломается
             var count = NpgsqlService.GetCountRow(selectGroupSrt, joinStr, whereStr, pageSize, page);

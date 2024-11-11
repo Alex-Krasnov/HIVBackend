@@ -1,12 +1,9 @@
-﻿using DocumentFormat.OpenXml.Presentation;
-using HIVBackend.Data;
-using HIVBackend.Models.DBModuls;
+﻿using HIVBackend.Data;
 using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
 using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using System.Data;
 using System.Text;
 
@@ -904,8 +901,6 @@ namespace HIVBackend.Controllers.Search
 
             #endregion
 
-            var searchRes = SerarchResService.GetSearchRes(selectGroupSrt, joinStr, whereStr, pageSize, form.Page);
-
 
             if (form.Excel)
             {
@@ -914,6 +909,7 @@ namespace HIVBackend.Controllers.Search
                 var jwtHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
                 var token = jwtHandler.ReadJwtToken(jwt);
 
+                var excelRes = NpgsqlService.GetDBData(selectGroupSrt, joinStr, whereStr, pageSize, form.Page, true);
 
                 var createExcel = new CreateExcel();
                 string fileName = $"res_search_{token.Claims.First().Value}_{DateTime.Now.ToString("dd_MM_yyyy_HH_mm_ss")}.xlsx";
@@ -923,13 +919,15 @@ namespace HIVBackend.Controllers.Search
                 if (System.IO.File.Exists(path))
                     System.IO.File.Delete(path);
 
-                createExcel.CreateSearchExcel(searchRes?.resPage, path, columName);
+                createExcel.CreateSearchExcel(NpgsqlService.DataSetToList(excelRes), path, columName);
 
                 string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 byte[] fileBytes = System.IO.File.ReadAllBytes(path);
 
                 return File(fileBytes, contentType, "res_search.xlsx");
             }
+
+            var searchRes = SerarchResService.GetSearchRes(selectGroupSrt, joinStr, whereStr, pageSize, form.Page);
 
             searchRes.ColumName = columName;
             return Ok(searchRes);
