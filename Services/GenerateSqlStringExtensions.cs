@@ -3,8 +3,10 @@ using System.Text;
 
 namespace HIVBackend.Services
 {
-    public static class GenerateSqlStringService
+    public static class GenerateSqlStringExtensions
     {
+        #region WHERE
+
         /// <summary>
         /// Добваляем строку типа $" AND {column} = {condition}"
         /// </summary>
@@ -86,6 +88,26 @@ namespace HIVBackend.Services
         }
 
         /// <summary>
+        /// Добваляем строку типа $" AND (to_number(NULLIF(REGEXP_REPLACE(\"{column}\", '[^0-9.]', '', 'g'), ''), '9999999999999999D9999')::numeric >= {condition}::numeric)"
+        /// </summary>
+        public static void AddWhereIntConvertMore(this StringBuilder whereStr, string column, int condition)
+        {
+            whereStr.Append($" AND (to_number(NULLIF(REGEXP_REPLACE({column}, '[^0-9.]', '', 'g'), ''), '9999999999999999D9999')::numeric >= {condition}::numeric)");
+        }
+
+        /// <summary>
+        /// Добваляем строку типа $" AND (to_number(NULLIF(REGEXP_REPLACE(\"{column}\", '[^0-9.]', '', 'g'), ''), '9999999999999999D9999')::numeric <= {condition}::numeric)"
+        /// </summary>
+        public static void AddWhereIntConvertLess(this StringBuilder whereStr, string column, int condition)
+        {
+            whereStr.Append($" AND (to_number(NULLIF(REGEXP_REPLACE({column}, '[^0-9.]', '', 'g'), ''), '9999999999999999D9999')::numeric <= {condition}::numeric)");
+        }
+
+        #endregion
+
+        #region JOIN
+
+        /// <summary>
         /// Добавляет LEFT JOIN если такого еще нет
         /// </summary>
         public static void AddLeftJoinIfNotExist(this StringBuilder joinStr, string joinTable, string field, string table, string? alias = null)
@@ -115,5 +137,7 @@ namespace HIVBackend.Services
             if (!joinStr.ToString().Contains(str))
                 joinStr.AppendLine(str);
         }
+
+        #endregion
     }
 }

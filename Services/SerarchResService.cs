@@ -36,7 +36,7 @@ namespace HIVBackend.Services
             string jwt = authHeader.Substring("Bearer ".Length);
             var jwtHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
             var token = jwtHandler.ReadJwtToken(jwt);
-
+            
             var excelRes = NpgsqlService.GetDBData(selectGroupSrt, joinStr, whereStr, pageSize, page, true);
 
             var createExcel = new CreateExcel();

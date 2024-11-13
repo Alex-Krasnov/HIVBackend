@@ -118,7 +118,12 @@ namespace HIVBackend.Controllers.Search
                     {
                         columName.Add("Регион (факт.)");
                         selectGroupSrt.AppendLine(",\"tblRegionFact\".region_long");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard", alias: "tblRegionFact");
+
+                        joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblRegion",
+                                                               fieldLeft: "fact_region_id",
+                                                               fieldRight: "region_id",
+                                                               table: "tblPatientCard",
+                                                               alias: "tblRegionFact");
                     }
 
                     if (key.Name == "selectCountry")
@@ -487,25 +492,45 @@ namespace HIVBackend.Controllers.Search
 
             if (form.regionFact[0] != "Все")
             {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard", alias: "tblRegionFact");
+                joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblRegion", 
+                                                       fieldLeft:"fact_region_id", 
+                                                       fieldRight: "region_id", 
+                                                       table: "tblPatientCard", 
+                                                       alias: "tblRegionFact");
+
                 whereStr.AddWhereSqlIn("\"tblRegionFact\".region_long", form.regionFact);
             }
 
             if (form.factRegionPreset == "Московская обл.")
             {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard", alias: "tblRegionFact");
+                joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblRegion",
+                                                       fieldLeft: "fact_region_id",
+                                                       fieldRight: "region_id",
+                                                       table: "tblPatientCard",
+                                                       alias: "tblRegionFact");
+
                 whereStr.AddWhereSqlEqual("\"tblRegionFact\".regtype_id", "1");
             }
 
             if (form.factRegionPreset == "Иногородние")
             {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard", alias: "tblRegionFact");
+                joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblRegion",
+                                                       fieldLeft: "fact_region_id",
+                                                       fieldRight: "region_id",
+                                                       table: "tblPatientCard",
+                                                       alias: "tblRegionFact");
+
                 whereStr.AddWhereSqlEqual("\"tblRegionFact\".regtype_id", "2");
             }
 
             if (form.factRegionPreset == "Иностранные")
             {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblRegion", field: "region_id", table: "tblPatientCard", alias: "tblRegionFact");
+                joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblRegion",
+                                                       fieldLeft: "fact_region_id",
+                                                       fieldRight: "region_id",
+                                                       table: "tblPatientCard",
+                                                       alias: "tblRegionFact");
+
                 whereStr.AddWhereSqlEqual("\"tblRegionFact\".regtype_id", "3");
             }
 
@@ -873,8 +898,25 @@ namespace HIVBackend.Controllers.Search
                     joinStr.AppendLine(str);
             }
 
-            //                //(form.resVlStart.Length != 0 && IsVlStart ? e.VlResult >= ResVlStart : true) &&
-            //                //(form.resVlEnd.Length != 0 && IsVlEnd ? e.VlResult <= ResVlEnd : true) &&
+            if (form.resVlStart != null && form.resVlStart.Length != 0)
+            {
+                whereStr.AddWhereIntConvertMore("\"vn\".acl_mcn_code", Int32.Parse(form.resVlStart));
+
+                string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+                if (!joinStr.ToString().Contains(str))
+                    joinStr.AppendLine(str);
+            }
+
+            if (form.resVlEnd != null && form.resVlEnd.Length != 0)
+            {
+                whereStr.AddWhereIntConvertLess("\"vn\".acl_mcn_code", Int32.Parse(form.resVlEnd));
+
+                string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+                if (!joinStr.ToString().Contains(str))
+                    joinStr.AppendLine(str);
+            }
 
             if (form.dateIMStart.Length != 0)
             {
