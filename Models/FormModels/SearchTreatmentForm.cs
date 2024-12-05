@@ -80,6 +80,10 @@
         public string? dateImEnd { get; set; }
         public string? resImStart { get; set; }
         public string? resImEnd { get; set; }
+        public string? unrzYNA { get; set; }
+        public string? unrz { get; set; }
+        public string? snilsYNA { get; set; }
+        public string? snils { get; set; }
 
 
         public Boolean selectInpDate { get; set; }
@@ -120,6 +124,8 @@
         public Boolean selectVlRes { get; set; }
         public Boolean selectImDate { get; set; }
         public Boolean selectImRes { get; set; }
+        public Boolean selectUnrz { get; set; }
+        public Boolean selectSnils { get; set; }
 
         public int Page { get; set; }
         public Boolean Excel { get; set; }

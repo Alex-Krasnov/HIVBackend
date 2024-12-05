@@ -383,6 +383,18 @@ namespace HIVBackend.Controllers.Search
                         joinStr.AddLeftJoinIfNotExist(joinTable: "tblRangeTherapy", field: "range_therapy_id", table: "tblPatientCureSchema");
                     }
 
+                    if (key.Name == "selectUnrz")
+                    {
+                        columName.Add("УНРЗ");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".unrz_fr");
+                    }
+
+                    if (key.Name == "selectSnils")
+                    {
+                        columName.Add("СНИЛС");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".snils");
+                    }
+
                     #region Добавление результаток исследований TODO
                     if (key.Name == "selectVlDate")
                     {
@@ -918,7 +930,7 @@ namespace HIVBackend.Controllers.Search
                     joinStr.AppendLine(str);
             }
 
-            if (form.dateIMStart.Length != 0)
+            if (form.dateIMStart?.Length != 0)
             {
                 whereStr.AddWhereSqlDateMore("\"im\".acl_sample_date", DateOnly.Parse(form.dateIMStart).ToString("dd-MM-yyyy"));
 
@@ -928,7 +940,7 @@ namespace HIVBackend.Controllers.Search
                     joinStr.AppendLine(str);
             }
 
-            if (form.dateImEnd.Length != 0)
+            if (form.dateImEnd?.Length != 0)
             {
                 whereStr.AddWhereSqlDateLess("\"im\".acl_sample_date", DateOnly.Parse(form.dateImEnd).ToString("dd-MM-yyyy"));
 
@@ -940,6 +952,36 @@ namespace HIVBackend.Controllers.Search
 
             //                //(form.resImStart.Length != 0 && IsImStart ? e.ImResult >= ResImStart : true) &&
             //                //(form.resImEnd.Length != 0 && IsImEnd ? e.ImResult <= ResImEnd : true)
+
+            if (form.unrz?.Length != 0)
+            {
+                whereStr.AddWhereSqlEqualString("\"tblPatientCard\".unrz_fr", form.unrz);
+            }
+
+            if (form.unrzYNA == "Да")
+            {
+                whereStr.AddWhereSqlIsNotNull("\"tblPatientCard\".unrz_fr");
+            }
+
+            if (form.unrzYNA == "Нет")
+            {
+                whereStr.AddWhereSqlIsNull("\"tblPatientCard\".unrz_fr");
+            }
+
+            if (form.snils?.Length != 0)
+            {
+                whereStr.AddWhereSqlEqualString("\"tblPatientCard\".snils", form.snils);
+            }
+
+            if (form.snilsYNA == "Да")
+            {
+                whereStr.AddWhereSqlIsNotNull("\"tblPatientCard\".snils");
+            }
+
+            if (form.snilsYNA == "Нет")
+            {
+                whereStr.AddWhereSqlIsNull("\"tblPatientCard\".snils");
+            }
 
             #endregion
 
