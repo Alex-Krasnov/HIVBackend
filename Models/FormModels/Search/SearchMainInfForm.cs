@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Models.FormModels
+﻿namespace HIVBackend.Models.FormModels.Search
 {
     public class SearchMainInfForm
     {
@@ -77,45 +77,45 @@
         public string regionPreset { get; set; }
         public string factRegionPreset { get; set; }
 
-        public Boolean selectInpDate { get; set; }
-        public Boolean selectPatientId { get; set; }
-        public Boolean selectFio { get; set; }
-        public Boolean selectSex { get; set; }
-        public Boolean selectBirthDate { get; set; }
-        public Boolean selectRegion { get; set; }
-        public Boolean selectRegionFact { get; set; }
-        public Boolean selectCountry { get; set; }
-        public Boolean selectAddr { get; set; }
-        public Boolean selectRegOnDate { get; set; }
-        public Boolean selectBlotCheckPlace { get; set; }
-        public Boolean selectStage { get; set; }
-        public Boolean selectDieDate { get; set; }
-        public Boolean selectCheckCourse { get; set; }
-        public Boolean selectDieCourse { get; set; }
-        public Boolean selectInfectCourse { get; set; }
-        public Boolean selectShowIllnes { get; set; }
-        public Boolean selectIb { get; set; }
-        public Boolean selectHospCourse { get; set; }
-        public Boolean selectAge { get; set; }
-        public Boolean selectCardNo { get; set; }
-        public Boolean selectArt { get; set; }
-        public Boolean selectMkb10 { get; set; }
-        public Boolean selectArchive { get; set; }
-        public Boolean selectTransfArea { get; set; }
-        public Boolean selectFr { get; set; }
-        public Boolean selectTransfFeder { get; set; }
-        public Boolean selectUfsin { get; set; }
-        public Boolean selectAids12 { get; set; }
-        public Boolean selectUnrz { get; set; }
-        public Boolean selectChemprof { get; set; }
-        public Boolean selectDieDiag { get; set; }
-        public Boolean selectDateReg { get; set; }
-        public Boolean selectPasSer { get; set; }
-        public Boolean selectPasNum { get; set; }
-        public Boolean selectPasWhom { get; set; }
-        public Boolean selectPasWhen { get; set; }
+        public bool selectInpDate { get; set; }
+        public bool selectPatientId { get; set; }
+        public bool selectFio { get; set; }
+        public bool selectSex { get; set; }
+        public bool selectBirthDate { get; set; }
+        public bool selectRegion { get; set; }
+        public bool selectRegionFact { get; set; }
+        public bool selectCountry { get; set; }
+        public bool selectAddr { get; set; }
+        public bool selectRegOnDate { get; set; }
+        public bool selectBlotCheckPlace { get; set; }
+        public bool selectStage { get; set; }
+        public bool selectDieDate { get; set; }
+        public bool selectCheckCourse { get; set; }
+        public bool selectDieCourse { get; set; }
+        public bool selectInfectCourse { get; set; }
+        public bool selectShowIllnes { get; set; }
+        public bool selectIb { get; set; }
+        public bool selectHospCourse { get; set; }
+        public bool selectAge { get; set; }
+        public bool selectCardNo { get; set; }
+        public bool selectArt { get; set; }
+        public bool selectMkb10 { get; set; }
+        public bool selectArchive { get; set; }
+        public bool selectTransfArea { get; set; }
+        public bool selectFr { get; set; }
+        public bool selectTransfFeder { get; set; }
+        public bool selectUfsin { get; set; }
+        public bool selectAids12 { get; set; }
+        public bool selectUnrz { get; set; }
+        public bool selectChemprof { get; set; }
+        public bool selectDieDiag { get; set; }
+        public bool selectDateReg { get; set; }
+        public bool selectPasSer { get; set; }
+        public bool selectPasNum { get; set; }
+        public bool selectPasWhom { get; set; }
+        public bool selectPasWhen { get; set; }
 
         public int Page { get; set; }
-        public Boolean Excel { get; set; }
+        public bool Excel { get; set; }
     }
 }

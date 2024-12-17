@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Models.FormModels
+﻿namespace HIVBackend.Models.FormModels.Search
 {
     public class SearchPregnantForm
     {
@@ -57,42 +57,42 @@
         public string aclMcnCodeStart { get; set; }
         public string aclMcnCodeEnd { get; set; }
 
-        public Boolean selectInpDate { get; set; }
-        public Boolean selectPatientId { get; set; }
-        public Boolean selectFio { get; set; }
-        public Boolean selectBirthDate { get; set; }
-        public Boolean selectRegion { get; set; }
-        public Boolean selectRegionFact { get; set; }
-        public Boolean selectCountry { get; set; }
-        public Boolean selectRegOnDate { get; set; }
-        public Boolean selectStage { get; set; }
-        public Boolean selectCheckCourse { get; set; }
-        public Boolean selectInfectCourse { get; set; }
-        public Boolean selectShowIllnes { get; set; }
-        public Boolean selectTransfArea { get; set; }
-        public Boolean selectFr { get; set; }
-        public Boolean selectUfsin { get; set; }
+        public bool selectInpDate { get; set; }
+        public bool selectPatientId { get; set; }
+        public bool selectFio { get; set; }
+        public bool selectBirthDate { get; set; }
+        public bool selectRegion { get; set; }
+        public bool selectRegionFact { get; set; }
+        public bool selectCountry { get; set; }
+        public bool selectRegOnDate { get; set; }
+        public bool selectStage { get; set; }
+        public bool selectCheckCourse { get; set; }
+        public bool selectInfectCourse { get; set; }
+        public bool selectShowIllnes { get; set; }
+        public bool selectTransfArea { get; set; }
+        public bool selectFr { get; set; }
+        public bool selectUfsin { get; set; }
 
-        public Boolean selectPregCheck { get; set; }
-        public Boolean selectPregMonthNo { get; set; }
-        public Boolean selectBirthType { get; set; }
-        public Boolean selectMedecineStartMonthNo { get; set; }
-        public Boolean selectChildBirthDate { get; set; }
-        public Boolean selectChildFio { get; set; }
-        public Boolean selectCardNo { get; set; }
-        public Boolean selectPhpSchema1 { get; set; }
-        public Boolean selectPhpSchema2 { get; set; }
-        public Boolean selectPhpSchema3 { get; set; }
-        public Boolean selectMedecineForSchema1 { get; set; }
-        public Boolean selectMedecineForSchema2 { get; set; }
-        public Boolean selectMedecineForSchema3 { get; set; }
-        public Boolean selectArt { get; set; }
-        public Boolean selectAddr { get; set; }
-        public Boolean selectMaterhome { get; set; }
-        public Boolean selectAclDate { get; set; }
-        public Boolean selectAclMcnCode { get; set; }
+        public bool selectPregCheck { get; set; }
+        public bool selectPregMonthNo { get; set; }
+        public bool selectBirthType { get; set; }
+        public bool selectMedecineStartMonthNo { get; set; }
+        public bool selectChildBirthDate { get; set; }
+        public bool selectChildFio { get; set; }
+        public bool selectCardNo { get; set; }
+        public bool selectPhpSchema1 { get; set; }
+        public bool selectPhpSchema2 { get; set; }
+        public bool selectPhpSchema3 { get; set; }
+        public bool selectMedecineForSchema1 { get; set; }
+        public bool selectMedecineForSchema2 { get; set; }
+        public bool selectMedecineForSchema3 { get; set; }
+        public bool selectArt { get; set; }
+        public bool selectAddr { get; set; }
+        public bool selectMaterhome { get; set; }
+        public bool selectAclDate { get; set; }
+        public bool selectAclMcnCode { get; set; }
 
         public int Page { get; set; }
-        public Boolean Excel { get; set; }
+        public bool Excel { get; set; }
     }
 }

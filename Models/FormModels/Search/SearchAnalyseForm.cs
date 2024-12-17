@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Models.FormModels
+﻿namespace HIVBackend.Models.FormModels.Search
 {
     public class SearchAnalyseForm
     {
@@ -84,44 +84,44 @@
         public string[]? art { get; set; }
 
 
-        public Boolean selectInpDate { get; set; }
-        public Boolean selectPatientId { get; set; }
-        public Boolean selectFio { get; set; }
-        public Boolean selectSex { get; set; }
-        public Boolean selectBirthDate { get; set; }
-        public Boolean selectRegion { get; set; }
-        public Boolean selectRegionFact { get; set; }
-        public Boolean selectCountry { get; set; }
-        public Boolean selectAddr { get; set; }
-        public Boolean selectRegOnDate { get; set; }
-        public Boolean selectStage { get; set; }
-        public Boolean selectDieDate { get; set; }
-        public Boolean selectDieCourse { get; set; }
-        public Boolean selectCheckCourse { get; set; }
-        public Boolean selectInfectCourse { get; set; }
-        public Boolean selectShowIllnes { get; set; }
-        public Boolean selectTransfArea { get; set; }
-        public Boolean selectFr { get; set; }
-        public Boolean selectIb { get; set; }
-        public Boolean selectUfsin { get; set; }
+        public bool selectInpDate { get; set; }
+        public bool selectPatientId { get; set; }
+        public bool selectFio { get; set; }
+        public bool selectSex { get; set; }
+        public bool selectBirthDate { get; set; }
+        public bool selectRegion { get; set; }
+        public bool selectRegionFact { get; set; }
+        public bool selectCountry { get; set; }
+        public bool selectAddr { get; set; }
+        public bool selectRegOnDate { get; set; }
+        public bool selectStage { get; set; }
+        public bool selectDieDate { get; set; }
+        public bool selectDieCourse { get; set; }
+        public bool selectCheckCourse { get; set; }
+        public bool selectInfectCourse { get; set; }
+        public bool selectShowIllnes { get; set; }
+        public bool selectTransfArea { get; set; }
+        public bool selectFr { get; set; }
+        public bool selectIb { get; set; }
+        public bool selectUfsin { get; set; }
 
-        public Boolean selectCardNo { get; set; }
-        public Boolean selectArt { get; set; }
+        public bool selectCardNo { get; set; }
+        public bool selectArt { get; set; }
 
-        public Boolean selectVlDate { get; set; }
-        public Boolean selectVlRes { get; set; }
-        public Boolean selectImDate { get; set; }
-        public Boolean selectImCd3Res { get; set; }
-        public Boolean selectImCd4Res { get; set; }
-        public Boolean selectImCd8Res { get; set; }
-        public Boolean selectHepCIfa { get; set; }
-        public Boolean selectHepBIfa { get; set; }
-        public Boolean selectHepSyphIfa { get; set; }
-        public Boolean selectHepC { get; set; }
-        public Boolean selectHepB { get; set; }
+        public bool selectVlDate { get; set; }
+        public bool selectVlRes { get; set; }
+        public bool selectImDate { get; set; }
+        public bool selectImCd3Res { get; set; }
+        public bool selectImCd4Res { get; set; }
+        public bool selectImCd8Res { get; set; }
+        public bool selectHepCIfa { get; set; }
+        public bool selectHepBIfa { get; set; }
+        public bool selectHepSyphIfa { get; set; }
+        public bool selectHepC { get; set; }
+        public bool selectHepB { get; set; }
 
 
         public int Page { get; set; }
-        public Boolean Excel { get; set; }
+        public bool Excel { get; set; }
     }
 }

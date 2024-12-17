@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Models.FormModels
+﻿namespace HIVBackend.Models.FormModels.Search
 {
     public class SearchAclForm
     {
@@ -36,28 +36,28 @@
         public string aclTestCode5 { get; set; }
         public string aclTestCode6 { get; set; }
         public string aclTestCode7 { get; set; }
-        public Boolean biochemistry { get; set; }
-        public Boolean hematology { get; set; }
+        public bool biochemistry { get; set; }
+        public bool hematology { get; set; }
         public string aclSampleDateStart { get; set; }
         public string aclSampleDateEnd { get; set; }
 
 
-        public Boolean selectInpDate { get; set; }
-        public Boolean selectPatientId { get; set; }
-        public Boolean selectFio { get; set; }
-        public Boolean selectSex { get; set; }
-        public Boolean selectBirthDate { get; set; }
-        public Boolean selectRegion { get; set; }
-        public Boolean selectRegionFact { get; set; }
-        public Boolean selectRegOnDate { get; set; }
-        public Boolean selectStage { get; set; }
-        public Boolean selectCheckCourse { get; set; }
-        public Boolean selectIb { get; set; }
-        public Boolean selectTestCode { get; set; }
-        public Boolean selectSampleDate { get; set; }
+        public bool selectInpDate { get; set; }
+        public bool selectPatientId { get; set; }
+        public bool selectFio { get; set; }
+        public bool selectSex { get; set; }
+        public bool selectBirthDate { get; set; }
+        public bool selectRegion { get; set; }
+        public bool selectRegionFact { get; set; }
+        public bool selectRegOnDate { get; set; }
+        public bool selectStage { get; set; }
+        public bool selectCheckCourse { get; set; }
+        public bool selectIb { get; set; }
+        public bool selectTestCode { get; set; }
+        public bool selectSampleDate { get; set; }
 
 
         public int Page { get; set; }
-        public Boolean Excel { get; set; }
+        public bool Excel { get; set; }
     }
 }

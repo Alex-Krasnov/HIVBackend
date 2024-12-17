@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Models.FormModels
+﻿namespace HIVBackend.Models.FormModels.Search
 {
     public class SearchHospForm
     {
@@ -45,31 +45,31 @@
         public string[]? hospCourse { get; set; }
         public string[]? hospResult { get; set; }
 
-        public Boolean selectInpDate { get; set; }
-        public Boolean selectPatientId { get; set; }
-        public Boolean selectFio { get; set; }
-        public Boolean selectSex { get; set; }
-        public Boolean selectBirthDate { get; set; }
-        public Boolean selectRegion { get; set; }
-        public Boolean selectRegionFact { get; set; }
-        public Boolean selectCountry { get; set; }
-        public Boolean selectAddr { get; set; }
-        public Boolean selectRegOnDate { get; set; }
-        public Boolean selectStage { get; set; }
-        public Boolean selectCheckCourse { get; set; }
-        public Boolean selectInfectCourse { get; set; }
-        public Boolean selectTransfArea { get; set; }
-        public Boolean selectFr { get; set; }
-        public Boolean selectUfsin { get; set; }
+        public bool selectInpDate { get; set; }
+        public bool selectPatientId { get; set; }
+        public bool selectFio { get; set; }
+        public bool selectSex { get; set; }
+        public bool selectBirthDate { get; set; }
+        public bool selectRegion { get; set; }
+        public bool selectRegionFact { get; set; }
+        public bool selectCountry { get; set; }
+        public bool selectAddr { get; set; }
+        public bool selectRegOnDate { get; set; }
+        public bool selectStage { get; set; }
+        public bool selectCheckCourse { get; set; }
+        public bool selectInfectCourse { get; set; }
+        public bool selectTransfArea { get; set; }
+        public bool selectFr { get; set; }
+        public bool selectUfsin { get; set; }
 
-        public Boolean selectDateHospIn { get; set; }
-        public Boolean selectDateHospOut { get; set; }
-        public Boolean selectLpu { get; set; }
-        public Boolean selectHospCourse { get; set; }
-        public Boolean selectHospResult { get; set; }
+        public bool selectDateHospIn { get; set; }
+        public bool selectDateHospOut { get; set; }
+        public bool selectLpu { get; set; }
+        public bool selectHospCourse { get; set; }
+        public bool selectHospResult { get; set; }
 
 
         public int Page { get; set; }
-        public Boolean Excel { get; set; }
+        public bool Excel { get; set; }
     }
 }

@@ -1,5 +1,5 @@
 ﻿using HIVBackend.Data;
-using HIVBackend.Models.FormModels;
+using HIVBackend.Models.FormModels.Search;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;

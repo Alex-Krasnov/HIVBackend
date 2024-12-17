@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Models.OutputModel
+﻿namespace HIVBackend.Models.OutputModel.Search
 {
     public class SearchEpid
     {

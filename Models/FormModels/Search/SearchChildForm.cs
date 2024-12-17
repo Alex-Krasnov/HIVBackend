@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Models.FormModels
+﻿namespace HIVBackend.Models.FormModels.Search
 {
     public class SearchChildForm
     {
@@ -54,36 +54,36 @@
         public string form309 { get; set; }
 
 
-        public Boolean selectInpDate { get; set; }
-        public Boolean selectPatientId { get; set; }
-        public Boolean selectFio { get; set; }
-        public Boolean selectBirthDate { get; set; }
-        public Boolean selectRegion { get; set; }
-        public Boolean selectRegionFact { get; set; }
-        public Boolean selectCountry { get; set; }
-        public Boolean selectRegOnDate { get; set; }
-        public Boolean selectStage { get; set; }
-        public Boolean selectCheckCourse { get; set; }
-        public Boolean selectInfectCourse { get; set; }
-        public Boolean selectShowIllnes { get; set; }
-        public Boolean selectTransfArea { get; set; }
-        public Boolean selectFr { get; set; }
+        public bool selectInpDate { get; set; }
+        public bool selectPatientId { get; set; }
+        public bool selectFio { get; set; }
+        public bool selectBirthDate { get; set; }
+        public bool selectRegion { get; set; }
+        public bool selectRegionFact { get; set; }
+        public bool selectCountry { get; set; }
+        public bool selectRegOnDate { get; set; }
+        public bool selectStage { get; set; }
+        public bool selectCheckCourse { get; set; }
+        public bool selectInfectCourse { get; set; }
+        public bool selectShowIllnes { get; set; }
+        public bool selectTransfArea { get; set; }
+        public bool selectFr { get; set; }
 
-        public Boolean selectFamilyType { get; set; }
-        public Boolean selectFirstCheckDate { get; set; }
-        public Boolean selectChildPlace { get; set; }
-        public Boolean selectBreastMonthNo { get; set; }
-        public Boolean selectChildPhp { get; set; }
-        public Boolean selectSex { get; set; }
-        public Boolean selectCardNo { get; set; }
-        public Boolean selectParentId { get; set; }
-        public Boolean selectAddr { get; set; }
-        public Boolean selectArvt { get; set; }
-        public Boolean selectDieDate { get; set; }
-        public Boolean selectMaterHome { get; set; }
-        public Boolean selectForm309 { get; set; }
+        public bool selectFamilyType { get; set; }
+        public bool selectFirstCheckDate { get; set; }
+        public bool selectChildPlace { get; set; }
+        public bool selectBreastMonthNo { get; set; }
+        public bool selectChildPhp { get; set; }
+        public bool selectSex { get; set; }
+        public bool selectCardNo { get; set; }
+        public bool selectParentId { get; set; }
+        public bool selectAddr { get; set; }
+        public bool selectArvt { get; set; }
+        public bool selectDieDate { get; set; }
+        public bool selectMaterHome { get; set; }
+        public bool selectForm309 { get; set; }
 
         public int Page { get; set; }
-        public Boolean Excel { get; set; }
+        public bool Excel { get; set; }
     }
 }

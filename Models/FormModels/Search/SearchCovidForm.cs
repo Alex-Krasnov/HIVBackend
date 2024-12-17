@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Models.FormModels
+﻿namespace HIVBackend.Models.FormModels.Search
 {
     public class SearchCovidForm
     {
@@ -76,51 +76,51 @@
         public string dischargeEnd { get; set; }
 
 
-        public Boolean selectInpDate { get; set; }
-        public Boolean selectPatientId { get; set; }
-        public Boolean selectFio { get; set; }
-        public Boolean selectSex { get; set; }
-        public Boolean selectBirthDate { get; set; }
-        public Boolean selectRegion { get; set; }
-        public Boolean selectRegionFact { get; set; }
-        public Boolean selectCountry { get; set; }
-        public Boolean selectRegOnDate { get; set; }
-        public Boolean selectStage { get; set; }
-        public Boolean selectDieDate { get; set; }
-        public Boolean selectCheckCourse { get; set; }
-        public Boolean selectDieCourse { get; set; }
-        public Boolean selectInfectCourse { get; set; }
-        public Boolean selectShowIllnes { get; set; }
-        public Boolean selectIb { get; set; }
-        public Boolean selectHospCourse { get; set; }
-        public Boolean selectArt { get; set; }
-        public Boolean selectMkb10 { get; set; }
+        public bool selectInpDate { get; set; }
+        public bool selectPatientId { get; set; }
+        public bool selectFio { get; set; }
+        public bool selectSex { get; set; }
+        public bool selectBirthDate { get; set; }
+        public bool selectRegion { get; set; }
+        public bool selectRegionFact { get; set; }
+        public bool selectCountry { get; set; }
+        public bool selectRegOnDate { get; set; }
+        public bool selectStage { get; set; }
+        public bool selectDieDate { get; set; }
+        public bool selectCheckCourse { get; set; }
+        public bool selectDieCourse { get; set; }
+        public bool selectInfectCourse { get; set; }
+        public bool selectShowIllnes { get; set; }
+        public bool selectIb { get; set; }
+        public bool selectHospCourse { get; set; }
+        public bool selectArt { get; set; }
+        public bool selectMkb10 { get; set; }
 
-        public Boolean selectMkb10Covid { get; set; }
-        public Boolean selectMkb10Tuber { get; set; }
-        public Boolean selectMkb10Pneumonia { get; set; }
-        public Boolean selectHospCovid { get; set; }
-        public Boolean selectClinVarCovid { get; set; }
-        public Boolean selectCourseCovid { get; set; }
-        public Boolean selectArterHyper { get; set; }
-        public Boolean selectDiabetes { get; set; }
-        public Boolean selectCoronarySynd { get; set; }
-        public Boolean selectHobl { get; set; }
-        public Boolean selectBronhAstma { get; set; }
-        public Boolean selectCancer { get; set; }
-        public Boolean selectKidneyDes { get; set; }
-        public Boolean selectOutpatTreat { get; set; }
-        public Boolean selectDeathCovid { get; set; }
-        public Boolean selectOrit { get; set; }
-        public Boolean selectOxygen { get; set; }
-        public Boolean selectTypeAlv { get; set; }
-        public Boolean selectPeriodDes { get; set; }
-        public Boolean selectPositivResCovid { get; set; }
-        public Boolean selectNegativeResCovid { get; set; }
-        public Boolean selectHospitalization { get; set; }
-        public Boolean selectDischarge { get; set; }
+        public bool selectMkb10Covid { get; set; }
+        public bool selectMkb10Tuber { get; set; }
+        public bool selectMkb10Pneumonia { get; set; }
+        public bool selectHospCovid { get; set; }
+        public bool selectClinVarCovid { get; set; }
+        public bool selectCourseCovid { get; set; }
+        public bool selectArterHyper { get; set; }
+        public bool selectDiabetes { get; set; }
+        public bool selectCoronarySynd { get; set; }
+        public bool selectHobl { get; set; }
+        public bool selectBronhAstma { get; set; }
+        public bool selectCancer { get; set; }
+        public bool selectKidneyDes { get; set; }
+        public bool selectOutpatTreat { get; set; }
+        public bool selectDeathCovid { get; set; }
+        public bool selectOrit { get; set; }
+        public bool selectOxygen { get; set; }
+        public bool selectTypeAlv { get; set; }
+        public bool selectPeriodDes { get; set; }
+        public bool selectPositivResCovid { get; set; }
+        public bool selectNegativeResCovid { get; set; }
+        public bool selectHospitalization { get; set; }
+        public bool selectDischarge { get; set; }
 
         public int Page { get; set; }
-        public Boolean Excel { get; set; }
+        public bool Excel { get; set; }
     }
 }
