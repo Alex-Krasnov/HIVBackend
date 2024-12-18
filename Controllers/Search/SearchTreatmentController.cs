@@ -6,7 +6,7 @@ namespace HIVBackend.Controllers.Search
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SearchTreatmentController : SearchBaseController<SearchTreatmentForm, SearchTreatmentInputForm>
+    public class SearchTreatmentController : BaseSearchController<SearchTreatmentForm, SearchTreatmentInputForm>
     {
     }
 }

@@ -48,14 +48,14 @@ namespace HIVBackend.Controllers.Search
 
         [HttpPost, Route("GetRes")]
         [Authorize(Roles = "User")]
-        public IActionResult GetRes(SearchAnalyseForm form)
+        public IActionResult GetRes(SearchAnalyseInputForm form)
         {
             int pageSize = 100;
             List<string> columName = new() { "Ид пациента" };
 
             List<string> activeColumns = new() { "PatientId" };
 
-            foreach (var key in typeof(SearchAnalyseForm).GetProperties())
+            foreach (var key in typeof(SearchAnalyseInputForm).GetProperties())
             {
                 if (key.Name.StartsWith("select") && (bool)key.GetValue(form) == true)
                 {

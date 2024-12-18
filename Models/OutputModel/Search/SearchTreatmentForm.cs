@@ -1,4 +1,5 @@
 ﻿using HIVBackend.Data;
+using HIVBackend.Enums;
 
 namespace HIVBackend.Models.OutputModel.Search
 {
@@ -6,7 +7,7 @@ namespace HIVBackend.Models.OutputModel.Search
     {
         public List<string?>? ListSex { get; set; }
         public List<string?>? ListRegion { get; set; }
-        public List<string?>? ListRegionPreset { get; set; }
+        public List<string> ListRegionPreset { get; set; }
         public List<string?>? ListCountry { get; set; }
         public List<string?>? ListRegOff { get; set; }
         public List<string?>? ListStage { get; set; }
@@ -26,7 +27,7 @@ namespace HIVBackend.Models.OutputModel.Search
         public List<string?>? ListArvt { get; set; }
         public List<string?>? ListRangeTherapy { get; set; }
         public List<string?>? ListYN { get; set; }
-        public List<string?>? ListYNA { get; set; }
+        public List<string> ListYNA { get; set; }
         public List<string?>? ListResIb { get; set; }
         public List<string?>? ListSelectBlot { get; set; }
 
@@ -34,14 +35,14 @@ namespace HIVBackend.Models.OutputModel.Search
         {
             ListSex = _context.TblSexes.Select(e => e.SexShort).ToList();
             ListRegion = _context.TblRegions.Select(e => e.RegionLong).OrderBy(e => e).ToList();
-            ListRegionPreset = new() { "Все", "Московская обл.", "Иногородние", "Иностранные" };
+            ListRegionPreset = EnumExtension.EnumToListOfDescription(typeof(RegionPresetEnum));
             ListCountry = _context.TblCountries.Select(e => e.CountryLong).OrderBy(e => e).ToList();
             ListRegOff = _context.TblInfectCourses.Where(e => e.InfectCourseId == 201 || e.InfectCourseId == 203 || e.InfectCourseId == 210).Select(e => e.InfectCourseLong).ToList();
             ListStage = _context.TblDiagnoses.Select(e => e.DiagnosisLong).OrderBy(e => e).ToList();
             ListInfectCourse = _context.TblInfectCourses.Where(e => e.InfectCourseId != 210).Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
             ListCheckCourse = _context.TblCheckCourses.Select(e => new Selector2Col { Short = e.CheckCourseShort, Long = e.CheckCourseLong }).OrderBy(e => e.Short).ToList();
             ListShowIllness = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong).OrderBy(e => e).ToList();
-            ListYNA = new() { "Да", "Нет", "Все" };
+            ListYNA = EnumExtension.EnumToListOfDescription(typeof(YNAEnum));
             ListArvt = _context.TblArvts.Select(e => e.ArvtLong).OrderBy(e => e).ToList();
             ListSchema = _context.TblCureSchemas.Select(e => e.CureSchemaLong).OrderBy(e => e).ToList();
             ListDiePreset = new() { "Все", "ВИЧ", "Не связанные с ВИЧ", "СПИД" };

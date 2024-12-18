@@ -1,7 +1,9 @@
 ﻿namespace HIVBackend.Models.FormModels.Search
 {
-    public class SearchMainInfForm
+    public class SearchMainInfInputForm
     {
+        #region поля
+
         public string dateInpStart { get; set; }
         public string dateInpEnd { get; set; }
         public string patientId { get; set; }
@@ -77,6 +79,10 @@
         public string regionPreset { get; set; }
         public string factRegionPreset { get; set; }
 
+        #endregion
+
+        #region select поля
+
         public bool selectInpDate { get; set; }
         public bool selectPatientId { get; set; }
         public bool selectFio { get; set; }
@@ -114,6 +120,8 @@
         public bool selectPasNum { get; set; }
         public bool selectPasWhom { get; set; }
         public bool selectPasWhen { get; set; }
+
+        #endregion
 
         public int Page { get; set; }
         public bool Excel { get; set; }

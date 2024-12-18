@@ -1,6 +1,5 @@
 ﻿using HIVBackend.Data;
 using HIVBackend.Models.FormModels.Search;
-using HIVBackend.Models.OutputModel;
 using HIVBackend.Models.OutputModel.Search;
 using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
@@ -15,7 +14,7 @@ namespace HIVBackend.Controllers.Search
     /// <typeparam name="TFormModel"></typeparam>
     [Route("api/[controller]")]
     [ApiController]
-    public abstract class SearchBaseController<TForm, TFormModel> : ControllerBase
+    public abstract class BaseSearchController<TForm, TFormModel> : ControllerBase
         where TForm : BaseSearchForm
         where TFormModel : BaseSearchInputForm
     {
