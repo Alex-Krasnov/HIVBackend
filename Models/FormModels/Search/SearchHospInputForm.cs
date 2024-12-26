@@ -40,7 +40,7 @@ namespace HIVBackend.Models.FormModels.Search
 
             #region Генерация строк SELECT GROUP BY и LEFT JOIN для запроса
 
-            foreach (var key in typeof(SearchTreatmentInputForm).GetProperties().Where(e => e.Name.StartsWith("Select")))
+            foreach (var key in typeof(SearchHospInputForm).GetProperties().Where(e => e.Name.StartsWith("Select")))
             {
                 if ((bool)key.GetValue(this) == true)
                 {
