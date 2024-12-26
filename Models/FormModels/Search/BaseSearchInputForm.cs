@@ -75,13 +75,20 @@ namespace HIVBackend.Models.FormModels.Search
         public string UnrzYNA { get; set; } = YNAEnum.All.ToString();
         public string Unrz { get; set; } = string.Empty;
 
+        #region Служебные
+
         public int Page { get; set; } = 1;
         public bool Excel { get; set; } = false;
 
+        /// <summary>
+        /// Названия колонок
+        /// </summary>
         public List<string> columName = new() { "Ид пациента" };
         public StringBuilder selectGroupSrt = new();
         public StringBuilder joinStr = new();
         public StringBuilder whereStr = new();
+
+        #endregion
 
         #endregion
 

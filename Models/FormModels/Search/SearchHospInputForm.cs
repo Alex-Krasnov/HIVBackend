@@ -1,83 +1,178 @@
-﻿namespace HIVBackend.Models.FormModels.Search
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using HIVBackend.Enums;
+using HIVBackend.Services;
+
+namespace HIVBackend.Models.FormModels.Search
 {
-    public class SearchHospInputForm
+    public class SearchHospInputForm : BaseSearchInputForm
     {
         #region поля
 
-        public string dateInpStart { get; set; }
-        public string dateInpEnd { get; set; }
-        public string patientId { get; set; }
-        public string familyName { get; set; }
-        public string firstName { get; set; }
-        public string thirdName { get; set; }
-        public string sex { get; set; }
-        public string birthDateStart { get; set; }
-        public string birthDateEnd { get; set; }
-        public string[]? regionReg { get; set; }
-        public string regionPreset { get; set; }
-        public string[]? regionFact { get; set; }
-        public string factRegionPreset { get; set; }
-        public string[]? country { get; set; }
-        public string city { get; set; }
-        public string location { get; set; }
-        public string indx { get; set; }
-        public string street { get; set; }
-        public string home { get; set; }
-        public string dateRegOnStart { get; set; }
-        public string dateRegOnEnd { get; set; }
-        public string dateUnRegStart { get; set; }
-        public string dateUnRegEnd { get; set; }
-        public string[]? stage { get; set; }
-        public string[]? checkCourse { get; set; }
-        public string[]? infectCourse { get; set; }
-        public string transfAreaYNA { get; set; }
-        public string dateTransfAreaStart { get; set; }
-        public string dateTransfAreaEnd { get; set; }
-        public string ufsinYNA { get; set; }
-        public string dateUfsinStart { get; set; }
-        public string dateUfsinEnd { get; set; }
-        public string frYNA { get; set; }
-        public string zavApoYNA { get; set; }
-
-        public string dateHospInStart { get; set; }
-        public string dateHospInEnd { get; set; }
-        public string dateHospOutStart { get; set; }
-        public string dateHospOutEnd { get; set; }
-        public string[]? lpu { get; set; }
-        public string[]? hospCourse { get; set; }
-        public string[]? hospResult { get; set; }
+        public string Sex { get; set; } = string.Empty;
+        public string UfsinYNA { get; set; } = string.Empty;
+        public string DateUfsinStart { get; set; } = string.Empty;
+        public string DateUfsinEnd { get; set; } = string.Empty;
+        public string DateHospInStart { get; set; } = string.Empty;
+        public string DateHospInEnd { get; set; } = string.Empty;
+        public string DateHospOutStart { get; set; } = string.Empty;
+        public string DateHospOutEnd { get; set; } = string.Empty;
+        public string[] Lpu { get; set; } = new string[] { "Все" };
+        public string[] HospCourse { get; set; } = new string[] { "Все" };
+        public string[] HospResult { get; set; } = new string[] { "Все" };
 
         #endregion
 
         #region select поля
 
-        public bool selectInpDate { get; set; }
-        public bool selectPatientId { get; set; }
-        public bool selectFio { get; set; }
-        public bool selectSex { get; set; }
-        public bool selectBirthDate { get; set; }
-        public bool selectRegion { get; set; }
-        public bool selectRegionFact { get; set; }
-        public bool selectCountry { get; set; }
-        public bool selectAddr { get; set; }
-        public bool selectRegOnDate { get; set; }
-        public bool selectStage { get; set; }
-        public bool selectCheckCourse { get; set; }
-        public bool selectInfectCourse { get; set; }
-        public bool selectTransfArea { get; set; }
-        public bool selectFr { get; set; }
-        public bool selectUfsin { get; set; }
-
-        public bool selectDateHospIn { get; set; }
-        public bool selectDateHospOut { get; set; }
-        public bool selectLpu { get; set; }
-        public bool selectHospCourse { get; set; }
-        public bool selectHospResult { get; set; }
+        public bool selectSex { get; set; } = false;
+        public bool selectUfsin { get; set; } = false;
+        public bool selectDateHospIn { get; set; } = false;
+        public bool selectDateHospOut { get; set; } = false;
+        public bool selectLpu { get; set; } = false;
+        public bool selectHospCourse { get; set; } = false;
+        public bool selectHospResult { get; set; } = false;
 
         #endregion
 
+        public override void SetSearchData()
+        {
+            base.SetSearchData();
 
-        public int Page { get; set; }
-        public bool Excel { get; set; }
+            #region Генерация строк SELECT GROUP BY и LEFT JOIN для запроса
+
+            foreach (var key in typeof(SearchTreatmentInputForm).GetProperties().Where(e => e.Name.StartsWith("Select")))
+            {
+                if ((bool)key.GetValue(this) == true)
+                {
+                    if (key.Name == "SelectSex")
+                    {
+                        columName.Add("Пол");
+                        selectGroupSrt.AppendLine(",\"tblSex\".sex_short");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblSex", field: "sex_id", table: "tblPatientCard");
+                    }
+
+                    if (key.Name == "SelectUfsin")
+                    {
+                        columName.Add("Дата постановки на учет УФСИН");
+                        selectGroupSrt.AppendLine(",\"tblPatientCard\".ufsin_date");
+                    }
+
+                    if (key.Name == "selectDateHospIn")
+                    {
+                        columName.Add("Дата госп");
+                        selectGroupSrt.AppendLine(",\"tblPatientHospResultR\".date_hosp_in");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+                    }
+
+                    if (key.Name == "selectDateHospOut")
+                    {
+                        columName.Add("Дата выписки");
+                        selectGroupSrt.AppendLine(",\"tblPatientHospResultR\".date_hosp_out");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+                    }
+
+                    if (key.Name == "selectLpu")
+                    {
+                        columName.Add("МО");
+                        selectGroupSrt.AppendLine(",\"tblLpu\".lpu_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblLpu", field: "lpu_id", table: "tblPatientHospResultR");
+                    }
+
+                    if (key.Name == "selectHospCourse")
+                    {
+                        columName.Add("Причина госпитализации");
+                        selectGroupSrt.AppendLine(",\"tblHospCourse\".hosp_course_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblHospCourse", field: "hosp_course_id", table: "tblPatientHospResultR");
+                    }
+
+                    if (key.Name == "selectHospResult")
+                    {
+                        columName.Add("Исход госпитализации");
+                        selectGroupSrt.AppendLine(",\"tblHospResult\".hosp_result_long");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblHospResult", field: "hosp_result_id", table: "tblPatientHospResultR");
+                    }
+                }
+            }
+
+            #endregion
+
+            #region Генерация строки WHERE
+
+            if (Sex.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblSex", field: "sex_id", table: "tblPatientCard");
+                whereStr.AddWhereSqlEqualString("\"tblSex\".sex_short", Sex);
+            }
+
+            if (UfsinYNA == YNAEnum.Yes.ToEnumDescriptionNameString())
+            {
+                whereStr.AddWhereSqlIsNotNull("\"tblPatientCard\".ufsin_date");
+            }
+
+            if (UfsinYNA == YNAEnum.No.ToEnumDescriptionNameString())
+            {
+                whereStr.AddWhereSqlIsNull("\"tblPatientCard\".ufsin_date");
+            }
+
+            if (DateUfsinStart.Length != 0)
+            {
+                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".ufsin_date", DateOnly.Parse(DateUfsinStart).ToString("dd-MM-yyyy"));
+            }
+
+            if (DateUfsinEnd.Length != 0)
+            {
+                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".ufsin_date", DateOnly.Parse(DateUfsinEnd).ToString("dd-MM-yyyy"));
+            }
+
+            if (DateHospInStart.Length != 0)
+            {
+                whereStr.AddWhereSqlDateMore("\"tblPatientHospResultR\".date_hosp_in", DateOnly.Parse(DateHospInStart).ToString("dd-MM-yyyy"));
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            }
+
+            if (DateHospInEnd.Length != 0)
+            {
+                whereStr.AddWhereSqlDateLess("\"tblPatientHospResultR\".date_hosp_in", DateOnly.Parse(DateHospInEnd).ToString("dd-MM-yyyy"));
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            }
+
+            if (DateHospOutStart.Length != 0)
+            {
+                whereStr.AddWhereSqlDateMore("\"tblPatientHospResultR\".date_hosp_out", DateOnly.Parse(DateHospOutStart).ToString("dd-MM-yyyy"));
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            }
+
+            if (DateHospOutEnd.Length != 0)
+            {
+                whereStr.AddWhereSqlDateLess("\"tblPatientHospResultR\".date_hosp_out", DateOnly.Parse(DateHospOutEnd).ToString("dd-MM-yyyy"));
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            }
+
+            if (Lpu[0] != "Все")
+            {
+                whereStr.AddWhereSqlIn("\"tblLpu\".lpu_long", Lpu);
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblLpu", field: "lpu_id", table: "tblPatientHospResultR");
+            }
+
+            if (HospCourse[0] != "Все")
+            {
+                whereStr.AddWhereSqlIn("\"tblHospCourse\".hosp_course_long", HospCourse);
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblHospCourse", field: "hosp_course_id", table: "tblPatientHospResultR");
+            }
+
+            if (HospResult[0] != "Все")
+            {
+                whereStr.AddWhereSqlIn("\"tblHospResult\".hosp_result_long", HospCourse);
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblHospResult", field: "hosp_result_id", table: "tblPatientHospResultR");
+            }
+
+            #endregion
+        }
     }
 }

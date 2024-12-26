@@ -1,4 +1,5 @@
 ﻿using HIVBackend.Data;
+using HIVBackend.Enums;
 
 namespace HIVBackend.Models.OutputModel.Search
 {
@@ -8,9 +9,11 @@ namespace HIVBackend.Models.OutputModel.Search
     /// </summary>
     public abstract class BaseSearchForm
     {
+        public List<string>? ListYNA { get; set; }
+
         protected BaseSearchForm(HivContext _context)
         {
-
+            ListYNA = EnumExtension.EnumToListOfDescription(typeof(YNAEnum));
         }
     }
 }
