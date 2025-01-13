@@ -79,6 +79,24 @@ namespace HIVBackend.Controllers.Search
                         activeColumns.Add("InputDate");
                     }
 
+                    if (key.Name == "selectSnils")
+                    {
+                        columName.Add("СНИЛС");
+                        activeColumns.Add("Snils");
+                    }
+
+                    if (key.Name == "selectUnrz")
+                    {
+                        columName.Add("УНРЗ");
+                        activeColumns.Add("UnrzFr");
+                    }
+
+                    if (key.Name == "selectEpidDescr")
+                    {
+                        columName.Add("Эпид. примечание");
+                        activeColumns.Add("EpidDescr");
+                    }
+
                     if (key.Name == "selectFio")
                     {
                         columName.Add("Фамилия");
@@ -540,7 +558,14 @@ namespace HIVBackend.Controllers.Search
                         (form.pavNotInjDateStart.Length != 0 ? e.DateStartPavNotInj >= DateOnly.Parse(form.pavNotInjDateStart) : true) &&
                         (form.pavNotInjDateEnd.Length != 0 ? e.DateStartPavNotInj <= DateOnly.Parse(form.pavNotInjDateEnd) : true) &&
                         (form.timeInfectDateStart.Length != 0 ? e.EpidemInfectStart >= DateOnly.Parse(form.timeInfectDateStart) : true) &&
-                        (form.timeInfectDateEnd.Length != 0 ? e.EpidemInfectStart <= DateOnly.Parse(form.timeInfectDateEnd) : true)
+                        (form.timeInfectDateEnd.Length != 0 ? e.EpidemInfectStart <= DateOnly.Parse(form.timeInfectDateEnd) : true) &&
+                        (form.unrzYNA == "Да" ? e.UnrzFr != null || e.UnrzFr.Length != 0 : true) &&
+                        (form.unrzYNA == "Нет" ? e.UnrzFr == null : true) &&
+                        (form.unrz.Length != 0 ? e.UnrzFr.ToLower().StartsWith(form.unrz.ToLower()) : true) &&
+                        (form.snilsYNA == "Да" ? e.Snils != null || e.Snils.Length != 0 : true) &&
+                        (form.snilsYNA == "Нет" ? e.Snils == null : true) &&
+                        (form.snils.Length != 0 ? e.Snils.ToLower().StartsWith(form.snils.ToLower()) : true) &&
+                        (form.epidDescr.Length != 0 ? e.EpidDescr.ToLower().StartsWith(form.epidDescr.ToLower()) : true)
                             ).OrderBy(e => e.FamilyName).ThenBy(e => e.FirstName).ThenBy(e => e.ThirdName);
 
             var lambda = new CreateLambda<QrySearchEpid>().CreateLambdaSelect(activeColumns);

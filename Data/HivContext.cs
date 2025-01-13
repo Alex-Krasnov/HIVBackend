@@ -4683,6 +4683,15 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.EpidemInfectEnd)
                 .HasColumnName("epidem_time_infect_end");
+
+            entity.Property(e => e.Snils)
+                .HasColumnName("snils");
+
+            entity.Property(e => e.UnrzFr)
+                .HasColumnName("unrz_fr");
+
+            entity.Property(e => e.EpidDescr)
+                .HasColumnName("epidem_descr");
         });
 
         modelBuilder.Entity<QrySearchHosp>(entity =>

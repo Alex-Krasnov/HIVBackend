@@ -52,6 +52,9 @@ public partial class QrySearchEpid
     public DateOnly? TransfFederDate { get; set; }
     public DateOnly? UfsinDate { get; set; }
     public string? Aids12Long { get; set; }
+    public string? Snils { get; set; }
+    public string? UnrzFr { get; set; }
+    public string? EpidDescr { get; set; }
 
     public DateOnly? DtMailReg { get; set; }
     public string? EduName { get; set; }

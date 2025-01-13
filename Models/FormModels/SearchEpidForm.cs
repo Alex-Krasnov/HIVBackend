@@ -90,6 +90,11 @@
         public string pavNotInjDateEnd { get; set; }
         public string timeInfectDateStart { get; set; }
         public string timeInfectDateEnd { get; set; }
+        public string unrzYNA { get; set; }
+        public string unrz { get; set; }
+        public string snilsYNA { get; set; }
+        public string snils { get; set; }
+        public string epidDescr { get; set; }
 
 
         public Boolean selectInpDate { get; set; }
@@ -136,6 +141,9 @@
         public Boolean selectPavInj { get; set; }
         public Boolean selectPavNotInj { get; set; }
         public Boolean selectTimeInfect { get; set; }
+        public Boolean selectUnrz { get; set; }
+        public Boolean selectSnils { get; set; }
+        public Boolean selectEpidDescr { get; set; }
 
 
         public int Page { get; set; }
