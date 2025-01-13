@@ -1864,7 +1864,7 @@ public partial class HivContext : DbContext
             entity.Property(e => e.TransfAreaDate).HasColumnName("transf_area_date");
             entity.Property(e => e.TransfAreaFlg).HasColumnName("transf_area_flg");
             entity.Property(e => e.TransfFederDate).HasColumnName("transf_feder_date");
-            entity.Property(e => e.TransmitionMechId).HasColumnName("transmition_mech_id");
+            entity.Property(e => e.TransmitionMechId).HasColumnName("transmission_mech_id");
             entity.Property(e => e.UfsinDate).HasColumnName("ufsin_date");
             entity.Property(e => e.Uidpatient).HasColumnName("UIDpatient");
             entity.Property(e => e.UnrzFr).HasColumnName("unrz_fr_");
