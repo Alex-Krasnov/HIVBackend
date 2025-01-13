@@ -1846,7 +1846,7 @@ public partial class HivContext : DbContext
             entity.Property(e => e.RegionId).HasColumnName("region_id");
             entity.Property(e => e.RegistId).HasColumnName("regist_id");
             entity.Property(e => e.SexId).HasColumnName("sex_id");
-            entity.Property(e => e.SituationtDetectId).HasColumnName("situationt_detect_id");
+            entity.Property(e => e.SituationtDetectId).HasColumnName("situation_detect_id");
             entity.Property(e => e.Snils)
                 .HasMaxLength(50)
                 .HasColumnName("snils");
