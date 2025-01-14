@@ -56,6 +56,7 @@ namespace HIVBackend.Controllers.Search
             outModel.ListMkb10Covid = _context.TblListMkb10Covids.Select(e => e.Mkb10ShortName).OrderBy(e => e).ToList();
             outModel.ListContactType = _context.TblInfectCourses.Where(e => e.InfectCourseId == 104 || e.InfectCourseId == 100).Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
             outModel.ListYNA = new() { "Да", "Нет", "Все" };
+            outModel.ListCallStatus = _context.TblListCallStatuses.Where(e => e.LongName != null).Select(e => e.LongName).OrderBy(e => e).ToList();
 
             return Ok(outModel);
         }
@@ -401,6 +402,14 @@ namespace HIVBackend.Controllers.Search
                         columName.Add("Вероятные сроки инфиц. по");
                         activeColumns.Add("EpidemInfectEnd");
                     }
+
+                    if (key.Name == "selectPatientCall")
+                    {
+                        columName.Add("Дата звонка");
+                        activeColumns.Add("CallDate");
+                        columName.Add("Статус звонка");
+                        activeColumns.Add("Callstatus");
+                    }
                 }
             }
 
@@ -565,7 +574,10 @@ namespace HIVBackend.Controllers.Search
                         (form.snilsYNA == "Да" ? e.Snils != null || e.Snils.Length != 0 : true) &&
                         (form.snilsYNA == "Нет" ? e.Snils == null : true) &&
                         (form.snils.Length != 0 ? e.Snils.ToLower().StartsWith(form.snils.ToLower()) : true) &&
-                        (form.epidDescr.Length != 0 ? e.EpidDescr.ToLower().StartsWith(form.epidDescr.ToLower()) : true)
+                        (form.epidDescr.Length != 0 ? e.EpidDescr.ToLower().StartsWith(form.epidDescr.ToLower()) : true) &&
+                        (form.callstatus[0] != "Все" ? form.callstatus.Contains(e.Callstatus) : true) &&
+                        (form.callDateStart.Length != 0 ? e.CallDate >= DateOnly.Parse(form.callDateStart) : true) &&
+                        (form.callDateEnd.Length != 0 ? e.CallDate <= DateOnly.Parse(form.callDateEnd) : true)
                             ).OrderBy(e => e.FamilyName).ThenBy(e => e.FirstName).ThenBy(e => e.ThirdName);
 
             var lambda = new CreateLambda<QrySearchEpid>().CreateLambdaSelect(activeColumns);

@@ -33,5 +33,6 @@
         public List<string>? ListMkb10Covid { get; set; }
         public List<string>? ListContactType { get; set; }
         public List<string>? ListYNA { get; set; }
+        public List<string>? ListCallStatus { get; set; }
     }
 }

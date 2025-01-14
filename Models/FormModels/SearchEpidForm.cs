@@ -95,6 +95,9 @@
         public string snilsYNA { get; set; }
         public string snils { get; set; }
         public string epidDescr { get; set; }
+        public string[] callstatus { get; set; } = new string[] { "Все" };
+        public string callDateStart { get; set; } = string.Empty;
+        public string callDateEnd { get; set; } = string.Empty;
 
 
         public Boolean selectInpDate { get; set; }
@@ -144,6 +147,7 @@
         public Boolean selectUnrz { get; set; }
         public Boolean selectSnils { get; set; }
         public Boolean selectEpidDescr { get; set; }
+        public Boolean selectPatientCall { get; set; } = false;
 
 
         public int Page { get; set; }

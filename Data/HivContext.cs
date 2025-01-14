@@ -4692,6 +4692,12 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.EpidDescr)
                 .HasColumnName("epidem_descr");
+
+            entity.Property(e => e.Callstatus)
+                .HasColumnName("call_status_name");
+
+            entity.Property(e => e.CallDate)
+                .HasColumnName("call_date");
         });
 
         modelBuilder.Entity<QrySearchHosp>(entity =>

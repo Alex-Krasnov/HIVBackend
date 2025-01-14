@@ -81,5 +81,7 @@ public partial class QrySearchEpid
     public string? YnNamePavNotInj { get; set; }
     public DateOnly? EpidemInfectStart { get; set; }
     public DateOnly? EpidemInfectEnd { get; set; }
+    public string? Callstatus { get; set; }
+    public DateOnly? CallDate { get; set; }
 }
 
