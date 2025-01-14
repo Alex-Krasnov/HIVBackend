@@ -13,7 +13,6 @@ namespace HIVBackend.Models.OutputModel.Search
         public List<Selector2Col>? ListCheckCourse { get; set; }
         public List<string>? ListInfectCourse { get; set; }
         public List<string>? ListShowIllness { get; set; }
-        public List<string>? ListYNA { get; set; }
 
         public SearchNonresidentForm(HivContext _context) : base(_context)
         {
@@ -24,7 +23,6 @@ namespace HIVBackend.Models.OutputModel.Search
             ListStage = _context.TblDiagnoses.Select(e => e.DiagnosisLong).OrderBy(e => e).ToList();
             ListCheckCourse = _context.TblCheckCourses.Select(e => new Selector2Col { Short = e.CheckCourseShort, Long = e.CheckCourseLong }).OrderBy(e => e.Short).ToList();
             ListShowIllness = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong).OrderBy(e => e).ToList();
-            ListYNA = EnumExtension.EnumToListOfDescription(typeof(YNAEnum));
             ListRegionPreset = EnumExtension.EnumToListOfDescription(typeof(RegionPresetEnum));
         }
     }
