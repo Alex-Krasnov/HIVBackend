@@ -372,7 +372,7 @@ namespace HIVBackend.Models.FormModels.Search
             if (DiePreset == "ВИЧ")
             {
                 joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
-                whereStr.Append($" AND \"tblTempDieCureMKB10List\".\"Dethtype_id\" IN (1,3) ");
+                whereStr.AddWhereSqlIn("\"tblTempDieCureMKB10List\".\"Dethtype_id\"", new[] { "1", "3" });
             }
 
             if (DiePreset == "Не связанные с ВИЧ")

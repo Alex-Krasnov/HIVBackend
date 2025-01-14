@@ -40,11 +40,11 @@ namespace HIVBackend.Services
         }
 
         /// <summary>
-        /// Добваляем строку типа $" AND {column} LIKE '{condition}'"
+        /// Добваляем строку типа $" AND {column} LIKE '%{condition}%'"
         /// </summary>
         public static void AddWhereSqlEqualString(this StringBuilder whereStr, string column, string condition)
         {
-            whereStr.Append($" AND {column} LIKE '{condition}'");
+            whereStr.Append($" AND {column} LIKE '%{condition}%'");
         }
 
         /// <summary>
