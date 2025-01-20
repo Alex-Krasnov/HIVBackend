@@ -33,7 +33,7 @@ namespace HIVBackend.Models.FormModels.Search
         public string CardNo { get; set; } = string.Empty;
         public string[] Art { get; set; } = new string[] { "Все" };
         public string[] Mkb10 { get; set; } = new string[] { "Все" };
-        public string ArchiveYNA { get; set; } =  = YNAEnum.All.ToEnumDescriptionNameString();
+        public string ArchiveYNA { get; set; } = YNAEnum.All.ToEnumDescriptionNameString();
         public string Archive { get; set; } = string.Empty;
         public string TransfFederYNA { get; set; } = YNAEnum.All.ToEnumDescriptionNameString();
         public string DateTransfFederStart { get; set; } = string.Empty;
