@@ -31,8 +31,8 @@ namespace HIVBackend.Models.FormModels.Search
         public string ThirdName { get; set; } = string.Empty;
 
         // ФР / Зав. АПО
-        public string FrYNA { get; set; } = YNAEnum.All.ToString();
-        public string ZavApoYNA { get; set; } = YNAEnum.All.ToString();
+        public string FrYNA { get; set; } = YNAEnum.All.ToEnumDescriptionNameString();
+        public string ZavApoYNA { get; set; } = YNAEnum.All.ToEnumDescriptionNameString();
 
         // Фактор риска заражения
         public string[] InfectCourse { get; set; } = new string[] { "Все" };
@@ -45,12 +45,12 @@ namespace HIVBackend.Models.FormModels.Search
         public string PatientId { get; set; } = string.Empty;
 
         // Регион (рег.)
-        public string[] RegionReg { get; set; } = new string[] { RegionPresetEnum.All.ToString() };
-        public string RegionPreset { get; set; } = RegionPresetEnum.All.ToString();
+        public string[] RegionReg { get; set; } = new string[] { RegionPresetEnum.All.ToEnumDescriptionNameString() };
+        public string RegionPreset { get; set; } = RegionPresetEnum.All.ToEnumDescriptionNameString();
 
         // Регион (факт.)
-        public string[] RegionFact { get; set; } = new string[] { RegionPresetEnum.All.ToString() };
-        public string FactRegionPreset { get; set; } = RegionPresetEnum.All.ToString();
+        public string[] RegionFact { get; set; } = new string[] { RegionPresetEnum.All.ToEnumDescriptionNameString() };
+        public string FactRegionPreset { get; set; } = RegionPresetEnum.All.ToEnumDescriptionNameString();
 
         // Дата пост.на учёт / снят.с учёта
         public string DateRegOnStart { get; set; } = string.Empty;
@@ -60,19 +60,19 @@ namespace HIVBackend.Models.FormModels.Search
         public string UnRegCourse { get; set; } = string.Empty;
 
         // СНИЛС
-        public string SnilsYNA { get; set; } = YNAEnum.All.ToString();
+        public string SnilsYNA { get; set; } = YNAEnum.All.ToEnumDescriptionNameString();
         public string Snils { get; set; } = string.Empty;
 
         // Стадия
         public string[] Stage { get; set; } = new string[] { "Все" };
 
         // Передан в район
-        public string TransfAreaYNA { get; set; } = YNAEnum.All.ToString();
+        public string TransfAreaYNA { get; set; } = YNAEnum.All.ToEnumDescriptionNameString();
         public string DateTransfAreaStart { get; set; } = string.Empty;
         public string DateTransfAreaEnd { get; set; } = string.Empty;
 
         // УНРЗ
-        public string UnrzYNA { get; set; } = YNAEnum.All.ToString();
+        public string UnrzYNA { get; set; } = YNAEnum.All.ToEnumDescriptionNameString();
         public string Unrz { get; set; } = string.Empty;
 
         #region Служебные

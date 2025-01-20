@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Models.FormModels.Search
+﻿namespace HIVBackend.Models.FormModels.Search.LEGACY
 {
     public class SearchAclInputForm
     {

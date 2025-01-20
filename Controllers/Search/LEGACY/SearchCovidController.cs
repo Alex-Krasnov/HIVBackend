@@ -1,6 +1,6 @@
 ﻿using HIVBackend.Data;
 using HIVBackend.Models.DBModuls;
-using HIVBackend.Models.FormModels.Search;
+using HIVBackend.Models.FormModels.Search.LEGACY;
 using HIVBackend.Models.OutputModel;
 using HIVBackend.Models.OutputModel.Search;
 using HIVBackend.Services;

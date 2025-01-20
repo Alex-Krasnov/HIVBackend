@@ -27,7 +27,7 @@ namespace HIVBackend.Models.FormModels.Search
         public string DateInpIbStart { get; set; } = string.Empty;
         public string DateInpIbEnd { get; set; } = string.Empty;
         public string IbSelect { get; set; } = string.Empty;
-        public string UfsinYNA { get; set; } = YNAEnum.All.ToString();
+        public string UfsinYNA { get; set; } = YNAEnum.All.ToEnumDescriptionNameString();
         public string DateUfsinStart { get; set; } = string.Empty;
         public string DateUfsinEnd { get; set; } = string.Empty;
         public string[] Invalid { get; set; } = new string[] { "Все" };

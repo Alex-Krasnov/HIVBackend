@@ -9,7 +9,7 @@ namespace HIVBackend.Models.FormModels.Search
         #region поля
 
         public string Sex { get; set; } = string.Empty;
-        public string UfsinYNA { get; set; } = string.Empty;
+        public string UfsinYNA { get; set; } = YNAEnum.All.ToEnumDescriptionNameString();
         public string DateUfsinStart { get; set; } = string.Empty;
         public string DateUfsinEnd { get; set; } = string.Empty;
         public string DateHospInStart { get; set; } = string.Empty;

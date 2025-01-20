@@ -1,6 +1,6 @@
 ﻿using HIVBackend.Data;
 using HIVBackend.Models.DBModuls;
-using HIVBackend.Models.FormModels.Search;
+using HIVBackend.Models.FormModels.Search.LEGACY;
 using HIVBackend.Models.OutputModel;
 using HIVBackend.Models.OutputModel.Search;
 using HIVBackend.Services;
@@ -12,10 +12,10 @@ namespace HIVBackend.Controllers.Search.LEGACY
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class SearchAnalyseController : ControllerBase
+    public class DEL_SearchAnalyseController : ControllerBase
     {
         private readonly HivContext _context;
-        public SearchAnalyseController(HivContext context)
+        public DEL_SearchAnalyseController(HivContext context)
         {
             _context = context;
         }
