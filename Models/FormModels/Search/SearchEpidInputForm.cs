@@ -126,7 +126,7 @@ namespace HIVBackend.Models.FormModels.Search
                         joinStr.AddLeftJoinIfNotExist(joinTable: "tblSex", field: "sex_id", table: "tblPatientCard");
                     }
 
-                    if (key.Name == "selectBlotCheckPlace")
+                    if (key.Name == "SelectBlotCheckPlace")
                     {
                         columName.Add("Место лаб. исследования");
                         selectGroupSrt.AppendLine(",\"tblCheckPlace\".check_place_long");

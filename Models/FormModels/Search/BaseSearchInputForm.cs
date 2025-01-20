@@ -11,7 +11,7 @@ namespace HIVBackend.Models.FormModels.Search
        // Адрес
         public string City { get; set; } = string.Empty;
         public string Location { get; set; } = string.Empty;
-        public string Iindx { get; set; } = string.Empty;
+        public string Indx { get; set; } = string.Empty;
         public string Street { get; set; } = string.Empty;
         public string Home { get; set; } = string.Empty;
 
@@ -275,9 +275,9 @@ namespace HIVBackend.Models.FormModels.Search
                 whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".location_name", Location.ToLower());
             }
 
-            if (Iindx.Length != 0)
+            if (Indx.Length != 0)
             {
-                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".addr_ind", Iindx.ToLower());
+                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".addr_ind", Indx.ToLower());
             }
 
             if (Street.Length != 0)

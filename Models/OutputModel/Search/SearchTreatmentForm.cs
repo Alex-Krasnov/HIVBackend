@@ -27,7 +27,6 @@ namespace HIVBackend.Models.OutputModel.Search
         public List<string?>? ListArvt { get; set; }
         public List<string?>? ListRangeTherapy { get; set; }
         public List<string?>? ListYN { get; set; }
-        public List<string> ListYNA { get; set; }
         public List<string?>? ListResIb { get; set; }
         public List<string>? ListSelectBlot { get; set; }
 
@@ -41,7 +40,6 @@ namespace HIVBackend.Models.OutputModel.Search
             ListInfectCourse = _context.TblInfectCourses.Where(e => e.InfectCourseId != 210).Select(e => e.InfectCourseLong).OrderBy(e => e).ToList();
             ListCheckCourse = _context.TblCheckCourses.Select(e => new Selector2Col { Short = e.CheckCourseShort, Long = e.CheckCourseLong }).OrderBy(e => e.Short).ToList();
             ListShowIllness = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong).OrderBy(e => e).ToList();
-            ListYNA = EnumExtension.EnumToListOfDescription(typeof(YNAEnum));
             ListArvt = _context.TblArvts.Select(e => e.ArvtLong).OrderBy(e => e).ToList();
             ListSchema = _context.TblCureSchemas.Select(e => e.CureSchemaLong).OrderBy(e => e).ToList();
             ListInvalid = _context.TblInvalids.Select(e => e.InvalidLong).OrderBy(e => e).ToList();
