@@ -94,11 +94,11 @@ namespace HIVBackend.Models.FormModels.Search
 
         #region Общие select поля
 
-        public bool SelectAddr { get; set; } = false;
+        public bool SelectFio { get; set; } = false;
         public bool SelectBirthDate { get; set; } = false;
+        public bool SelectAddr { get; set; } = false;
         public bool SelectCheckCourse { get; set; } = false;
         public bool SelectCountry { get; set; } = false;
-        public bool SelectFio { get; set; } = false;
         public bool SelectFr { get; set; } = false;
         public bool SelectInfectCourse { get; set; } = false;
         public bool SelectInpDate { get; set; } = false;
