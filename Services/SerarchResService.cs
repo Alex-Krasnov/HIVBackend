@@ -1,7 +1,4 @@
-﻿using DocumentFormat.OpenXml.Office2016.Excel;
-using DocumentFormat.OpenXml.Wordprocessing;
-using HIVBackend.Models;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
+﻿using HIVBackend.Models;
 using System.Text;
 
 namespace HIVBackend.Services
@@ -19,7 +16,7 @@ namespace HIVBackend.Services
             //получаем сами данные из бд тут, вроде пофиг на кол-во из-за пагинации, но хз
             var res = NpgsqlService.GetDBData(selectGroupSrt, joinStr, whereStr, pageSize, page);
 
-            return new SearchRes() { ResCount = count, resPage = NpgsqlService.DataSetToList(res)};
+            return new SearchRes() { ResCount = count, ResPage = NpgsqlService.DataSetToList(res)};
         }
 
         /// <summary>
