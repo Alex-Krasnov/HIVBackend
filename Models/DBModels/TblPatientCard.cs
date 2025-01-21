@@ -310,8 +310,6 @@ public partial class TblPatientCard
 
     public virtual TblSex? Sex { get; set; }
 
-    public virtual TblStatus? Status { get; set; }
-
     public virtual ICollection<TblCovid> TblCovids { get; } = new List<TblCovid>();
 
     public virtual ICollection<TblPatientBiochem> TblPatientBiochems { get; } = new List<TblPatientBiochem>();
@@ -342,17 +340,11 @@ public partial class TblPatientCard
 
     public virtual ICollection<TblPatientJail> TblPatientJails { get; } = new List<TblPatientJail>();
 
-    public virtual ICollection<TblPatientMedicine> TblPatientMedicines { get; } = new List<TblPatientMedicine>();
-
     public virtual ICollection<TblPatientPregnantM> TblPatientPregnantMs { get; } = new List<TblPatientPregnantM>();
 
     public virtual ICollection<TblPatientPrescrM> TblPatientPrescrMs { get; } = new List<TblPatientPrescrM>();
 
-    public virtual ICollection<TblPatientResist> TblPatientResists { get; } = new List<TblPatientResist>();
-
     public virtual ICollection<TblPatientShowIllness> TblPatientShowIllnesses { get; } = new List<TblPatientShowIllness>();
-
-    public virtual ICollection<TblPatientStacionar> TblPatientStacionars { get; } = new List<TblPatientStacionar>();
 
     public virtual ICollection<TblPatientVirusLoad> TblPatientVirusLoads { get; } = new List<TblPatientVirusLoad>();
 

@@ -1754,10 +1754,6 @@ public partial class HivContext : DbContext
             entity.HasOne(d => d.Sex).WithMany(p => p.TblPatientCards)
                 .HasForeignKey(d => d.SexId)
                 .HasConstraintName("FK_tblPatientCard_tblSex");
-
-            entity.HasOne(d => d.Status).WithMany(p => p.TblPatientCards)
-                .HasForeignKey(d => d.StatusId)
-                .HasConstraintName("FK_tblPatientCard_tblStatus");
         });
 
         modelBuilder.Entity<TblPatientCheck>(entity =>
