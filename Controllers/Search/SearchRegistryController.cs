@@ -5,7 +5,7 @@ using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HIVBackend.Controllers.Search.LEGACY
+namespace HIVBackend.Controllers.Search
 {
     [Route("api/[controller]")]
     [ApiController]
