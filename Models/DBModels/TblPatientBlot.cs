@@ -26,7 +26,11 @@ public partial class TblPatientBlot
 
     public int? VnResultId { get; set; }
 
+    public int? ReferenceMoId { get; set; }
+
     public virtual TblCheckPlace? CheckPlace { get; set; }
 
     public virtual TblIbResult? IbResult { get; set; }
+
+    public virtual TblListReferenceMo? TblListReferenceMo { get; set; }
 }

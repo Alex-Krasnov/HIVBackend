@@ -897,5 +897,16 @@ namespace HIVBackend.Controllers.Lists
             var inList = _context.TblListCallStatuses.Any(e => e.LongName == data.Str);
             return Ok(inList);
         }
+
+        [HttpPost, Route("getInListReferenceMos")]
+        [Authorize(Roles = "User")]
+        public IActionResult GetInListReferenceMos(InList data)
+        {
+            if (data.Str == null || data.Str?.Length == 0)
+                return Ok(true);
+
+            var inList = _context.TblListReferenceMos.Any(e => e.ReferenceMoName == data.Str);
+            return Ok(inList);
+        }
     }
 }

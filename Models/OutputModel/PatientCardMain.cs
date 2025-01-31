@@ -82,6 +82,7 @@
         public List<string>? ListRes { get; set; }
         public List<string>? ListDesease { get; set; }
         public List<string>? ListStage { get; set; }
+        public List<string>? ListReferenceMo { get; set; }
 
         public List<FrmBlot>? Blots { get; set; }
         public List<FrmSecondDeseases>? SecondDeseases { get; set; }
@@ -95,6 +96,7 @@
         public DateOnly? BlotDate { get; set; }
         public string? BlotRes { get; set; }
         public string? CheckPlace { get; set; }
+        public string? ReferenceMo { get; set; }
         public bool? First { get; set; }
         public bool? Last { get; set; }
         public bool? Ifa { get; set; }

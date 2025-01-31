@@ -47,7 +47,8 @@ namespace HIVBackend.Controllers.PatientCard
                         First = pBlot.First1,
                         Last = pBlot.Last1,
                         Ifa = pBlot.FlgIfa,
-                        InputDate = pBlot.Datetime1
+                        InputDate = pBlot.Datetime1,
+                        ReferenceMo = _context.TblListReferenceMos.FirstOrDefault(e => e.ReferenceMoId == pBlot.ReferenceMoId)?.ReferenceMoName
                     });
             }
 
@@ -156,6 +157,7 @@ namespace HIVBackend.Controllers.PatientCard
             patientCardMain.ListRes = _context.TblIbResults.Select(e => e.IbResultShort)?.ToList();
             patientCardMain.ListDesease = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong)?.ToList();
             patientCardMain.ListStage = _context.TblDiagnoses.Select(e => e.DiagnosisLong)?.ToList();
+            patientCardMain.ListReferenceMo = _context.TblListReferenceMos.Select(e => e.ReferenceMoName).ToList();
 
             patientCardMain.Blots = blots;
             patientCardMain.SecondDeseases = secondDeseases;
@@ -194,7 +196,8 @@ namespace HIVBackend.Controllers.PatientCard
                 First1 = blot.First1,
                 Last1 = blot.Last1,
                 FlgIfa = blot.FlgIfa,
-                Datetime1 = DateOnly.FromDateTime(DateTime.Now)
+                Datetime1 = DateOnly.FromDateTime(DateTime.Now),
+                ReferenceMoId = _context.TblListReferenceMos.FirstOrDefault(e => e.ReferenceMoName == blot.ReferenceMo)?.ReferenceMoId
             };
 
             _context.TblPatientBlots.Attach(item);
@@ -224,6 +227,7 @@ namespace HIVBackend.Controllers.PatientCard
                 item.First1 = blot.First1;
                 item.Last1 = blot.Last1;
                 item.FlgIfa = blot.FlgIfa;
+                item.ReferenceMoId = _context.TblListReferenceMos.FirstOrDefault(e => e.ReferenceMoName == blot.ReferenceMo)?.ReferenceMoId;
                 _context.SaveChanges();
                 return Ok();
             }
@@ -240,7 +244,8 @@ namespace HIVBackend.Controllers.PatientCard
                 First1 = blot.First1,
                 Last1 = blot.Last1,
                 FlgIfa = blot.FlgIfa,
-                Datetime1 = datetime1
+                Datetime1 = datetime1,
+                ReferenceMoId = _context.TblListReferenceMos.FirstOrDefault(e => e.ReferenceMoName == blot.ReferenceMo)?.ReferenceMoId
             };
             _context.TblPatientBlots.Add(item);
             _context.SaveChanges();

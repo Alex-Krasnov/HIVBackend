@@ -151,6 +151,8 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<TblVloadResult> TblVloadResults { get; set; }
 
+    public virtual DbSet<TblListReferenceMo> TblListReferenceMos { get; set; }
+
     #endregion
 
 
@@ -1424,6 +1426,7 @@ public partial class HivContext : DbContext
                 .HasMaxLength(50)
                 .HasColumnName("user1");
             entity.Property(e => e.VnResultId).HasColumnName("vn_result_id");
+            entity.Property(e => e.ReferenceMoId).HasColumnName("reference_mo_id");
 
             entity.HasOne(d => d.CheckPlace).WithMany(p => p.TblPatientBlots)
                 .HasForeignKey(d => d.CheckPlaceId)
@@ -1432,6 +1435,10 @@ public partial class HivContext : DbContext
             entity.HasOne(d => d.IbResult).WithMany(p => p.TblPatientBlots)
                 .HasForeignKey(d => d.IbResultId)
                 .HasConstraintName("FK_tblPatientBlot_tblIbResult");
+
+            entity.HasOne(d => d.TblListReferenceMo).WithMany(p => p.TblPatientBlots)
+                .HasForeignKey(d => d.ReferenceMoId)
+                .HasConstraintName("tblpatientblot_tbllistreferencemo_fk");
         });
 
         modelBuilder.Entity<TblPatientCard>(entity =>
@@ -3417,6 +3424,24 @@ public partial class HivContext : DbContext
             entity.HasOne(d => d.Patient).WithMany(p => p.TblHepCs)
                 .HasForeignKey(d => d.PatientId)
                 .HasConstraintName("tblhepc_tblpatientcard_fk");
+        });
+
+        modelBuilder.Entity<TblListReferenceMo>(entity =>
+        {
+            entity.HasKey(e => e.ReferenceMoId);
+
+            entity.ToTable("tblListReferenceMo");
+
+            entity.Property(e => e.ReferenceMoId)
+                .ValueGeneratedNever()
+                .HasColumnName("reference_mo_id");
+
+            entity.Property(e => e.ReferenceMoName)
+                .HasMaxLength(50)
+                .IsFixedLength()
+                .HasColumnName("reference_mo_name");
+            entity.Property(e => e.User).HasColumnName("user");
+            entity.Property(e => e.Datetime).HasColumnName("datetime");
         });
 
         OnModelCreatingPartial(modelBuilder);
