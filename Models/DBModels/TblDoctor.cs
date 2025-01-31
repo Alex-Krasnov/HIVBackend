@@ -21,8 +21,4 @@ public partial class TblDoctor
     public virtual ICollection<TblPatientCheckOut> TblPatientCheckOuts { get; } = new List<TblPatientCheckOut>();
 
     public virtual ICollection<TblPatientCheck> TblPatientChecks { get; } = new List<TblPatientCheck>();
-
-    public virtual ICollection<TblPatientMedicine> TblPatientMedicines { get; } = new List<TblPatientMedicine>();
-
-    public virtual ICollection<TblPatientStacionar> TblPatientStacionars { get; } = new List<TblPatientStacionar>();
 }

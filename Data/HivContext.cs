@@ -15,81 +15,7 @@ public partial class HivContext : DbContext
     {
     }
 
-    public virtual DbSet<TblAclTestBh> TblAclTestBhs { get; set; }
-
-    public virtual DbSet<TblAclTestGe> TblAclTestGes { get; set; }
-
-    public virtual DbSet<TblAclTestResistence> TblAclTestResistences { get; set; }
-
-    public virtual DbSet<TblAgegr> TblAgegrs { get; set; }
-
-    public virtual DbSet<TblAids12> TblAids12s { get; set; }
-
-    public virtual DbSet<TblArvt> TblArvts { get; set; }
-
-    public virtual DbSet<TblBiochem> TblBiochems { get; set; }
-
-    public virtual DbSet<TblBirthType> TblBirthTypes { get; set; }
-
-    public virtual DbSet<TblCabinet> TblCabinets { get; set; }
-
-    public virtual DbSet<TblCheckCourse> TblCheckCourses { get; set; }
-
-    public virtual DbSet<TblCheckPlace> TblCheckPlaces { get; set; }
-
-    public virtual DbSet<TblChemop> TblChemops { get; set; }
-
-    public virtual DbSet<TblChildCount> TblChildCounts { get; set; }
-
-    public virtual DbSet<TblChildPhp> TblChildPhps { get; set; }
-
-    public virtual DbSet<TblChildPlace> TblChildPlaces { get; set; }
-
-    public virtual DbSet<TblCodeMkb10> TblCodeMkb10s { get; set; }
-
-    public virtual DbSet<TblCorrespIllness> TblCorrespIllnesses { get; set; }
-
-    public virtual DbSet<TblCountry> TblCountries { get; set; }
-
-    public virtual DbSet<TblCovid> TblCovids { get; set; }
-
-    public virtual DbSet<TblCovidVac> TblCovidVacs { get; set; }
-
-    public virtual DbSet<TblCureChange> TblCureChanges { get; set; }
-
-    public virtual DbSet<TblCureSchema> TblCureSchemas { get; set; }
-
-    public virtual DbSet<TblDiagnosis> TblDiagnoses { get; set; }
-
-    public virtual DbSet<TblDiagnosisCdc> TblDiagnosisCdcs { get; set; }
-
-    public virtual DbSet<TblDieCourse> TblDieCourses { get; set; }
-
-    public virtual DbSet<TblDoctor> TblDoctors { get; set; }
-
-    public virtual DbSet<TblDtype> TblDtypes { get; set; }
-
-    public virtual DbSet<TblFamilyType> TblFamilyTypes { get; set; }
-
-    public virtual DbSet<TblFinSource> TblFinSources { get; set; }
-
-    public virtual DbSet<TblHepatitResult> TblHepatitResults { get; set; }
-
-    public virtual DbSet<TblHepatitResult2> TblHepatitResult2s { get; set; }
-
-    public virtual DbSet<TblHospCourse> TblHospCourses { get; set; }
-
-    public virtual DbSet<TblHospResult> TblHospResults { get; set; }
-
-    public virtual DbSet<TblIbResult> TblIbResults { get; set; }
-
-    public virtual DbSet<TblImmuneStat> TblImmuneStats { get; set; }
-
-    public virtual DbSet<TblInfectCourse> TblInfectCourses { get; set; }
-
-    public virtual DbSet<TblInvalid> TblInvalids { get; set; }
-
-    public virtual DbSet<TblJail> TblJails { get; set; }
+    #region Lists
 
     public virtual DbSet<TblListAvlType> TblListAvlTypes { get; set; }
 
@@ -131,6 +57,68 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<TblListYn> TblListYns { get; set; }
 
+    public virtual DbSet<TblListCallStatus> TblListCallStatuses { get; set; }
+
+    public virtual DbSet<TblAgegr> TblAgegrs { get; set; }
+
+    public virtual DbSet<TblAids12> TblAids12s { get; set; }
+
+    public virtual DbSet<TblArvt> TblArvts { get; set; }
+
+    public virtual DbSet<TblBiochem> TblBiochems { get; set; } // нет ссылок
+
+    public virtual DbSet<TblBirthType> TblBirthTypes { get; set; }
+
+    public virtual DbSet<TblCabinet> TblCabinets { get; set; }
+
+    public virtual DbSet<TblCheckCourse> TblCheckCourses { get; set; }
+
+    public virtual DbSet<TblCheckPlace> TblCheckPlaces { get; set; }
+
+    public virtual DbSet<TblChemop> TblChemops { get; set; }
+
+    public virtual DbSet<TblChildCount> TblChildCounts { get; set; }
+
+    public virtual DbSet<TblChildPhp> TblChildPhps { get; set; }
+
+    public virtual DbSet<TblChildPlace> TblChildPlaces { get; set; }
+
+    public virtual DbSet<TblCodeMkb10> TblCodeMkb10s { get; set; }
+
+    public virtual DbSet<TblCorrespIllness> TblCorrespIllnesses { get; set; }
+
+    public virtual DbSet<TblCountry> TblCountries { get; set; }
+
+    public virtual DbSet<TblCureChange> TblCureChanges { get; set; }
+
+    public virtual DbSet<TblCureSchema> TblCureSchemas { get; set; }
+
+    public virtual DbSet<TblDiagnosis> TblDiagnoses { get; set; }
+
+    public virtual DbSet<TblDieCourse> TblDieCourses { get; set; }
+
+    public virtual DbSet<TblDoctor> TblDoctors { get; set; }
+
+    public virtual DbSet<TblFamilyType> TblFamilyTypes { get; set; }
+
+    public virtual DbSet<TblFinSource> TblFinSources { get; set; }
+
+    public virtual DbSet<TblHepatitResult> TblHepatitResults { get; set; }
+
+    public virtual DbSet<TblHepatitResult2> TblHepatitResult2s { get; set; }
+
+    public virtual DbSet<TblHospCourse> TblHospCourses { get; set; }
+
+    public virtual DbSet<TblHospResult> TblHospResults { get; set; }
+
+    public virtual DbSet<TblIbResult> TblIbResults { get; set; }
+
+    public virtual DbSet<TblInfectCourse> TblInfectCourses { get; set; }
+
+    public virtual DbSet<TblInvalid> TblInvalids { get; set; }
+
+    public virtual DbSet<TblJail> TblJails { get; set; }
+
     public virtual DbSet<TblLpu> TblLpus { get; set; }
 
     public virtual DbSet<TblMaterHome> TblMaterHomes { get; set; }
@@ -139,33 +127,62 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<TblMedicineForSchema> TblMedicineForSchemas { get; set; }
 
-    public virtual DbSet<TblMessage> TblMessages { get; set; }
+    public virtual DbSet<TblPregCheck> TblPregChecks { get; set; }
 
-    public virtual DbSet<TblMonth> TblMonths { get; set; }
+    public virtual DbSet<TblRangeTherapy> TblRangeTherapies { get; set; }
+
+    public virtual DbSet<TblRegTime> TblRegTimes { get; set; }
+
+    public virtual DbSet<TblRegion> TblRegions { get; set; }
+
+    public virtual DbSet<TblRegist> TblRegists { get; set; } // нет ссылок
+
+    public virtual DbSet<TblRegtype> TblRegtypes { get; set; } // нет ссылок
+
+    public virtual DbSet<TblResearch> TblResearches { get; set; }
+
+    public virtual DbSet<TblSex> TblSexes { get; set; }
+
+    public virtual DbSet<TblShowIllness> TblShowIllnesses { get; set; }
+
+    public virtual DbSet<TblSpec> TblSpecs { get; set; }
+
+    public virtual DbSet<TblTempDieCureMkb10list> TblTempDieCureMkb10lists { get; set; }
+
+    public virtual DbSet<TblVloadResult> TblVloadResults { get; set; }
+
+    #endregion
+
+
+
+
+    public virtual DbSet<TblCovid> TblCovids { get; set; }
+
+    public virtual DbSet<TblCovidVac> TblCovidVacs { get; set; }
 
     public virtual DbSet<TblPatDiagnosis> TblPatDiagnoses { get; set; }
 
     public virtual DbSet<TblPatientAclResult> TblPatientAclResults { get; set; }
 
-    public virtual DbSet<TblPatientBiochem> TblPatientBiochems { get; set; }
+    public virtual DbSet<TblPatientBiochem> TblPatientBiochems { get; set; } // нет ссылок
 
     public virtual DbSet<TblPatientBlot> TblPatientBlots { get; set; }
 
     public virtual DbSet<TblPatientCard> TblPatientCards { get; set; }
 
-    public virtual DbSet<TblPatientCheck> TblPatientChecks { get; set; }
+    public virtual DbSet<TblPatientCheck> TblPatientChecks { get; set; } // нет ссылок
 
     public virtual DbSet<TblPatientCheckOut> TblPatientCheckOuts { get; set; }
 
-    public virtual DbSet<TblPatientChemop> TblPatientChemops { get; set; }
+    public virtual DbSet<TblPatientChemop> TblPatientChemops { get; set; } // нет ссылок
 
-    public virtual DbSet<TblPatientChildSendForm> TblPatientChildSendForms { get; set; }
+    public virtual DbSet<TblPatientChildSendForm> TblPatientChildSendForms { get; set; } // нет ссылок
 
     public virtual DbSet<TblPatientContact> TblPatientContacts { get; set; }
 
     public virtual DbSet<TblPatientContactChemsex> TblPatientContactChemsexes { get; set; }
 
-    public virtual DbSet<TblPatientContactDrug> TblPatientContactDrugs { get; set; }
+    public virtual DbSet<TblPatientContactDrug> TblPatientContactDrugs { get; set; } // нет ссылок
 
     public virtual DbSet<TblPatientContactPavInj> TblPatientContactPavInjs { get; set; }
 
@@ -181,7 +198,7 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<TblPatientHepatitResult2> TblPatientHepatitResult2s { get; set; }
 
-    public virtual DbSet<TblPatientHosp> TblPatientHosps { get; set; }
+    public virtual DbSet<TblPatientHosp> TblPatientHosps { get; set; } // нет ссылок
 
     public virtual DbSet<TblPatientHospResultR> TblPatientHospResultRs { get; set; }
 
@@ -189,9 +206,7 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<TblPatientJail> TblPatientJails { get; set; }
 
-    public virtual DbSet<TblPatientMedicine> TblPatientMedicines { get; set; }
-
-    public virtual DbSet<TblPatientNonresident> TblPatientNonresidents { get; set; }
+    public virtual DbSet<TblPatientNonresident> TblPatientNonresidents { get; set; } // нет ссылок
 
     public virtual DbSet<TblPatientPregnantM> TblPatientPregnantMs { get; set; }
 
@@ -201,83 +216,21 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<TblPatientRegistryTalon> TblPatientRegistryTalons { get; set; }
 
-    public virtual DbSet<TblPatientResist> TblPatientResists { get; set; }
-
     public virtual DbSet<TblPatientShowIllness> TblPatientShowIllnesses { get; set; }
 
-    public virtual DbSet<TblPatientStacionar> TblPatientStacionars { get; set; }
-
     public virtual DbSet<TblPatientVirusLoad> TblPatientVirusLoads { get; set; }
-
-    public virtual DbSet<TblPregCheck> TblPregChecks { get; set; }
-
-    public virtual DbSet<TblQgr> TblQgrs { get; set; }
-
-    public virtual DbSet<TblQuest> TblQuests { get; set; }
-
-    public virtual DbSet<TblQuestDimeR> TblQuestDimeRs { get; set; }
-
-    public virtual DbSet<TblRangeTherapy> TblRangeTherapies { get; set; }
-
-    public virtual DbSet<TblRegTime> TblRegTimes { get; set; }
-
-    public virtual DbSet<TblRegion> TblRegions { get; set; }
-
-    public virtual DbSet<TblRegionSelect> TblRegionSelects { get; set; }
-
-    public virtual DbSet<TblRegist> TblRegists { get; set; }
-
-    public virtual DbSet<TblRegtype> TblRegtypes { get; set; }
-
-    public virtual DbSet<TblResearch> TblResearches { get; set; }
-
-    public virtual DbSet<TblResist> TblResists { get; set; }
-
-    public virtual DbSet<TblRmedic> TblRmedics { get; set; }
 
     public virtual DbSet<TblSchemaMedicineR> TblSchemaMedicineRs { get; set; }
 
     public virtual DbSet<TblSecDi> TblSecDis { get; set; }
 
-    public virtual DbSet<TblSetup> TblSetups { get; set; }
-
-    public virtual DbSet<TblSex> TblSexes { get; set; }
-
-    public virtual DbSet<TblShowIllness> TblShowIllnesses { get; set; }
-
-    public virtual DbSet<TblSpec> TblSpecs { get; set; }
-
-    public virtual DbSet<TblStacionar> TblStacionars { get; set; }
-
-    public virtual DbSet<TblStatus> TblStatuses { get; set; }
-
     public virtual DbSet<TblTalonListOfValue> TblTalonListOfValues { get; set; }
-
-    public virtual DbSet<TblTempDieCureMkb10list> TblTempDieCureMkb10lists { get; set; }
 
     public virtual DbSet<TblUser> TblUsers { get; set; }
 
-    public virtual DbSet<TblVloadResult> TblVloadResults { get; set; }
+    public virtual DbSet<QrySearchAnalyse> QrySearchAnalyses { get; set; } // LEGACY
 
-    public virtual DbSet<TblZzztempSnil> TblZzztempSnils { get; set; }
-
-    public virtual DbSet<QrySearchMainInf> QrySearchMainInfs { get; set; }
-
-    public virtual DbSet<QrySearchPregnant> QrySearchPregnants { get; set; }
-
-    public virtual DbSet<QrySearchChild> QrySearchChilds { get; set; }
-
-    public virtual DbSet<QrySearchAnalyse> QrySearchAnalyses { get; set; }
-
-    public virtual DbSet<QrySearchAcl> QrySearchAcls { get; set; }
-
-    public virtual DbSet<QrySearchVisit> QrySearchVisits { get; set; }
-
-    public virtual DbSet<QrySearchEpid> QrySearchEpids { get; set; }
-
-    public virtual DbSet<QrySearchHosp> QrySearchHosps { get; set; }
-
-    public virtual DbSet<QrySearchNonresident> QrySearchNonresidents { get; set; }
+    public virtual DbSet<QrySearchAcl> QrySearchAcls { get; set; } // LEGACY
 
     public virtual DbSet<QrySearchCovid> QrySearchCovids { get; set; }
 
@@ -286,8 +239,6 @@ public partial class HivContext : DbContext
     public virtual DbSet<TblPatientFiles> TblPatientFileses { get; set; }
 
     public virtual DbSet<TblPatientCall> TblPatientCalls { get; set; }
-
-    public virtual DbSet<TblListCallStatus> TblListCallStatuses { get; set; }
 
     public virtual DbSet<TblPatientEpidChild> TblPatientEpidChildren { get; set; }
 
@@ -305,76 +256,6 @@ public partial class HivContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<TblAclTestBh>(entity =>
-        {
-            entity.HasKey(e => e.AclTestCode);
-
-            entity.ToTable("tblAclTest_BH");
-
-            entity.Property(e => e.AclTestCode)
-                .HasMaxLength(50)
-                .HasColumnName("acl_test_code");
-            entity.Property(e => e.AclTestName)
-                .HasMaxLength(255)
-                .HasColumnName("acl_test_name");
-            entity.Property(e => e.AclTestRefint)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .HasColumnName("acl_test_refint");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.Desc01)
-                .HasMaxLength(255)
-                .HasColumnName("desc01");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
-
-        modelBuilder.Entity<TblAclTestGe>(entity =>
-        {
-            entity.HasKey(e => e.AclTestCode);
-
-            entity.ToTable("tblAclTest_GE");
-
-            entity.Property(e => e.AclTestCode)
-                .HasMaxLength(50)
-                .HasColumnName("acl_test_code");
-            entity.Property(e => e.AclTestName)
-                .HasMaxLength(255)
-                .HasColumnName("acl_test_name");
-            entity.Property(e => e.AclTestRefint)
-                .HasMaxLength(10)
-                .IsFixedLength()
-                .HasColumnName("acl_test_refint");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.Desc01)
-                .HasMaxLength(255)
-                .HasColumnName("desc01");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
-
-        modelBuilder.Entity<TblAclTestResistence>(entity =>
-        {
-            entity.HasKey(e => e.AclTestCode).HasName("PK_dbo.tblAclTest_Resistence");
-
-            entity.ToTable("tblAclTest_Resistence");
-
-            entity.Property(e => e.AclTestCode)
-                .HasMaxLength(50)
-                .HasColumnName("acl_test_code");
-            entity.Property(e => e.AclTestName)
-                .HasMaxLength(255)
-                .HasColumnName("acl_test_name");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.Desc01)
-                .HasMaxLength(255)
-                .HasColumnName("desc01");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
 
         modelBuilder.Entity<TblAgegr>(entity =>
         {
@@ -811,25 +692,6 @@ public partial class HivContext : DbContext
                 .HasColumnName("user1");
         });
 
-        modelBuilder.Entity<TblDiagnosisCdc>(entity =>
-        {
-            entity.HasKey(e => e.DiagnosisCdcId);
-
-            entity.ToTable("tblDiagnosisCDC");
-
-            entity.Property(e => e.DiagnosisCdcId).HasColumnName("diagnosis_cdc_id");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.DiagnosisCdcLong)
-                .HasMaxLength(100)
-                .HasColumnName("diagnosis_cdc_long");
-            entity.Property(e => e.DiagnosisCdcShort)
-                .HasMaxLength(50)
-                .HasColumnName("diagnosis_cdc_short");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
-
         modelBuilder.Entity<TblDieCourse>(entity =>
         {
             entity.HasKey(e => e.DieCourseId);
@@ -874,22 +736,6 @@ public partial class HivContext : DbContext
             entity.Property(e => e.User1)
                 .HasMaxLength(50)
                 .HasColumnName("user1");
-        });
-
-        modelBuilder.Entity<TblDtype>(entity =>
-        {
-            entity.HasKey(e => e.DtypeId);
-
-            entity.ToTable("tblDtype");
-
-            entity.Property(e => e.DtypeId).HasColumnName("dtype_id");
-            entity.Property(e => e.DtChanged).HasColumnName("dt_changed");
-            entity.Property(e => e.DtypeName)
-                .HasMaxLength(50)
-                .HasColumnName("dtype_name");
-            entity.Property(e => e.DtypeTbl)
-                .HasMaxLength(50)
-                .HasColumnName("dtype_tbl");
         });
 
         modelBuilder.Entity<TblFamilyType>(entity =>
@@ -1020,32 +866,6 @@ public partial class HivContext : DbContext
             entity.Property(e => e.IbResultShort)
                 .HasMaxLength(3)
                 .HasColumnName("ib_result_short");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
-
-        modelBuilder.Entity<TblImmuneStat>(entity =>
-        {
-            entity.HasKey(e => e.ImmuneStatId);
-
-            entity.ToTable("tblImmuneStat");
-
-            entity.Property(e => e.ImmuneStatId)
-                .ValueGeneratedNever()
-                .HasColumnName("immune_stat_id");
-            entity.Property(e => e.Comment1)
-                .HasMaxLength(255)
-                .HasColumnName("comment1");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.ImmuneStatLong)
-                .HasMaxLength(100)
-                .HasColumnName("immune_stat_long");
-            entity.Property(e => e.ImmuneStatShort)
-                .HasMaxLength(50)
-                .HasColumnName("immune_stat_short");
-            entity.Property(e => e.Max1).HasColumnName("max1");
-            entity.Property(e => e.Min1).HasColumnName("min1");
             entity.Property(e => e.User1)
                 .HasMaxLength(50)
                 .HasColumnName("user1");
@@ -1502,39 +1322,6 @@ public partial class HivContext : DbContext
                 .HasColumnName("user1");
         });
 
-        modelBuilder.Entity<TblMessage>(entity =>
-        {
-            entity.HasKey(e => e.Mesid);
-
-            entity.ToTable("tblMessage");
-
-            entity.Property(e => e.Mesid)
-                .ValueGeneratedNever()
-                .HasColumnName("MESID");
-            entity.Property(e => e.Mestxt)
-                .HasMaxLength(255)
-                .HasColumnName("MESTXT");
-        });
-
-        modelBuilder.Entity<TblMonth>(entity =>
-        {
-            entity.HasKey(e => e.MonthId);
-
-            entity.ToTable("tblMonth");
-
-            entity.Property(e => e.MonthId).HasColumnName("month_id");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.MonthLong)
-                .HasMaxLength(8)
-                .HasColumnName("month_long");
-            entity.Property(e => e.MonthShort)
-                .HasMaxLength(3)
-                .HasColumnName("month_short");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
-
         modelBuilder.Entity<TblPatDiagnosis>(entity =>
         {
             entity.HasKey(e => e.IdPatDiagnos);
@@ -1967,10 +1754,6 @@ public partial class HivContext : DbContext
             entity.HasOne(d => d.Sex).WithMany(p => p.TblPatientCards)
                 .HasForeignKey(d => d.SexId)
                 .HasConstraintName("FK_tblPatientCard_tblSex");
-
-            entity.HasOne(d => d.Status).WithMany(p => p.TblPatientCards)
-                .HasForeignKey(d => d.StatusId)
-                .HasConstraintName("FK_tblPatientCard_tblStatus");
         });
 
         modelBuilder.Entity<TblPatientCheck>(entity =>
@@ -2427,41 +2210,6 @@ public partial class HivContext : DbContext
                 .HasConstraintName("FK_tblPatientJail_tblPatientCard");
         });
 
-        modelBuilder.Entity<TblPatientMedicine>(entity =>
-        {
-            entity.HasKey(e => new { e.PatientId, e.MedicineId, e.DoctorId, e.GiveDate });
-
-            entity.ToTable("tblPatientMedicine");
-
-            entity.HasIndex(e => e.DoctorId, "IX_tblPatientMedicine_doctor_id");
-
-            entity.HasIndex(e => e.MedicineId, "IX_tblPatientMedicine_medicine_id");
-
-            entity.Property(e => e.PatientId).HasColumnName("patient_id");
-            entity.Property(e => e.MedicineId).HasColumnName("medicine_id");
-            entity.Property(e => e.DoctorId).HasColumnName("doctor_id");
-            entity.Property(e => e.GiveDate).HasColumnName("give_date");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.PackNumber).HasColumnName("pack_number");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-
-            entity.HasOne(d => d.Doctor).WithMany(p => p.TblPatientMedicines)
-                .HasForeignKey(d => d.DoctorId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblPatientMedicine_tblDoctor");
-
-            entity.HasOne(d => d.Medicine).WithMany(p => p.TblPatientMedicines)
-                .HasForeignKey(d => d.MedicineId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblPatientMedicine_tblMedicine");
-
-            entity.HasOne(d => d.Patient).WithMany(p => p.TblPatientMedicines)
-                .HasForeignKey(d => d.PatientId)
-                .HasConstraintName("FK_tblPatientMedicine_tblPatientCard");
-        });
-
         modelBuilder.Entity<TblPatientNonresident>(entity =>
         {
             entity.HasKey(e => e.PatientId);
@@ -2682,38 +2430,6 @@ public partial class HivContext : DbContext
                 .HasColumnName("talon_num");
         });
 
-        modelBuilder.Entity<TblPatientResist>(entity =>
-        {
-            entity.HasKey(e => new { e.PatientId, e.RmedicId });
-
-            entity.ToTable("tblPatientResist");
-
-            entity.HasIndex(e => e.ResistId, "IX_tblPatientResist_resist_id");
-
-            entity.HasIndex(e => e.RmedicId, "IX_tblPatientResist_rmedic_id");
-
-            entity.Property(e => e.PatientId).HasColumnName("patient_id");
-            entity.Property(e => e.RmedicId).HasColumnName("rmedic_id");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.ResistId).HasColumnName("resist_id");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-
-            entity.HasOne(d => d.Patient).WithMany(p => p.TblPatientResists)
-                .HasForeignKey(d => d.PatientId)
-                .HasConstraintName("FK_tblPatientResist_tblPatientCard");
-
-            entity.HasOne(d => d.Resist).WithMany(p => p.TblPatientResists)
-                .HasForeignKey(d => d.ResistId)
-                .HasConstraintName("FK_tblPatientResist_tblResist");
-
-            entity.HasOne(d => d.Rmedic).WithMany(p => p.TblPatientResists)
-                .HasForeignKey(d => d.RmedicId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_tblPatientResist_tblRmedic");
-        });
-
         modelBuilder.Entity<TblPatientShowIllness>(entity =>
         {
             entity.HasKey(e => new { e.PatientId, e.ShowIllnessId, e.StartDate });
@@ -2742,62 +2458,6 @@ public partial class HivContext : DbContext
                 .HasForeignKey(d => d.ShowIllnessId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_tblPatientShowIllness_tblShowIllness");
-        });
-
-        modelBuilder.Entity<TblPatientStacionar>(entity =>
-        {
-            entity.HasKey(e => new { e.PatientId, e.DocDate, e.DocNum, e.StacionarId, e.MedicineId });
-
-            entity.ToTable("tblPatientStacionar");
-
-            entity.HasIndex(e => e.DoctorId, "IX_tblPatientStacionar_doctor_id");
-
-            entity.HasIndex(e => e.GiveMedId, "IX_tblPatientStacionar_give_med_id");
-
-            entity.HasIndex(e => e.MedicineId, "IX_tblPatientStacionar_medicine_id");
-
-            entity.HasIndex(e => e.StacionarId, "IX_tblPatientStacionar_stacionar_id");
-
-            entity.Property(e => e.PatientId).HasColumnName("patient_id");
-            entity.Property(e => e.DocDate).HasColumnName("doc_date");
-            entity.Property(e => e.DocNum)
-                .HasMaxLength(50)
-                .HasColumnName("doc_num");
-            entity.Property(e => e.StacionarId).HasColumnName("stacionar_id");
-            entity.Property(e => e.MedicineId).HasColumnName("medicine_id");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.DoctorId).HasColumnName("doctor_id");
-            entity.Property(e => e.GiveDate).HasColumnName("give_date");
-            entity.Property(e => e.GiveMedId).HasColumnName("give_med_id");
-            entity.Property(e => e.GivePackNum).HasColumnName("give_pack_num");
-            entity.Property(e => e.LetterNum)
-                .HasMaxLength(50)
-                .HasColumnName("letter_num");
-            entity.Property(e => e.PackNumber).HasColumnName("pack_number");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-            entity.Property(e => e.ZayavkaDate).HasColumnName("zayavka_date");
-
-            entity.HasOne(d => d.Doctor).WithMany(p => p.TblPatientStacionars)
-                .HasForeignKey(d => d.DoctorId)
-                .HasConstraintName("FK_tblPatientStacionar_tbDoctor");
-
-            entity.HasOne(d => d.GiveMed).WithMany(p => p.TblPatientStacionarGiveMeds)
-                .HasForeignKey(d => d.GiveMedId)
-                .HasConstraintName("FK_tblPatientStacionar_tblMedicine2");
-
-            entity.HasOne(d => d.Medicine).WithMany(p => p.TblPatientStacionarMedicines)
-                .HasForeignKey(d => d.MedicineId)
-                .HasConstraintName("FK_tblPatientStacionar_tblMedicine");
-
-            entity.HasOne(d => d.Patient).WithMany(p => p.TblPatientStacionars)
-                .HasForeignKey(d => d.PatientId)
-                .HasConstraintName("FK_tblPatientStacionar_tblPatientCard");
-
-            entity.HasOne(d => d.Stacionar).WithMany(p => p.TblPatientStacionars)
-                .HasForeignKey(d => d.StacionarId)
-                .HasConstraintName("FK_tblPatientStacionar_tblStacionar");
         });
 
         modelBuilder.Entity<TblPatientVirusLoad>(entity =>
@@ -2839,240 +2499,6 @@ public partial class HivContext : DbContext
             entity.Property(e => e.User1)
                 .HasMaxLength(50)
                 .HasColumnName("user1");
-        });
-
-        modelBuilder.Entity<TblQgr>(entity =>
-        {
-            entity.HasKey(e => e.QgrId);
-
-            entity.ToTable("tblQgr");
-
-            entity.Property(e => e.QgrId).HasColumnName("qgr_id");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.QgrName)
-                .HasMaxLength(255)
-                .HasColumnName("qgr_name");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
-
-        modelBuilder.Entity<TblQuest>(entity =>
-        {
-            entity.HasKey(e => e.QuestId);
-
-            entity.ToTable("tblQuest");
-
-            entity.HasIndex(e => e.QgrId, "IX_tblQuest_qgr_id");
-
-            entity.Property(e => e.QuestId).HasColumnName("quest_id");
-            entity.Property(e => e.B1)
-                .HasMaxLength(50)
-                .HasColumnName("b1");
-            entity.Property(e => e.B10)
-                .HasMaxLength(50)
-                .HasColumnName("b10");
-            entity.Property(e => e.B11)
-                .HasMaxLength(50)
-                .HasColumnName("b11");
-            entity.Property(e => e.B12)
-                .HasMaxLength(50)
-                .HasColumnName("b12");
-            entity.Property(e => e.B12c1)
-                .HasMaxLength(50)
-                .HasColumnName("b12c1");
-            entity.Property(e => e.B12c2)
-                .HasMaxLength(50)
-                .HasColumnName("b12c2");
-            entity.Property(e => e.B12c3)
-                .HasMaxLength(50)
-                .HasColumnName("b12c3");
-            entity.Property(e => e.B12c4)
-                .HasMaxLength(50)
-                .HasColumnName("b12c4");
-            entity.Property(e => e.B13)
-                .HasMaxLength(50)
-                .HasColumnName("b13");
-            entity.Property(e => e.B14)
-                .HasMaxLength(50)
-                .HasColumnName("b14");
-            entity.Property(e => e.B15)
-                .HasMaxLength(50)
-                .HasColumnName("b15");
-            entity.Property(e => e.B16)
-                .HasMaxLength(50)
-                .HasColumnName("b16");
-            entity.Property(e => e.B17)
-                .HasMaxLength(50)
-                .HasColumnName("b17");
-            entity.Property(e => e.B17c1)
-                .HasMaxLength(50)
-                .HasColumnName("b17c1");
-            entity.Property(e => e.B17c2)
-                .HasMaxLength(50)
-                .HasColumnName("b17c2");
-            entity.Property(e => e.B17c3)
-                .HasMaxLength(50)
-                .HasColumnName("b17c3");
-            entity.Property(e => e.B18)
-                .HasMaxLength(50)
-                .HasColumnName("b18");
-            entity.Property(e => e.B18c1)
-                .HasMaxLength(50)
-                .HasColumnName("b18c1");
-            entity.Property(e => e.B18c2)
-                .HasMaxLength(50)
-                .HasColumnName("b18c2");
-            entity.Property(e => e.B19)
-                .HasMaxLength(50)
-                .HasColumnName("b19");
-            entity.Property(e => e.B1c1)
-                .HasMaxLength(50)
-                .HasColumnName("b1c1");
-            entity.Property(e => e.B1c2)
-                .HasMaxLength(50)
-                .HasColumnName("b1c2");
-            entity.Property(e => e.B2)
-                .HasMaxLength(50)
-                .HasColumnName("b2");
-            entity.Property(e => e.B20)
-                .HasMaxLength(50)
-                .HasColumnName("b20");
-            entity.Property(e => e.B21)
-                .HasMaxLength(50)
-                .HasColumnName("b21");
-            entity.Property(e => e.B22)
-                .HasMaxLength(50)
-                .HasColumnName("b22");
-            entity.Property(e => e.B23)
-                .HasMaxLength(50)
-                .HasColumnName("b23");
-            entity.Property(e => e.B2c1)
-                .HasMaxLength(50)
-                .HasColumnName("b2c1");
-            entity.Property(e => e.B2c2)
-                .HasMaxLength(50)
-                .HasColumnName("b2c2");
-            entity.Property(e => e.B2c3)
-                .HasMaxLength(50)
-                .HasColumnName("b2c3");
-            entity.Property(e => e.B2c4)
-                .HasMaxLength(50)
-                .HasColumnName("b2c4");
-            entity.Property(e => e.B2c5)
-                .HasMaxLength(50)
-                .HasColumnName("b2c5");
-            entity.Property(e => e.B2c6)
-                .HasMaxLength(50)
-                .HasColumnName("b2c6");
-            entity.Property(e => e.B2c7)
-                .HasMaxLength(50)
-                .HasColumnName("b2c7");
-            entity.Property(e => e.B3)
-                .HasMaxLength(50)
-                .HasColumnName("b3");
-            entity.Property(e => e.B3c1)
-                .HasMaxLength(50)
-                .HasColumnName("b3c1");
-            entity.Property(e => e.B3c2)
-                .HasMaxLength(50)
-                .HasColumnName("b3c2");
-            entity.Property(e => e.B3c3)
-                .HasMaxLength(50)
-                .HasColumnName("b3c3");
-            entity.Property(e => e.B4)
-                .HasMaxLength(50)
-                .HasColumnName("b4");
-            entity.Property(e => e.B4c1)
-                .HasMaxLength(50)
-                .HasColumnName("b4c1");
-            entity.Property(e => e.B5)
-                .HasMaxLength(50)
-                .HasColumnName("b5");
-            entity.Property(e => e.B5c1)
-                .HasMaxLength(50)
-                .HasColumnName("b5c1");
-            entity.Property(e => e.B5c2)
-                .HasMaxLength(50)
-                .HasColumnName("b5c2");
-            entity.Property(e => e.B6)
-                .HasMaxLength(50)
-                .HasColumnName("b6");
-            entity.Property(e => e.B7)
-                .HasMaxLength(50)
-                .HasColumnName("b7");
-            entity.Property(e => e.B8)
-                .HasMaxLength(50)
-                .HasColumnName("b8");
-            entity.Property(e => e.B8c1)
-                .HasMaxLength(50)
-                .HasColumnName("b8c1");
-            entity.Property(e => e.B8c2)
-                .HasMaxLength(50)
-                .HasColumnName("b8c2");
-            entity.Property(e => e.B9)
-                .HasMaxLength(50)
-                .HasColumnName("b9");
-            entity.Property(e => e.B9c1)
-                .HasMaxLength(50)
-                .HasColumnName("b9c1");
-            entity.Property(e => e.B9c2)
-                .HasMaxLength(50)
-                .HasColumnName("b9c2");
-            entity.Property(e => e.B9c3)
-                .HasMaxLength(50)
-                .HasColumnName("b9c3");
-            entity.Property(e => e.B9c4)
-                .HasMaxLength(50)
-                .HasColumnName("b9c4");
-            entity.Property(e => e.B9c5)
-                .HasMaxLength(50)
-                .HasColumnName("b9c5");
-            entity.Property(e => e.Blot1).HasColumnName("blot1");
-            entity.Property(e => e.Date1).HasColumnName("date1");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.Pivot1).HasColumnName("pivot1");
-            entity.Property(e => e.QgrId).HasColumnName("qgr_id");
-            entity.Property(e => e.QuestName)
-                .HasMaxLength(255)
-                .HasColumnName("quest_name");
-            entity.Property(e => e.RepName)
-                .HasMaxLength(50)
-                .HasColumnName("rep_name");
-            entity.Property(e => e.Trans1).HasColumnName("trans1");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-
-            entity.HasOne(d => d.Qgr).WithMany(p => p.TblQuests)
-                .HasForeignKey(d => d.QgrId)
-                .OnDelete(DeleteBehavior.Cascade)
-                .HasConstraintName("FK_tblQuest_tblQgr");
-        });
-
-        modelBuilder.Entity<TblQuestDimeR>(entity =>
-        {
-            entity.HasKey(e => new { e.QuestId, e.DimeId, e.DtypeId });
-
-            entity.ToTable("tblQuestDimeR");
-
-            entity.HasIndex(e => e.DtypeId, "IX_tblQuestDimeR_dtype_id");
-
-            entity.Property(e => e.QuestId).HasColumnName("quest_id");
-            entity.Property(e => e.DimeId).HasColumnName("dime_id");
-            entity.Property(e => e.DtypeId).HasColumnName("dtype_id");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-
-            entity.HasOne(d => d.Dtype).WithMany(p => p.TblQuestDimeRs)
-                .HasForeignKey(d => d.DtypeId)
-                .HasConstraintName("FK_tblQuestDimeR_tblDtype");
-
-            entity.HasOne(d => d.Quest).WithMany(p => p.TblQuestDimeRs)
-                .HasForeignKey(d => d.QuestId)
-                .HasConstraintName("FK_tblQuestDimeR_tblQuest");
         });
 
         modelBuilder.Entity<TblRangeTherapy>(entity =>
@@ -3143,27 +2569,6 @@ public partial class HivContext : DbContext
                 .HasConstraintName("FK_tblRegion_tblRegtype");
         });
 
-        modelBuilder.Entity<TblRegionSelect>(entity =>
-        {
-            entity
-                .HasNoKey()
-                .ToTable("tblRegionSelect");
-
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.RegionSelectId)
-                .ValueGeneratedOnAdd()
-                .HasColumnName("RegionSelect_id");
-            entity.Property(e => e.RegionSelectItem)
-                .HasMaxLength(8000)
-                .HasColumnName("RegionSelect_item");
-            entity.Property(e => e.RegionSelectName)
-                .HasMaxLength(255)
-                .HasColumnName("RegionSelect_name");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
-
         modelBuilder.Entity<TblRegist>(entity =>
         {
             entity.HasKey(e => e.RegistId);
@@ -3221,48 +2626,6 @@ public partial class HivContext : DbContext
             entity.Property(e => e.SortNum).HasColumnName("sort_num");
         });
 
-        modelBuilder.Entity<TblResist>(entity =>
-        {
-            entity.HasKey(e => e.ResistId);
-
-            entity.ToTable("tblResist");
-
-            entity.Property(e => e.ResistId)
-                .ValueGeneratedNever()
-                .HasColumnName("resist_id");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.ResistLong)
-                .HasMaxLength(100)
-                .HasColumnName("resist_long");
-            entity.Property(e => e.ResistShort)
-                .HasMaxLength(50)
-                .HasColumnName("resist_short");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
-
-        modelBuilder.Entity<TblRmedic>(entity =>
-        {
-            entity.HasKey(e => e.RmedicId);
-
-            entity.ToTable("tblRmedic");
-
-            entity.Property(e => e.RmedicId)
-                .ValueGeneratedNever()
-                .HasColumnName("rmedic_id");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.RmedicLong)
-                .HasMaxLength(100)
-                .HasColumnName("rmedic_long");
-            entity.Property(e => e.RmedicShort)
-                .HasMaxLength(50)
-                .HasColumnName("rmedic_short");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
-
         modelBuilder.Entity<TblSchemaMedicineR>(entity =>
         {
             entity.HasKey(e => new { e.CureSchemaId, e.MedicineId });
@@ -3303,15 +2666,6 @@ public partial class HivContext : DbContext
             entity.Property(e => e.DStart).HasColumnName("d_start");
             entity.Property(e => e.IdMkbSecDis).HasColumnName("id_MKB_sec_dis");
             entity.Property(e => e.PatientId).HasColumnName("patient_id");
-        });
-
-        modelBuilder.Entity<TblSetup>(entity =>
-        {
-            entity.ToTable("tblSetup");
-
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("id");
         });
 
         modelBuilder.Entity<TblSex>(entity =>
@@ -3369,42 +2723,6 @@ public partial class HivContext : DbContext
             entity.Property(e => e.User1)
                 .HasMaxLength(50)
                 .HasColumnName("user1");
-        });
-
-        modelBuilder.Entity<TblStacionar>(entity =>
-        {
-            entity.HasKey(e => e.StacionarId);
-
-            entity.ToTable("tblStacionar");
-
-            entity.Property(e => e.StacionarId).HasColumnName("stacionar_id");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.StacionarLong)
-                .HasMaxLength(100)
-                .HasColumnName("stacionar_long");
-            entity.Property(e => e.StacionarShort)
-                .HasMaxLength(50)
-                .HasColumnName("stacionar_short");
-            entity.Property(e => e.User1)
-                .HasMaxLength(50)
-                .HasColumnName("user1");
-        });
-
-        modelBuilder.Entity<TblStatus>(entity =>
-        {
-            entity.HasKey(e => e.StatusId);
-
-            entity.ToTable("tblStatus");
-
-            entity.Property(e => e.StatusId)
-                .ValueGeneratedNever()
-                .HasColumnName("status_id");
-            entity.Property(e => e.StatusLong)
-                .HasMaxLength(100)
-                .HasColumnName("status_long");
-            entity.Property(e => e.StatusShort)
-                .HasMaxLength(50)
-                .HasColumnName("status_short");
         });
 
         modelBuilder.Entity<TblTalonListOfValue>(entity =>
@@ -3493,556 +2811,6 @@ public partial class HivContext : DbContext
             entity.Property(e => e.VloadResultShort)
                 .HasMaxLength(50)
                 .HasColumnName("vload_result_short");
-        });
-
-        modelBuilder.Entity<TblZzztempSnil>(entity =>
-        {
-            entity.HasKey(e => e.PatientId);
-
-            entity.ToTable("tblZZZTempSNILS");
-
-            entity.Property(e => e.PatientId)
-                .ValueGeneratedNever()
-                .HasColumnName("patient_id");
-            entity.Property(e => e.Datetime1).HasColumnName("datetime1");
-            entity.Property(e => e.Snils)
-                .HasMaxLength(50)
-                .HasColumnName("snils");
-            entity.Property(e => e.SnilsFed)
-                .HasMaxLength(50)
-                .HasColumnName("snils_fed");
-        });
-
-        modelBuilder.Entity<QrySearchMainInf>(entity =>
-        {
-            entity.HasNoKey();
-
-            entity.ToTable("qrySearchMainInf");
-
-            entity.Property(e => e.PatientId)
-                .HasColumnName("patient_id");
-
-            entity.Property(e => e.InputDate)
-                .HasColumnName("input_date");
-
-            entity.Property(e => e.Snils)
-                .HasColumnName("snils");
-
-            entity.Property(e => e.FamilyName)
-                .HasColumnName("family_name");
-
-            entity.Property(e => e.FirstName)
-                .HasColumnName("first_name");
-
-            entity.Property(e => e.ThirdName)
-                .HasColumnName("third_name");
-
-            entity.Property(e => e.SexShort)
-                .HasColumnName("sex_short");
-
-            entity.Property(e => e.BirthDate)
-                .HasColumnName("birth_date");
-
-            entity.Property(e => e.RegionLong)
-                .HasColumnName("region_long");
-
-            entity.Property(e => e.RegionLongFact)
-                .HasColumnName("region_long_fact");
-
-            entity.Property(e => e.CountryLong)
-                .HasColumnName("country_long");
-
-            entity.Property(e => e.CityName)
-                .HasColumnName("city_name");
-
-            entity.Property(e => e.LocationName)
-                .HasColumnName("location_name");
-
-            entity.Property(e => e.AddrInd)
-                .HasColumnName("addr_ind");
-
-            entity.Property(e => e.AddrStreet)
-                .HasColumnName("addr_street");
-
-            entity.Property(e => e.AddrHouse)
-                .HasColumnName("addr_house");
-
-            entity.Property(e => e.AddrExt)
-                .HasColumnName("addr_ext");
-
-            entity.Property(e => e.AddrFlat)
-                .HasColumnName("addr_flat");
-
-            entity.Property(e => e.RegOnDate)
-                .HasColumnName("reg_on_date");
-
-            entity.Property(e => e.RegOffDate)
-                .HasColumnName("reg_off_date");
-
-            entity.Property(e => e.RegOff)
-                .HasColumnName("reg_off");
-
-            entity.Property(e => e.CheckPlaceLong)
-                .HasColumnName("check_place_long");
-
-            entity.Property(e => e.DiagnosisLong)
-                .HasColumnName("diagnosis_long");
-
-            entity.Property(e => e.DiagnosisDefDate)
-                .HasColumnName("diagnosis_def_date");
-
-            entity.Property(e => e.DieDate)
-                .HasColumnName("die_date");
-
-            entity.Property(e => e.DieAidsDate)
-                .HasColumnName("die_aids_date");
-
-            entity.Property(e => e.DieDateInput)
-                .HasColumnName("die_date_input");
-
-            entity.Property(e => e.CheckCourseLong)
-                .HasColumnName("check_course_long");
-
-            entity.Property(e => e.DieCourseShort)
-                .HasColumnName("die_course_short");
-
-            entity.Property(e => e.DieCourseLong)
-                .HasColumnName("die_course_long");
-
-            entity.Property(e => e.DethtypeId)
-                .HasColumnName("Dethtype_id");
-
-            entity.Property(e => e.InfectCourseLong)
-                .HasColumnName("infect_course_long");
-
-            entity.Property(e => e.ShowIllnessLong)
-                .HasColumnName("show_illness_long");
-
-            entity.Property(e => e.StartDate)
-                .HasColumnName("start_date");
-
-            entity.Property(e => e.EndDate)
-                .HasColumnName("end_date");
-
-            entity.Property(e => e.IbResultShort)
-                .HasColumnName("ib_result_short");
-
-            entity.Property(e => e.BlotDate)
-                .HasColumnName("blot_date");
-
-            entity.Property(e => e.BlotNo)
-                .HasColumnName("blot_no");
-
-            entity.Property(e => e.First1)
-                .HasColumnName("first1");
-
-            entity.Property(e => e.Last1)
-                .HasColumnName("last1");
-
-            entity.Property(e => e.Datetime1)
-                .HasColumnName("datetime1");
-
-            entity.Property(e => e.HospCourseLong)
-                .HasColumnName("hosp_course_long");
-
-            entity.Property(e => e.CardNo)
-                .HasColumnName("card_no");
-
-            entity.Property(e => e.ArvtLong)
-                .HasColumnName("arvt_long");
-
-            entity.Property(e => e.CodeMkb10Long)
-                .HasColumnName("code_mkb10_long");
-
-            entity.Property(e => e.Archive)
-                .HasColumnName("archive");
-
-            entity.Property(e => e.TransfAreaDate)
-                .HasColumnName("transf_area_date");
-
-            entity.Property(e => e.FlgZamMedPart)
-                .HasColumnName("flg_zam_med_part");
-
-            entity.Property(e => e.FlgHeadPhysician)
-                .HasColumnName("flg_head_physician");
-
-            entity.Property(e => e.TransfFederDate)
-                .HasColumnName("transf_feder_date");
-
-            entity.Property(e => e.UfsinDate)
-                .HasColumnName("ufsin_date");
-
-            entity.Property(e => e.Aids12Long)
-                .HasColumnName("aids12_long");
-
-            entity.Property(e => e.UnrzFr)
-                .HasColumnName("unrz_fr");
-
-            entity.Property(e => e.ChemopLong)
-                .HasColumnName("chemop_long");
-
-            entity.Property(e => e.ChemopDateFrom)
-                .HasColumnName("chemop_date_from");
-
-            entity.Property(e => e.ChemopDateTo)
-                .HasColumnName("chemop_date_to");
-
-            entity.Property(e => e.DtRegBeg)
-                .HasColumnName("dt_reg_beg");
-
-            entity.Property(e => e.DtRegEnd)
-                .HasColumnName("dt_reg_end");
-
-            entity.Property(e => e.PasSer)
-                .HasColumnName("pas_ser");
-
-            entity.Property(e => e.PasNum)
-                .HasColumnName("pas_num");
-
-            entity.Property(e => e.PasWhen)
-                .HasColumnName("pas_when");
-
-            entity.Property(e => e.PasWhom)
-                .HasColumnName("pas_whom");
-
-            entity.Property(e => e.FioChange)
-                .HasColumnName("fio_change");
-
-            entity.Property(e => e.Age)
-                .HasColumnName("age");
-
-            entity.Property(e => e.RegtypeId)
-                .HasColumnName("regtype_id");
-
-            entity.Property(e => e.FactRegtypeId)
-                .HasColumnName("fact_regtype_id");
-        });
-
-        modelBuilder.Entity<QrySearchPregnant>(entity =>
-        {
-            entity.HasNoKey();
-
-            entity.ToTable("qrySearchPregnant");
-
-            entity.Property(e => e.PatientId)
-                .HasColumnName("patient_id");
-
-            entity.Property(e => e.InputDate)
-                .HasColumnName("input_date");
-
-            entity.Property(e => e.FamilyName)
-                .HasColumnName("family_name");
-
-            entity.Property(e => e.FirstName)
-                .HasColumnName("first_name");
-
-            entity.Property(e => e.ThirdName)
-                .HasColumnName("third_name");
-
-            entity.Property(e => e.BirthDate)
-                .HasColumnName("birth_date");
-
-            entity.Property(e => e.RegionLong)
-                .HasColumnName("region_long");
-
-            entity.Property(e => e.RegionLongFact)
-                .HasColumnName("region_long_fact");
-
-            entity.Property(e => e.CountryLong)
-                .HasColumnName("country_long");
-
-            entity.Property(e => e.RegOnDate)
-                .HasColumnName("reg_on_date");
-
-            entity.Property(e => e.RegOffDate)
-                .HasColumnName("reg_off_date");
-
-            entity.Property(e => e.DiagnosisLong)
-                .HasColumnName("diagnosis_long");
-
-            entity.Property(e => e.DiagnosisDefDate)
-                .HasColumnName("diagnosis_def_date");
-
-            entity.Property(e => e.CheckCourseLong)
-                .HasColumnName("check_course_long");
-
-            entity.Property(e => e.InfectCourseLong)
-                .HasColumnName("infect_course_long");
-
-            entity.Property(e => e.ShowIllnessLong)
-                .HasColumnName("show_illness_long");
-
-            entity.Property(e => e.StartDate)
-                .HasColumnName("start_date");
-
-            entity.Property(e => e.EndDate)
-                .HasColumnName("end_date");
-
-            entity.Property(e => e.TransfAreaDate)
-                .HasColumnName("transf_area_date");
-
-            entity.Property(e => e.ArvtLong)
-                .HasColumnName("arvt_long");
-
-            entity.Property(e => e.UfsinDate)
-                .HasColumnName("ufsin_date");
-
-            entity.Property(e => e.FlgZamMedPart)
-                .HasColumnName("flg_zam_med_part");
-
-            entity.Property(e => e.FlgHeadPhysician)
-                .HasColumnName("flg_head_physician");
-
-            entity.Property(e => e.CityName)
-                .HasColumnName("city_name");
-
-            entity.Property(e => e.LocationName)
-                .HasColumnName("location_name");
-
-            entity.Property(e => e.AddrInd)
-                .HasColumnName("addr_ind");
-
-            entity.Property(e => e.AddrStreet)
-                .HasColumnName("addr_street");
-
-            entity.Property(e => e.AddrHouse)
-                .HasColumnName("addr_house");
-
-            entity.Property(e => e.AddrExt)
-                .HasColumnName("addr_ext");
-
-            entity.Property(e => e.AddrFlat)
-                .HasColumnName("addr_flat");
-
-            entity.Property(e => e.PregCheckLong)
-                .HasColumnName("preg_check_long");
-
-            entity.Property(e => e.PregMonthNo)
-                .HasColumnName("preg_month_no");
-
-            entity.Property(e => e.Php1Name)
-                .HasColumnName("php1_name");
-
-            entity.Property(e => e.BirthTypeLong)
-                .HasColumnName("birth_type_long");
-
-            entity.Property(e => e.MedecineStartMonthNo)
-                .HasColumnName("medicine_st_month_no");
-
-            entity.Property(e => e.ChildBirthDate)
-                .HasColumnName("child_birth_date");
-
-            entity.Property(e => e.PregDate)
-                .HasColumnName("preg_date");
-
-            entity.Property(e => e.ChildFamilyName)
-                .HasColumnName("child_family_name");
-
-            entity.Property(e => e.ChildFirstName)
-                .HasColumnName("child_first_name");
-
-            entity.Property(e => e.ChildThirdName)
-                .HasColumnName("child_third_name");
-
-            entity.Property(e => e.CardNo)
-                .HasColumnName("card_no");
-
-            entity.Property(e => e.Php2Name)
-                .HasColumnName("php2_name");
-
-            entity.Property(e => e.Php3Name)
-                .HasColumnName("php3_name");
-
-            entity.Property(e => e.DateStart1)
-                .HasColumnName("date_start1");
-
-            entity.Property(e => e.DateEnd1)
-                .HasColumnName("date_end1");
-
-            entity.Property(e => e.MedecineForSchemaLong1)
-                .HasColumnName("medforschema_long1");
-
-            entity.Property(e => e.MedecineForSchemaLong2)
-                .HasColumnName("medforschema_long2");
-
-            entity.Property(e => e.MedecineForSchemaLong3)
-                .HasColumnName("medforschema_long3");
-
-            entity.Property(e => e.ChildId)
-                .HasColumnName("child_id");
-
-            entity.Property(e => e.MaterhomeLong)
-                .HasColumnName("materhome_long");
-
-            entity.Property(e => e.AclSampleDate)
-                .HasColumnName("acl_sample_date");
-
-            entity.Property(e => e.AclMcnCode)
-                .HasColumnName("acl_mcn_code");
-
-            entity.Property(e => e.RegtypeId)
-                .HasColumnName("regtype_id");
-
-            entity.Property(e => e.FactRegtypeId)
-                .HasColumnName("fact_regtype_id");
-        });
-
-        modelBuilder.Entity<QrySearchChild>(entity =>
-        {
-            entity.HasNoKey();
-
-            entity.ToTable("qrySearchChild");
-
-            entity.Property(e => e.PatientId)
-                .HasColumnName("patient_id");
-
-            entity.Property(e => e.InputDate)
-                .HasColumnName("input_date");
-
-            entity.Property(e => e.FamilyName)
-                .HasColumnName("family_name");
-
-            entity.Property(e => e.FirstName)
-                .HasColumnName("first_name");
-
-            entity.Property(e => e.ThirdName)
-                .HasColumnName("third_name");
-
-            entity.Property(e => e.BirthDate)
-                .HasColumnName("birth_date");
-
-            entity.Property(e => e.AgeDay)
-                .HasColumnName("age_day");
-
-            entity.Property(e => e.RegionLong)
-                .HasColumnName("region_long");
-
-            entity.Property(e => e.RegtypeId)
-                .HasColumnName("regtype_id");
-
-            entity.Property(e => e.RegionLongFact)
-                .HasColumnName("region_long_fact");
-
-            entity.Property(e => e.FactRegtypeId)
-                .HasColumnName("fact_regtype_id");
-
-            entity.Property(e => e.CountryLong)
-                .HasColumnName("country_long");
-
-            entity.Property(e => e.RegOnDate)
-                .HasColumnName("reg_on_date");
-
-            entity.Property(e => e.RegOffDate)
-                .HasColumnName("reg_off_date");
-
-            entity.Property(e => e.RegOff)
-                .HasColumnName("reg_off");
-
-            entity.Property(e => e.DiagnosisLong)
-                .HasColumnName("diagnosis_long");
-
-            entity.Property(e => e.DiagnosisDefDate)
-                .HasColumnName("diagnosis_def_date");
-
-            entity.Property(e => e.CheckCourseLong)
-                .HasColumnName("check_course_long");
-
-            entity.Property(e => e.InfectCourseLong)
-                .HasColumnName("infect_course_long");
-
-            entity.Property(e => e.ShowIllnessLong)
-                .HasColumnName("show_illness_long");
-
-            entity.Property(e => e.StartDate)
-                .HasColumnName("start_date");
-
-            entity.Property(e => e.EndDate)
-                .HasColumnName("end_date");
-
-            entity.Property(e => e.TransfAreaDate)
-                .HasColumnName("transf_area_date");
-
-            entity.Property(e => e.FlgZamMedPart)
-                .HasColumnName("flg_zam_med_part");
-
-            entity.Property(e => e.FlgHeadPhysician)
-                .HasColumnName("flg_head_physician");
-
-            entity.Property(e => e.CodeMkb10Long)
-                .HasColumnName("code_mkb10_long");
-
-            entity.Property(e => e.FamilyTypeLong)
-                .HasColumnName("family_type_long");
-
-            entity.Property(e => e.CheckFirstDate)
-                .HasColumnName("check_first_date");
-
-            entity.Property(e => e.ChildPlaceLong)
-                .HasColumnName("child_place_long");
-
-            entity.Property(e => e.BreastMonthNo)
-                .HasColumnName("breast_month_no");
-
-            entity.Property(e => e.ChildPhpLong)
-                .HasColumnName("child_php_long");
-
-            entity.Property(e => e.SexShort)
-                .HasColumnName("sex_short");
-
-            entity.Property(e => e.CardNo)
-                .HasColumnName("card_no");
-
-            entity.Property(e => e.MotherPatientId)
-                .HasColumnName("mother_patient_id");
-
-            entity.Property(e => e.MotherFamilyName)
-                .HasColumnName("mother_family_name");
-
-            entity.Property(e => e.MotherFirstName)
-                .HasColumnName("mother_first_name");
-
-            entity.Property(e => e.MotherThirdName)
-                .HasColumnName("mother_third_name");
-
-            entity.Property(e => e.FatherPatientId)
-                .HasColumnName("father_patient_id");
-
-            entity.Property(e => e.CityName)
-                .HasColumnName("city_name");
-
-            entity.Property(e => e.LocationName)
-                .HasColumnName("location_name");
-
-            entity.Property(e => e.AddrInd)
-                .HasColumnName("addr_ind");
-
-            entity.Property(e => e.AddrStreet)
-                .HasColumnName("addr_street");
-
-            entity.Property(e => e.AddrHouse)
-                .HasColumnName("addr_house");
-
-            entity.Property(e => e.AddrExt)
-                .HasColumnName("addr_ext");
-
-            entity.Property(e => e.AddrFlat)
-                .HasColumnName("addr_flat");
-
-            entity.Property(e => e.ArvtLong)
-                .HasColumnName("arvt_long");
-
-            entity.Property(e => e.DieDate)
-                .HasColumnName("die_date");
-
-            entity.Property(e => e.DieAidsDate)
-                .HasColumnName("die_aids_date");
-
-            entity.Property(e => e.MaterHomeLong)
-                .HasColumnName("materhome_long");
-
-            entity.Property(e => e.Form309)
-                .HasColumnName("forma_309");
-
         });
 
         modelBuilder.Entity<QrySearchAnalyse>(entity =>
@@ -4318,637 +3086,6 @@ public partial class HivContext : DbContext
 
             entity.Property(e => e.AclResult)
                 .HasColumnName("acl_result");
-        });
-
-        modelBuilder.Entity<QrySearchVisit>(entity =>
-        {
-            entity.HasNoKey();
-
-            entity.ToTable("qrySearchVisit");
-
-            entity.Property(e => e.PatientId)
-                .HasColumnName("patient_id");
-
-            entity.Property(e => e.InputDate)
-                .HasColumnName("input_date");
-
-            entity.Property(e => e.FamilyName)
-                .HasColumnName("family_name");
-
-            entity.Property(e => e.FirstName)
-                .HasColumnName("first_name");
-
-            entity.Property(e => e.ThirdName)
-                .HasColumnName("third_name");
-
-            entity.Property(e => e.SexShort)
-                .HasColumnName("sex_short");
-
-            entity.Property(e => e.BirthDate)
-                .HasColumnName("birth_date");
-
-            entity.Property(e => e.RegionLong)
-                .HasColumnName("region_long");
-
-            entity.Property(e => e.RegtypeId)
-                .HasColumnName("regtype_id");
-
-            entity.Property(e => e.RegionLongFact)
-                .HasColumnName("region_long_fact");
-
-            entity.Property(e => e.FactRegtypeId)
-                .HasColumnName("fact_regtype_id");
-
-            entity.Property(e => e.CountryLong)
-                .HasColumnName("country_long");
-
-            entity.Property(e => e.CityName)
-                .HasColumnName("city_name");
-
-            entity.Property(e => e.LocationName)
-                .HasColumnName("location_name");
-
-            entity.Property(e => e.AddrInd)
-                .HasColumnName("addr_ind");
-
-            entity.Property(e => e.AddrStreet)
-                .HasColumnName("addr_street");
-
-            entity.Property(e => e.AddrHouse)
-                .HasColumnName("addr_house");
-
-            entity.Property(e => e.AddrExt)
-                .HasColumnName("addr_ext");
-
-            entity.Property(e => e.AddrFlat)
-                .HasColumnName("addr_flat");
-
-            entity.Property(e => e.RegOnDate)
-                .HasColumnName("reg_on_date");
-
-            entity.Property(e => e.RegOffDate)
-                .HasColumnName("reg_off_date");
-
-            entity.Property(e => e.RegOff)
-                .HasColumnName("reg_off");
-
-            entity.Property(e => e.DiagnosisLong)
-                .HasColumnName("diagnosis_long");
-
-            entity.Property(e => e.CheckCourseLong)
-                .HasColumnName("check_course_long");
-
-            entity.Property(e => e.InfectCourseLong)
-                .HasColumnName("infect_course_long");
-
-            entity.Property(e => e.ShowIllnessLong)
-                .HasColumnName("show_illness_long");
-
-            entity.Property(e => e.StartDate)
-                .HasColumnName("start_date");
-
-            entity.Property(e => e.EndDate)
-                .HasColumnName("end_date");
-
-            entity.Property(e => e.TransfAreaDate)
-                .HasColumnName("transf_area_date");
-
-            entity.Property(e => e.FlgZamMedPart)
-                .HasColumnName("flg_zam_med_part");
-
-            entity.Property(e => e.FlgHeadPhysician)
-                .HasColumnName("flg_head_physician");
-
-            entity.Property(e => e.UfsinDate)
-                .HasColumnName("ufsin_date");
-
-            entity.Property(e => e.CardNo)
-                .HasColumnName("card_no");
-
-            entity.Property(e => e.DtRegBeg)
-                .HasColumnName("dt_reg_beg");
-
-            entity.Property(e => e.DtRegEnd)
-                .HasColumnName("dt_reg_end");
-
-            entity.Property(e => e.DoctorLong)
-                .HasColumnName("doctor_long");
-
-            entity.Property(e => e.RegDate)
-                .HasColumnName("reg_date");
-
-            entity.Property(e => e.CheckDate)
-                .HasColumnName("check_date");
-
-            entity.Property(e => e.RegCheck)
-                .HasColumnName("reg_check");
-
-            entity.Property(e => e.ArvtLong)
-                .HasColumnName("arvt_long");
-        });
-
-        modelBuilder.Entity<QrySearchEpid>(entity =>
-        {
-            entity.HasNoKey();
-
-            entity.ToTable("qrySearchEpid");
-
-            entity.Property(e => e.PatientId)
-                .HasColumnName("patient_id");
-
-            entity.Property(e => e.InputDate)
-                .HasColumnName("input_date");
-
-            entity.Property(e => e.FamilyName)
-                .HasColumnName("family_name");
-
-            entity.Property(e => e.FirstName)
-                .HasColumnName("first_name");
-
-            entity.Property(e => e.ThirdName)
-                .HasColumnName("third_name");
-
-            entity.Property(e => e.SexShort)
-                .HasColumnName("sex_short");
-
-            entity.Property(e => e.BirthDate)
-                .HasColumnName("birth_date");
-
-            entity.Property(e => e.RegionLong)
-                .HasColumnName("region_long");
-
-            entity.Property(e => e.RegtypeId)
-                .HasColumnName("regtype_id");
-
-            entity.Property(e => e.RegionLongFact)
-                .HasColumnName("region_long_fact");
-
-            entity.Property(e => e.FactRegtypeId)
-                .HasColumnName("fact_regtype_id");
-
-            entity.Property(e => e.CountryLong)
-                .HasColumnName("country_long");
-
-            entity.Property(e => e.CityName)
-                .HasColumnName("city_name");
-
-            entity.Property(e => e.LocationName)
-                .HasColumnName("location_name");
-
-            entity.Property(e => e.AddrInd)
-                .HasColumnName("addr_ind");
-
-            entity.Property(e => e.AddrStreet)
-                .HasColumnName("addr_street");
-
-            entity.Property(e => e.AddrHouse)
-                .HasColumnName("addr_house");
-
-            entity.Property(e => e.AddrExt)
-                .HasColumnName("addr_ext");
-
-            entity.Property(e => e.AddrFlat)
-                .HasColumnName("addr_flat");
-
-            entity.Property(e => e.RegOnDate)
-                .HasColumnName("reg_on_date");
-
-            entity.Property(e => e.RegOffDate)
-                .HasColumnName("reg_off_date");
-
-            entity.Property(e => e.RegOff)
-                .HasColumnName("reg_off");
-
-            entity.Property(e => e.CheckPlaceLong)
-                .HasColumnName("check_place_long");
-
-            entity.Property(e => e.DiagnosisLong)
-                .HasColumnName("diagnosis_long");
-
-            entity.Property(e => e.DieDate)
-                .HasColumnName("die_date");
-
-            entity.Property(e => e.DieAidsDate)
-                .HasColumnName("die_aids_date");
-
-            entity.Property(e => e.DieCourseShort)
-                .HasColumnName("die_course_short");
-
-            entity.Property(e => e.DieCourseLong)
-                .HasColumnName("die_course_long");
-
-            entity.Property(e => e.DethtypeId)
-                .HasColumnName("Dethtype_id");
-
-            entity.Property(e => e.CheckCourseLong)
-                .HasColumnName("check_course_long");
-
-            entity.Property(e => e.InfectCourseLong)
-                .HasColumnName("infect_course_long");
-
-            entity.Property(e => e.ShowIllnessLong)
-                .HasColumnName("show_illness_long");
-
-            entity.Property(e => e.StartDate)
-                .HasColumnName("start_date");
-
-            entity.Property(e => e.EndDate)
-                .HasColumnName("end_date");
-
-            entity.Property(e => e.IbResultShort)
-                .HasColumnName("ib_result_short");
-
-            entity.Property(e => e.BlotDate)
-                .HasColumnName("blot_date");
-
-            entity.Property(e => e.BlotNo)
-                .HasColumnName("blot_no");
-
-            entity.Property(e => e.First1)
-                .HasColumnName("first1");
-
-            entity.Property(e => e.Last1)
-                .HasColumnName("last1");
-
-            entity.Property(e => e.Datetime1)
-                .HasColumnName("datetime1");
-
-            entity.Property(e => e.HospCourseLong)
-                .HasColumnName("hosp_course_long");
-
-            entity.Property(e => e.Age)
-                .HasColumnName("age");
-
-            entity.Property(e => e.CardNo)
-                .HasColumnName("card_no");
-
-            entity.Property(e => e.ArvtLong)
-                .HasColumnName("arvt_long");
-
-            entity.Property(e => e.CodeMkb10Long)
-                .HasColumnName("code_mkb10_long");
-
-            entity.Property(e => e.TransfAreaDate)
-                .HasColumnName("transf_area_date");
-
-            entity.Property(e => e.FlgZamMedPart)
-                .HasColumnName("flg_zam_med_part");
-
-            entity.Property(e => e.FlgHeadPhysician)
-                .HasColumnName("flg_head_physician");
-
-            entity.Property(e => e.TransfFederDate)
-                .HasColumnName("transf_feder_date");
-
-            entity.Property(e => e.UfsinDate)
-                .HasColumnName("ufsin_date");
-
-            entity.Property(e => e.Aids12Long)
-                .HasColumnName("aids12_long");
-
-            entity.Property(e => e.DtMailReg)
-                .HasColumnName("dt_mail_reg");
-
-            entity.Property(e => e.EduName)
-                .HasColumnName("edu_name");
-
-            entity.Property(e => e.FamilyStatusName)
-                .HasColumnName("fammily_status_name");
-
-            entity.Property(e => e.EmploymentName)
-                .HasColumnName("employment_name");
-
-            entity.Property(e => e.TransName)
-                .HasColumnName("trans_name");
-
-            entity.Property(e => e.PlaceCheckName)
-                .HasColumnName("place_check_name");
-
-            entity.Property(e => e.SituationDetectName)
-                .HasColumnName("situation_detect_name");
-
-            entity.Property(e => e.TrasmisoinMechName)
-                .HasColumnName("transmisiom_mech_name");
-
-            entity.Property(e => e.VulnerableGroupName)
-                .HasColumnName("vulnerable_group_name");
-
-            entity.Property(e => e.DVac1)
-                .HasColumnName("d_vac1");
-
-            entity.Property(e => e.DVac2)
-                .HasColumnName("d_vac2");
-
-            entity.Property(e => e.VacName)
-                .HasColumnName("vac_name");
-
-            entity.Property(e => e.DPositivResCovid)
-                .HasColumnName("d_positiv_res_covid");
-
-            entity.Property(e => e.DNegativeResCovid)
-                .HasColumnName("d_negative_res_covid");
-
-            entity.Property(e => e.Mkb10LongName)
-                .HasColumnName("mkb10_long_name");
-
-            entity.Property(e => e.Mkb10LongName)
-                .HasColumnName("mkb10_long_name");
-
-            entity.Property(e => e.YnNameChemsex)
-                .HasColumnName("y_n_name_chemsex");
-
-            entity.Property(e => e.ChemsexContactType)
-                .HasColumnName("chemsex_contact_type");
-
-            entity.Property(e => e.DateStartPavInj)
-                .HasColumnName("date_start_pav_inj");
-
-            entity.Property(e => e.DateEndPavInj)
-                .HasColumnName("date_end_pav_inj");
-
-            entity.Property(e => e.YnNamePavInj)
-                .HasColumnName("y_n_name_pav_inj");
-
-            entity.Property(e => e.DateStartPavNotInj)
-                .HasColumnName("date_start_pav_not_inj");
-
-            entity.Property(e => e.DateEndPavNotInj)
-                .HasColumnName("date_end_pav_not_inj");
-
-            entity.Property(e => e.YnNamePavNotInj)
-                .HasColumnName("y_n_name_pav_not_inj");
-
-            entity.Property(e => e.EpidemInfectStart)
-                .HasColumnName("epidem_time_infect_start");
-
-            entity.Property(e => e.EpidemInfectEnd)
-                .HasColumnName("epidem_time_infect_end");
-
-            entity.Property(e => e.Snils)
-                .HasColumnName("snils");
-
-            entity.Property(e => e.UnrzFr)
-                .HasColumnName("unrz_fr");
-
-            entity.Property(e => e.EpidDescr)
-                .HasColumnName("epidem_descr");
-
-            entity.Property(e => e.Callstatus)
-                .HasColumnName("call_status_name");
-
-            entity.Property(e => e.CallDate)
-                .HasColumnName("call_date");
-        });
-
-        modelBuilder.Entity<QrySearchHosp>(entity =>
-        {
-            entity.HasNoKey();
-
-            entity.ToTable("qrySearchHosp");
-
-            entity.Property(e => e.PatientId)
-                .HasColumnName("patient_id");
-
-            entity.Property(e => e.InputDate)
-                .HasColumnName("input_date");
-
-            entity.Property(e => e.FamilyName)
-                .HasColumnName("family_name");
-
-            entity.Property(e => e.FirstName)
-                .HasColumnName("first_name");
-
-            entity.Property(e => e.ThirdName)
-                .HasColumnName("third_name");
-
-            entity.Property(e => e.SexShort)
-                .HasColumnName("sex_short");
-
-            entity.Property(e => e.BirthDate)
-                .HasColumnName("birth_date");
-
-            entity.Property(e => e.RegionLong)
-                .HasColumnName("region_long");
-
-            entity.Property(e => e.RegtypeId)
-                .HasColumnName("regtype_id");
-
-            entity.Property(e => e.RegionLongFact)
-                .HasColumnName("region_long_fact");
-
-            entity.Property(e => e.FactRegtypeId)
-                .HasColumnName("fact_regtype_id");
-
-            entity.Property(e => e.CountryLong)
-                .HasColumnName("country_long");
-
-            entity.Property(e => e.CityName)
-                .HasColumnName("city_name");
-
-            entity.Property(e => e.LocationName)
-                .HasColumnName("location_name");
-
-            entity.Property(e => e.AddrInd)
-                .HasColumnName("addr_ind");
-
-            entity.Property(e => e.AddrStreet)
-                .HasColumnName("addr_street");
-
-            entity.Property(e => e.AddrHouse)
-                .HasColumnName("addr_house");
-
-            entity.Property(e => e.AddrExt)
-                .HasColumnName("addr_ext");
-
-            entity.Property(e => e.AddrFlat)
-                .HasColumnName("addr_flat");
-
-            entity.Property(e => e.RegOnDate)
-                .HasColumnName("reg_on_date");
-
-            entity.Property(e => e.RegOffDate)
-                .HasColumnName("reg_off_date");
-
-            entity.Property(e => e.RegOff)
-                .HasColumnName("reg_off");
-
-            entity.Property(e => e.DiagnosisLong)
-                .HasColumnName("diagnosis_long");
-
-            entity.Property(e => e.DiagnosisDefDate)
-                .HasColumnName("diagnosis_def_date");
-
-            entity.Property(e => e.CheckCourseLong)
-                .HasColumnName("check_course_long");
-
-            entity.Property(e => e.InfectCourseLong)
-                .HasColumnName("infect_course_long");
-
-            entity.Property(e => e.ShowIllnessLong)
-                .HasColumnName("show_illness_long");
-
-            entity.Property(e => e.StartDate)
-                .HasColumnName("start_date");
-
-            entity.Property(e => e.EndDate)
-                .HasColumnName("end_date");
-
-            entity.Property(e => e.TransfAreaDate)
-                .HasColumnName("transf_area_date");
-
-            entity.Property(e => e.FlgZamMedPart)
-                .HasColumnName("flg_zam_med_part");
-
-            entity.Property(e => e.FlgHeadPhysician)
-                .HasColumnName("flg_head_physician");
-
-            entity.Property(e => e.TransfFederDate)
-                .HasColumnName("transf_feder_date");
-
-            entity.Property(e => e.UfsinDate)
-                .HasColumnName("ufsin_date");
-
-            entity.Property(e => e.DateHospIn)
-                .HasColumnName("date_hosp_in");
-
-            entity.Property(e => e.DateHospOut)
-                .HasColumnName("date_hosp_out");
-
-            entity.Property(e => e.LpuLong)
-                .HasColumnName("lpu_long");
-
-            entity.Property(e => e.HospCourseLong)
-                .HasColumnName("hosp_course_long");
-
-            entity.Property(e => e.HospResultLong)
-                .HasColumnName("hosp_result_long");
-        });
-
-        modelBuilder.Entity<QrySearchNonresident>(entity =>
-        {
-            entity.HasNoKey();
-
-            entity.ToTable("qrySearchNonresident");
-
-            entity.Property(e => e.PatientId)
-                .HasColumnName("patient_id");
-
-            entity.Property(e => e.InputDate)
-                .HasColumnName("input_date");
-
-            entity.Property(e => e.FamilyName)
-                .HasColumnName("family_name");
-
-            entity.Property(e => e.FirstName)
-                .HasColumnName("first_name");
-
-            entity.Property(e => e.ThirdName)
-                .HasColumnName("third_name");
-
-            entity.Property(e => e.SexShort)
-                .HasColumnName("sex_short");
-
-            entity.Property(e => e.BirthDate)
-                .HasColumnName("birth_date");
-
-            entity.Property(e => e.RegionLong)
-                .HasColumnName("region_long");
-
-            entity.Property(e => e.RegtypeId)
-                .HasColumnName("regtype_id");
-
-            entity.Property(e => e.RegionLongFact)
-                .HasColumnName("region_long_fact");
-
-            entity.Property(e => e.FactRegtypeId)
-                .HasColumnName("fact_regtype_id");
-
-            entity.Property(e => e.CountryLong)
-                .HasColumnName("country_long");
-
-            entity.Property(e => e.CityName)
-                .HasColumnName("city_name");
-
-            entity.Property(e => e.LocationName)
-                .HasColumnName("location_name");
-
-            entity.Property(e => e.AddrInd)
-                .HasColumnName("addr_ind");
-
-            entity.Property(e => e.AddrStreet)
-                .HasColumnName("addr_street");
-
-            entity.Property(e => e.AddrHouse)
-                .HasColumnName("addr_house");
-
-            entity.Property(e => e.AddrExt)
-                .HasColumnName("addr_ext");
-
-            entity.Property(e => e.AddrFlat)
-                .HasColumnName("addr_flat");
-
-            entity.Property(e => e.RegOnDate)
-                .HasColumnName("reg_on_date");
-
-            entity.Property(e => e.RegOffDate)
-                .HasColumnName("reg_off_date");
-
-            entity.Property(e => e.RegOff)
-                .HasColumnName("reg_off");
-
-            entity.Property(e => e.DiagnosisLong)
-                .HasColumnName("diagnosis_long");
-
-            entity.Property(e => e.DiagnosisDefDate)
-                .HasColumnName("diagnosis_def_date");
-
-            entity.Property(e => e.CheckCourseLong)
-                .HasColumnName("check_course_long");
-
-            entity.Property(e => e.InfectCourseLong)
-                .HasColumnName("infect_course_long");
-
-            entity.Property(e => e.ShowIllnessLong)
-                .HasColumnName("show_illness_long");
-
-            entity.Property(e => e.StartDate)
-                .HasColumnName("start_date");
-
-            entity.Property(e => e.EndDate)
-                .HasColumnName("end_date");
-
-            entity.Property(e => e.TransfAreaDate)
-                .HasColumnName("transf_area_date");
-
-            entity.Property(e => e.FlgZamMedPart)
-                .HasColumnName("flg_zam_med_part");
-
-            entity.Property(e => e.FlgHeadPhysician)
-                .HasColumnName("flg_head_physician");
-
-            entity.Property(e => e.UfsinDate)
-                .HasColumnName("ufsin_date");
-
-            entity.Property(e => e.DateDiagnosis)
-                .HasColumnName("date_diagnosis");
-
-            entity.Property(e => e.DateRegistrationFrom)
-                .HasColumnName("date_registration_from");
-
-            entity.Property(e => e.DateRegistrationTo)
-                .HasColumnName("date_registration_to");
-
-            entity.Property(e => e.PlaceDiagnosis)
-                .HasColumnName("place_diagnosis");
-
-            entity.Property(e => e.DtRegBeg)
-                .HasColumnName("dt_reg_beg");
-
-            entity.Property(e => e.DtRegEnd)
-                .HasColumnName("dt_reg_end");
-
-            entity.Property(e => e.DateDeparture)
-                .HasColumnName("date_departure");
         });
 
         modelBuilder.Entity<QrySearchCovid>(entity =>
