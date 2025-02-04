@@ -28,6 +28,7 @@ namespace HIVBackend.Models.FormModels.Search
         public string DateInpIbStart { get; set; } = string.Empty;
         public string DateInpIbEnd { get; set; } = string.Empty;
         public string IbSelect { get; set; } = string.Empty;
+        public string ReferenceMO { get; set; } = string.Empty;
         public string[] HospCourse { get; set; } = new string[] { "Все" };
         public string[] Age { get; set; } = new string[] { "Все" };
         public string CardNo { get; set; } = string.Empty;
@@ -155,8 +156,12 @@ namespace HIVBackend.Models.FormModels.Search
                         columName.Add("Дата ввода");
                         selectGroupSrt.AppendLine(",\"tblPatientBlot\".datetime1");
 
+                        columName.Add("Референс");
+                        selectGroupSrt.AppendLine(",\"tblListReferenceMo\".reference_mo_name");
+
                         joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
                         joinStr.AddLeftJoinIfNotExist(joinTable: "tblIbResult", field: "ib_result_id", table: "tblPatientBlot");
+                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblListReferenceMo", field: "reference_mo_id", table: "tblPatientBlot");
                     }
 
                     if (key.Name == "SelectHospCourse")
@@ -426,6 +431,13 @@ namespace HIVBackend.Models.FormModels.Search
                 joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
                 whereStr.AddWhereSqlTrue("\"tblPatientBlot\".first1");
                 whereStr.AddWhereSqlTrue("\"tblPatientBlot\".last1");
+            }
+
+            if (ReferenceMO.Length != 0)
+            {
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+                joinStr.AddLeftJoinIfNotExist(joinTable: "tblListReferenceMo", field: "reference_mo_id", table: "tblPatientBlot");
+                whereStr.AddWhereSqlEqualString("\"tblListReferenceMo\".reference_mo_name", IbRes);
             }
 
             if (HospCourse[0] != "Все")

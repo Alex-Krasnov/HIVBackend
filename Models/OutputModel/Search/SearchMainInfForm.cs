@@ -26,6 +26,7 @@ namespace HIVBackend.Models.OutputModel.Search
         public List<string>? ListChemop { get; set; }
         public List<string>? ListDiePreset { get; set; }
         public List<string>? ListRegionPreset { get; set; }
+        public List<string>? ListReferenceMO { get; set; }
 
         public SearchMainInfForm(HivContext _context) : base(_context)
         {
@@ -47,6 +48,7 @@ namespace HIVBackend.Models.OutputModel.Search
             ListYN = _context.TblListYns.Select(e => e.YNName).OrderBy(e => e).ToList();
             ListAids12 = _context.TblAids12s.Select(e => e.Aids12Long).OrderBy(e => e).ToList();
             ListChemop = _context.TblChemops.Select(e => e.ChemopLong).OrderBy(e => e).ToList();
+            ListReferenceMO = _context.TblListReferenceMos.Select(e => e.ReferenceMoName).OrderBy(e => e).ToList();
 
             ListRegionPreset = EnumExtension.EnumToListOfDescription(typeof(RegionPresetEnum));
             ListDiePreset = EnumExtension.EnumToListOfDescription(typeof(DiePresetEnum));
