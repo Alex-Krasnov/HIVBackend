@@ -94,8 +94,6 @@ namespace HIVBackend.Services
             return ds;
         }
 
-
-
         /// <summary>
         /// Парсим DataSet в List<IDictionary<string, object>> 
         /// </summary>
@@ -114,7 +112,19 @@ namespace HIVBackend.Services
                         row[dc.ColumnName] = null;
                         continue;
                     }
-                    row[dc.ColumnName] = value;
+
+                    switch (Type.GetTypeCode(dc.DataType))
+                    {
+                        case TypeCode.DateTime:
+                            row[dc.ColumnName] = ((DateTime)value).ToString("dd.MM.yyyy");
+                            break;
+                        case TypeCode.Boolean:
+                            row[dc.ColumnName] = (bool)value == true ? "Да" : "Нет";
+                            break;
+                        default:
+                            row[dc.ColumnName] = value;
+                            break;
+                    }
                 }
                 lst.Add(row);  
             }
