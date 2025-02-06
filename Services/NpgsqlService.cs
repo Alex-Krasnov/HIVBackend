@@ -17,7 +17,7 @@ namespace HIVBackend.Services
 
             var qry = "SELECT COUNT(DISTINCT(" + selectGroupSrt.ToString() + "))" + "\n"
                       + joinStr.ToString() + "\n"
-                      + whereStr.ToString() + " AND \"tblPatientCard\".is_active = true\n"
+                      + whereStr.ToString() + "\n"
                       + "LIMIT 1000000";
 
             using (NpgsqlConnection connetion = new NpgsqlConnection(connectionString))
@@ -58,7 +58,7 @@ namespace HIVBackend.Services
 
             var qry = "SELECT " + selectGroupSrt.ToString()
                       + joinStr.ToString() + "\n"
-                      + whereStr.ToString() + " AND \"tblPatientCard\".is_active = true\n"
+                      + whereStr.ToString() + "\n"
                       + "Group by " + selectGroupSrt.ToString() + "\n"
                       + "ORDER BY \"tblPatientCard\".patient_id \n";
 
