@@ -120,7 +120,7 @@ namespace HIVBackend.Models.FormModels.Search
         {
             selectGroupSrt.Append("\"tblPatientCard\".patient_id");
             joinStr.Append(" FROM \"tblPatientCard\"");
-            whereStr.Append("WHERE true");
+            whereStr.Append("WHERE \"tblPatientCard\".is_active = true");
 
             #region Общая генерация строк SELECT GROUP BY и LEFT JOIN для запроса
 
