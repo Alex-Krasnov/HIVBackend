@@ -96,6 +96,8 @@ namespace HIVBackend.Models.FormModels.Search
 
         public bool SelectFio { get; set; } = false;
         public bool SelectBirthDate { get; set; } = false;
+        public bool SelectRegion { get; set; } = false;
+        public bool SelectRegionFact { get; set; } = false;
         public bool SelectAddr { get; set; } = false;
         public bool SelectCheckCourse { get; set; } = false;
         public bool SelectCountry { get; set; } = false;
@@ -103,8 +105,6 @@ namespace HIVBackend.Models.FormModels.Search
         public bool SelectInfectCourse { get; set; } = false;
         public bool SelectInpDate { get; set; } = false;
         public bool SelectPatientId { get; set; } = false;
-        public bool SelectRegion { get; set; } = false;
-        public bool SelectRegionFact { get; set; } = false;
         public bool SelectRegOnDate { get; set; } = false;
         public bool SelectSnils { get; set; } = false;
         public bool SelectStage { get; set; } = false;
