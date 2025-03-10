@@ -494,7 +494,7 @@ namespace HIVBackend.Models.FormModels.Search
             {
                 joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCorrespIllness", field: "patient_id", table: "tblPatientCard");
                 joinStr.AddLeftJoinIfNotExist(joinTable: "tblCorrespIllness", field: "corresp_illness_id", table: "tblPatientCorrespIllness");
-                whereStr.AddWhereSqlIn("\"tblCorrespIllness\".corresp_illness_long", Invalid);
+                whereStr.AddWhereSqlIn("\"tblCorrespIllness\".corresp_illness_long", CorrespIllnesses);
             }
 
             if (DateCorrespIllnessesStart.Length != 0)
