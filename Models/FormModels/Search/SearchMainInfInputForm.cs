@@ -1,7 +1,7 @@
 ﻿using HIVBackend.Data;
 using HIVBackend.Enums;
 using HIVBackend.Services;
-using System;
+using System.Reflection;
 
 namespace HIVBackend.Models.FormModels.Search
 {
@@ -56,12 +56,13 @@ namespace HIVBackend.Models.FormModels.Search
 
         #region select поля
 
+        [Order(7.5)]
+        public bool SelectIb { get; set; } = false;
         public bool SelectSex { get; set; } = false;
         public bool SelectBlotCheckPlace { get; set; } = false;
         public bool SelectDieDate { get; set; } = false;
         public bool SelectDieCourse { get; set; } = false;
         public bool SelectShowIllnes { get; set; } = false;
-        public bool SelectIb { get; set; } = false;
         public bool SelectHospCourse { get; set; } = false;
         public bool SelectAge { get; set; } = false;
         public bool SelectCardNo { get; set; } = false;
@@ -87,7 +88,9 @@ namespace HIVBackend.Models.FormModels.Search
 
             #region Генерация строк SELECT GROUP BY и LEFT JOIN для запроса
 
-            foreach (var key in typeof(SearchMainInfInputForm).GetProperties().Where(e => e.Name.StartsWith("Select")))
+            foreach (var key in typeof(SearchMainInfInputForm).GetProperties()
+                                                              .Where(e => e.Name.StartsWith("Select"))
+                                                              .OrderBy(p => p.GetCustomAttribute<OrderAttribute>()?.Order ?? double.MaxValue))
             {
                 if ((bool)key.GetValue(this) == true)
                 {

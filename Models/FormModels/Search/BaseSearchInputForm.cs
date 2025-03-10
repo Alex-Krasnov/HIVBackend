@@ -1,5 +1,7 @@
-﻿using HIVBackend.Enums;
+﻿using DocumentFormat.OpenXml.Drawing.Charts;
+using HIVBackend.Enums;
 using HIVBackend.Services;
+using System.Reflection;
 using System.Text;
 
 namespace HIVBackend.Models.FormModels.Search
@@ -94,21 +96,37 @@ namespace HIVBackend.Models.FormModels.Search
 
         #region Общие select поля
 
-        public bool SelectFio { get; set; } = false;
-        public bool SelectBirthDate { get; set; } = false;
-        public bool SelectRegion { get; set; } = false;
-        public bool SelectRegionFact { get; set; } = false;
-        public bool SelectAddr { get; set; } = false;
-        public bool SelectCheckCourse { get; set; } = false;
-        public bool SelectCountry { get; set; } = false;
-        public bool SelectFr { get; set; } = false;
-        public bool SelectInfectCourse { get; set; } = false;
-        public bool SelectInpDate { get; set; } = false;
+        [Order(1)]
         public bool SelectPatientId { get; set; } = false;
-        public bool SelectRegOnDate { get; set; } = false;
+        [Order(2)]
         public bool SelectSnils { get; set; } = false;
+        [Order(3)]
+        public bool SelectFio { get; set; } = false;
+        [Order(4)]
+        public bool SelectBirthDate { get; set; } = false;
+        [Order(5)]
+        public bool SelectRegion { get; set; } = false;
+        [Order(6)]
+        public bool SelectRegionFact { get; set; } = false;
+        [Order(7)]
+        public bool SelectAddr { get; set; } = false;
+        [Order(8)]
+        public bool SelectCheckCourse { get; set; } = false;
+        [Order(9)]
+        public bool SelectInfectCourse { get; set; } = false;
+        [Order(10)]
         public bool SelectStage { get; set; } = false;
+        [Order(11)]
+        public bool SelectCountry { get; set; } = false;
+        [Order(12)]
+        public bool SelectFr { get; set; } = false;
+        [Order(13)]
+        public bool SelectInpDate { get; set; } = false;
+        [Order(14)]
+        public bool SelectRegOnDate { get; set; } = false;
+        [Order(15)]
         public bool SelectTransfArea { get; set; } = false;
+        [Order(16)]
         public bool SelectUnrz { get; set; } = false;
 
         #endregion
@@ -124,7 +142,9 @@ namespace HIVBackend.Models.FormModels.Search
 
             #region Общая генерация строк SELECT GROUP BY и LEFT JOIN для запроса
 
-            foreach (var key in typeof(BaseSearchInputForm).GetProperties().Where(e => e.Name.StartsWith("Select")))
+            foreach (var key in typeof(BaseSearchInputForm).GetProperties()
+                                                           .Where(e => e.Name.StartsWith("Select"))
+                                                           .OrderBy(p => p.GetCustomAttribute<OrderAttribute>()?.Order ?? double.MaxValue))
             {
                 if ((bool)key.GetValue(this) == true)
                 {
