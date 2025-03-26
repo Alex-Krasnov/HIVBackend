@@ -12,6 +12,7 @@
         public List<FrmDiag2Col>? IHLs { get; set; }
         public List<FrmImStat>? ImStats { get; set; }
         public List<FrmImStatCD348>? ImStatCD348s { get; set; }
+        public List<FrmDrugRemains>? DrugRemains { get; set; }
     }
     public class FrmImStat
     {
@@ -36,5 +37,13 @@
         public DateOnly Date { get; set; }
         public string? Result { get; set; }
         public string? ResultDescr { get; set; }
+    }
+
+    public class FrmDrugRemains
+    {
+        public DateOnly CurrentDate { get; set; } = DateOnly.FromDateTime(DateTime.Now);
+        public DateOnly TakeDrugDate { get; set; }
+        public string DrugName { get; set; }
+        public string DrugCount { get; set; }
     }
 }

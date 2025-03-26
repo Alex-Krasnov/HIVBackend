@@ -28,6 +28,7 @@ namespace HIVBackend.Controllers.PatientCard
             List<FrmImStat> imStats = new();
             List<FrmImStatCD348> imStatCD348s = new();
             List<FrmDiag2Col> iHLs = new();
+            List<FrmDrugRemains> drugRemains = new();
 
             TblPatientCard patient = _context.TblPatientCards.Where(e => e.PatientId == patientId && e.IsActive == true).ToList().FirstOrDefault();
             if (patient is null)
@@ -123,8 +124,8 @@ namespace HIVBackend.Controllers.PatientCard
                 var i35 = imStatCD348s35?.FirstOrDefault(e => e.AclSampleDate == item.Key)?.AclResult;
                 try
                 {
-                    double a = double.Parse(i25) / double.Parse(i35);
-                    cd4cd8 = a.ToString();
+                    double div = double.Parse(i25) / double.Parse(i35);
+                    cd4cd8 = div.ToString();
                 }
                 catch { }
 
@@ -189,6 +190,25 @@ namespace HIVBackend.Controllers.PatientCard
                 });
             }
 
+            var drugTakeDate = _context.TblPatientPrescrMs.Where(e => e.PatientId == patientId).Max(e => e.GiveDate);
+            if (drugTakeDate.HasValue)
+            {
+                var dateDif = drugTakeDate.Value.DayNumber - DateOnly.FromDateTime(DateTime.Now).DayNumber;
+
+                foreach (var item in _context.TblPatientPrescrMs.Where(e => e.PatientId == patientId && e.GiveDate == drugTakeDate.Value).ToList())
+                {
+                    var remainsPills = item.GivePackNum * 30 - dateDif;
+                    var remainsPack = remainsPills / 30;
+
+                    drugRemains.Add(new()
+                    {
+                        TakeDrugDate = drugTakeDate.Value,
+                        DrugName = _context.TblMedicines.FirstOrDefault(e => e.MedicineId == item.GiveMedId)?.MedicineLong,
+                        DrugCount = $"упак.: {remainsPack} - таб.: {remainsPills}"
+                    });
+                }
+            }
+
             PatientCardDiagnostics patientCardDiagnostics = new();
 
             patientCardDiagnostics.PatientId = patient.PatientId;
@@ -199,8 +219,9 @@ namespace HIVBackend.Controllers.PatientCard
             patientCardDiagnostics.VirusLoadsQuals = virusLoadsQuals.OrderBy(e => e.Date).ToList();
             patientCardDiagnostics.CMVs = cMVs.OrderBy(e => e.Date).ToList();
             patientCardDiagnostics.IHLs = iHLs.OrderBy(e => e.Date).ToList();
+            patientCardDiagnostics.DrugRemains = drugRemains;
 
-            patientCardDiagnostics.IsNonResident = patient?.Region?.RegtypeId == 2;
+            patientCardDiagnostics.IsNonResident = _context.TblRegions.FirstOrDefault(e => e.RegionId == patient.RegionId)?.RegtypeId == 2;
 
             return Ok(patientCardDiagnostics);
         }
