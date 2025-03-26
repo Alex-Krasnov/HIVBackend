@@ -4,6 +4,7 @@
     {
         public int PatientId { get; set; }
         public string? PatientFio { get; set; }
+        public bool IsNonResident { get; set; } = false;
 
         public List<FrmDiag3Col>? VirusLoads { get; set; }
         public List<FrmDiag3Col>? CMVs { get; set; }

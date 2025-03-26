@@ -200,6 +200,8 @@ namespace HIVBackend.Controllers.PatientCard
             patientCardDiagnostics.CMVs = cMVs.OrderBy(e => e.Date).ToList();
             patientCardDiagnostics.IHLs = iHLs.OrderBy(e => e.Date).ToList();
 
+            patientCardDiagnostics.IsNonResident = patient?.Region?.RegtypeId == 2;
+
             return Ok(patientCardDiagnostics);
         }
     }
