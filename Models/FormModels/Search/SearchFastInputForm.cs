@@ -1,4 +1,4 @@
-﻿using HIVBackend.Services;
+﻿using HIVBackend.Helpers;
 
 namespace HIVBackend.Models.FormModels.Search
 {

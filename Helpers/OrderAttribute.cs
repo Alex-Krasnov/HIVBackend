@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Services
+﻿namespace HIVBackend.Helpers
 {
     [AttributeUsage(AttributeTargets.Property)]
     public class OrderAttribute : Attribute
