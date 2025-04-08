@@ -193,18 +193,22 @@ namespace HIVBackend.Controllers.PatientCard
             var drugTakeDate = _context.TblPatientPrescrMs.Where(e => e.PatientId == patientId).Max(e => e.GiveDate);
             if (drugTakeDate.HasValue)
             {
-                var dateDif = drugTakeDate.Value.DayNumber - DateOnly.FromDateTime(DateTime.Now).DayNumber;
+                var dateDif = DateOnly.FromDateTime(DateTime.Now).DayNumber - drugTakeDate.Value.DayNumber;
 
                 foreach (var item in _context.TblPatientPrescrMs.Where(e => e.PatientId == patientId && e.GiveDate == drugTakeDate.Value).ToList())
                 {
-                    var remainsPills = item.GivePackNum * 30 - dateDif;
-                    var remainsPack = remainsPills / 30;
+                    var expendPack = dateDif / 30;
+
+                    var drugCount = $"упак.: {item.GivePackNum - expendPack} - таб.: {item.GivePackNum * 30 - dateDif}";
+
+                    if (item.GivePackNum - expendPack < 0)
+                        drugCount = "ПРЕПАРАТЫ КОНЧИЛИСЬ";
 
                     drugRemains.Add(new()
                     {
                         TakeDrugDate = drugTakeDate.Value,
                         DrugName = _context.TblMedicines.FirstOrDefault(e => e.MedicineId == item.GiveMedId)?.MedicineLong,
-                        DrugCount = $"упак.: {remainsPack} - таб.: {remainsPills}"
+                        DrugCount = drugCount
                     });
                 }
             }
@@ -221,7 +225,7 @@ namespace HIVBackend.Controllers.PatientCard
             patientCardDiagnostics.IHLs = iHLs.OrderBy(e => e.Date).ToList();
             patientCardDiagnostics.DrugRemains = drugRemains;
 
-            patientCardDiagnostics.IsNonResident = _context.TblRegions.FirstOrDefault(e => e.RegionId == patient.RegionId)?.RegtypeId == 2;
+            patientCardDiagnostics.IsNonResident = _context.TblRegions.FirstOrDefault(e => e.RegionId == patient.RegionId)?.RegtypeId != 1;
 
             return Ok(patientCardDiagnostics);
         }
