@@ -534,6 +534,36 @@ namespace HIVBackend.Helpers
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblListCallStatus", field: "call_status_id", table: "tblPatientCall");
         }
 
+        public void AddSelectDateHospIn()
+        {
+            columName.Add("Дата госп");
+            selectGroupSrt.AppendLine(",\"tblPatientHospResultR\".date_hosp_in");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectDateHospOut()
+        {
+            columName.Add("Дата выписки");
+            selectGroupSrt.AppendLine(",\"tblPatientHospResultR\".date_hosp_out");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectLpu()
+        {
+            columName.Add("МО");
+            selectGroupSrt.AppendLine(",\"tblLpu\".lpu_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblLpu", field: "lpu_id", table: "tblPatientHospResultR");
+        }
+
+        public void AddSelectHospResult()
+        {
+            columName.Add("Исход госпитализации");
+            selectGroupSrt.AppendLine(",\"tblHospResult\".hosp_result_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblHospResult", field: "hosp_result_id", table: "tblPatientHospResultR");
+        }
+
         #endregion
 
         #region Where
@@ -1333,6 +1363,44 @@ namespace HIVBackend.Helpers
         {
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCall", field: "patient_id", table: "tblPatientCard");
             whereStr.AddWhereSqlDateLess("\"tblPatientCall\".call_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateHospInStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientHospResultR\".date_hosp_in", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateHospInEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientHospResultR\".date_hosp_in", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateHospOutStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientHospResultR\".date_hosp_out", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateHospOutEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientHospResultR\".date_hosp_out", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereLpu(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblLpu", field: "lpu_id", table: "tblPatientHospResultR");
+            whereStr.AddWhereSqlIn("\"tblLpu\".lpu_long", names);
+        }
+
+        public void AddWhereHospResult(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblHospResult", field: "hosp_result_id", table: "tblPatientHospResultR");
+            whereStr.AddWhereSqlIn("\"tblHospResult\".hosp_result_long", names);
         }
 
         #endregion
