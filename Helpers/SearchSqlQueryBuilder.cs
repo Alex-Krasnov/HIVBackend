@@ -1,8 +1,12 @@
-﻿using HIVBackend.Enums;
+﻿using HIVBackend.Data;
+using HIVBackend.Enums;
 using System.Text;
 
 namespace HIVBackend.Helpers
 {
+    /// <summary>
+    /// отвечает за логику генерации sql строк (столбцы, таблицы)
+    /// </summary>
     public class SearchSqlQueryBuilder
     {
         public List<string> columName;
@@ -151,7 +155,7 @@ namespace HIVBackend.Helpers
             selectGroupSrt.AppendLine(",\"tblPatientCard\".unrz_fr");
         }
 
-        public void AddAge()
+        public void AddSelectAgeDay()
         {
             columName.Add("Возраст в днях");
             selectGroupSrt.AppendLine(",now()::date - \"tblPatientCard\".birth_date");
@@ -265,6 +269,269 @@ namespace HIVBackend.Helpers
         {
             columName.Add("Форма 309");
             selectGroupSrt.AppendLine(",\"tblPatientCard\".forma_309");
+        }
+
+        public void AddSelectBlotCheckPlace()
+        {
+            columName.Add("Место лаб. исследования");
+            selectGroupSrt.AppendLine(",\"tblCheckPlace\".check_place_long");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCheckPlace", field: "check_place_id", table: "tblPatientBlot");
+        }
+
+        public void AddSelectDieCourse()
+        {
+            columName.Add("Причина смерти");
+            selectGroupSrt.AppendLine(",\"tblTempDieCureMKB10List\".die_course_long");
+            columName.Add("МКБ причина смерти");
+            selectGroupSrt.AppendLine(",\"tblTempDieCureMKB10List\".die_course_short");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectIb()
+        {
+            columName.Add("Результат референс");
+            selectGroupSrt.AppendLine(",\"tblIbResult\".ib_result_short");
+
+            columName.Add("Дата референс");
+            selectGroupSrt.AppendLine(",\"tblPatientBlot\".blot_date");
+
+            columName.Add("Номер");
+            selectGroupSrt.AppendLine(",\"tblPatientBlot\".blot_no");
+
+            columName.Add("Послед");
+            selectGroupSrt.AppendLine(",\"tblPatientBlot\".first1");
+
+            columName.Add("Дата ввода");
+            selectGroupSrt.AppendLine(",\"tblPatientBlot\".datetime1");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblIbResult", field: "ib_result_id", table: "tblPatientBlot");
+        }
+
+        public void AddSelectHospCourse()
+        {
+            columName.Add("Причина госпитализации");
+            selectGroupSrt.AppendLine(",\"tblHospCourse\".hosp_course_long");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHosp", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblHospCourse", field: "hosp_course_id", table: "tblPatientHosp");
+        }
+
+        public void AddSelectAge()
+        {
+            columName.Add("Возраст");
+            selectGroupSrt.AppendLine(",date_part('year'::text, age(\"tblPatientCard\".birth_date::timestamp with time zone))::integer");
+        }
+
+        public void AddSelectMkb10()
+        {
+            columName.Add("Код МКБ10");
+            selectGroupSrt.AppendLine(",\"tblTempDieCureMKB10List\".die_course_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectTransfFeder()
+        {
+            columName.Add("Дата передачи в субъект федерации");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".transf_feder_date");
+        }
+
+        public void AddSelectUfsin()
+        {
+            columName.Add("Дата постановки на учет УФСИН");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".ufsin_date");
+        }
+
+        public void AddSelectAids12()
+        {
+            columName.Add("Вич 1 2");
+            selectGroupSrt.AppendLine(",\"tblAids12\".aids12_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblAids12", field: "aids12_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectDtMailReg()
+        {
+            columName.Add("Дата письма в др.регион");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".dt_mail_reg");
+        }
+
+        public void AddSelectEdu()
+        {
+            columName.Add("Образование");
+            selectGroupSrt.AppendLine(",\"tblListEducation\".edu_name");
+
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblListEducation",
+                                                   fieldLeft: "edu_id",
+                                                   fieldRight: "education_id",
+                                                   table: "tblPatientCard");
+        }
+
+        public void AddSelectFamilyStatus()
+        {
+            columName.Add("Семейное положение");
+            selectGroupSrt.AppendLine(",\"tblListFamilyStatus\".fammily_status_name");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListFamilyStatus", field: "family_status_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectEmployment()
+        {
+            columName.Add("Занятость");
+            selectGroupSrt.AppendLine(",\"tblListEmployment\".employment_name");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListEmployment", field: "employment_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectTrans()
+        {
+            columName.Add("Трансгендерность");
+            selectGroupSrt.AppendLine(",\"tblListTrans\".trans_name");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListTrans", field: "trans_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectPlaceCheck()
+        {
+            columName.Add("Место выявления");
+            selectGroupSrt.AppendLine(",\"tblListPlaceCheck\".place_check_name");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListPlaceCheck", field: "place_check_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectSituationDetect()
+        {
+            columName.Add("Обст. выявления");
+            selectGroupSrt.AppendLine(",\"tblListSituationDetect\".situation_detect_name");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListSituationDetect", field: "situation_detect_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectTransmisionMech()
+        {
+            columName.Add("Вер. мех. передачи");
+            selectGroupSrt.AppendLine(",\"tblListTransmisionMech\".transmisiom_mech_name");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListTransmisionMech", field: "transmission_mech_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectVulnerableGroup()
+        {
+            columName.Add("Кат. уязвимой группы");
+            selectGroupSrt.AppendLine(",\"tblListVulnerableGroup\".vulnerable_group_name");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListVulnerableGroup", field: "vulnerable_group_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectCovidVac()
+        {
+            columName.Add("Дата 1 дозы");
+            selectGroupSrt.AppendLine(",\"tblCOVID_vac\".d_vac1");
+            columName.Add("Дата 2 дозы");
+            selectGroupSrt.AppendLine(",\"tblCOVID_vac\".d_vac2");
+            columName.Add("Наименование вакцины");
+            selectGroupSrt.AppendLine(",\"tblListVac\".vac_name");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCOVID_vac", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListVac", field: "vac_id", table: "tblCOVID_vac");
+        }
+
+        public void AddSelectCovid()
+        {
+            columName.Add("Дата пол. рез");
+            selectGroupSrt.AppendLine(",\"tblCOVID\".d_positiv_res_covid");
+
+            columName.Add("Дата отриц. рез");
+            selectGroupSrt.AppendLine(",\"tblCOVID\".d_negative_res_covid");
+
+            columName.Add("Диагноз МКБ10 COVID");
+            selectGroupSrt.AppendLine(",\"tblListMkb10COVID\".mkb10_long_name");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCOVID", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblListMkb10COVID",
+                                                   fieldLeft: "covid_MKB10",
+                                                   fieldRight: "MKB10_id",
+                                                   table: "tblCOVID");
+        }
+
+        public void AddSelectChemsex()
+        {
+            columName.Add("Химсекс(Да/Нет)");
+            selectGroupSrt.AppendLine(",\"tblListYNChemsex\".y_n_name");
+
+            columName.Add("Химсекс(Вид контакта)");
+            selectGroupSrt.AppendLine(",\"ChemSexContactType\".infect_course_long");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactChemsex", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblInfectCourse",
+                                                   fieldLeft: "contact_type",
+                                                   fieldRight: "infect_course_id",
+                                                   table: "tblPatientContactChemsex",
+                                                   alias: "ChemSexContactType");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblListYN",
+                                                   fieldLeft: "y_n_id",
+                                                   fieldRight: "id_y_n",
+                                                   table: "tblPatientContactChemsex",
+                                                   alias: "tblListYNChemsex");
+        }
+
+        public void AddSelectPavInj()
+        {
+            columName.Add("ПАВ инек. дата начала");
+            selectGroupSrt.AppendLine(",\"tblPatientContactPavInj\".date_start");
+
+            columName.Add("ПАВ инек. дата окончания");
+            selectGroupSrt.AppendLine(",\"tblPatientContactPavInj\".date_end");
+
+            columName.Add("ПАВ инек. (да/нет)");
+            selectGroupSrt.AppendLine(",\"tblListYNPavInj\".y_n_name");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactPavInj", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblListYN",
+                                                   fieldLeft: "y_n_id",
+                                                   fieldRight: "id_y_n",
+                                                   table: "tblPatientContactPavInj",
+                                                   alias: "tblListYNPavInj");
+        }
+
+        public void AddSelectPavNotInj()
+        {
+            columName.Add("ПАВ неинек. дата начала");
+            selectGroupSrt.AppendLine(",\"tblPatientContactPavNotInj\".date_start");
+
+            columName.Add("ПАВ неинек. дата окончания");
+            selectGroupSrt.AppendLine(",\"tblPatientContactPavNotInj\".date_end");
+
+            columName.Add("ПАВ неинек. (да/нет)");
+            selectGroupSrt.AppendLine(",\"tblListYNPavNotInj\".y_n_name");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactPavNotInj", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblListYN",
+                                                   fieldLeft: "y_n_id",
+                                                   fieldRight: "id_y_n",
+                                                   table: "tblPatientContactPavNotInj",
+                                                   alias: "tblListYNPavNotInj");
+        }
+
+        public void AddSelectTimeInfect()
+        {
+            columName.Add("Вероятные сроки инфиц. с");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".epidem_time_infect_start");
+
+            columName.Add("Вероятные сроки инфиц. по");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".epidem_time_infect_end");
+        }
+
+        public void AddSelectEpidDescr()
+        {
+            columName.Add("Эпид. примечание");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".epidem_descr");
+        }
+
+        public void AddSelectPatientCall()
+        {
+            columName.Add("Дата звонка");
+            selectGroupSrt.AppendLine(",\"tblPatientCall\".call_date");
+
+            columName.Add("Статус звонка");
+            selectGroupSrt.AppendLine(",\"tblListCallStatus\".long_name");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCall", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListCallStatus", field: "call_status_id", table: "tblPatientCall");
         }
 
         #endregion
@@ -670,13 +937,403 @@ namespace HIVBackend.Helpers
             }
         }
 
-        public void AddWhere(string namePart)
+        public void AddWhereBlotCheckPlace(string[] names)
+        {
+            whereStr.AddWhereSqlIn("\"tblCheckPlace\".check_place_long", names);
 
-        public void AddWhere(string namePart)
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCheckPlace", field: "check_place_id", table: "tblPatientBlot");
+        }
 
-        public void AddWhere(string namePart)
+        public void AddWhereDieCourse(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblTempDieCureMKB10List\".die_course_long", names);
+        }
 
-        public void AddWhere(string namePart)
+        public void AddWhereDiePreset(string name)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
+
+            if (name == DiePresetEnum.Hiv.ToEnumDescriptionNameString())
+            {
+                whereStr.AddWhereSqlIn("\"tblTempDieCureMKB10List\".\"Dethtype_id\"", new[] { "1", "3" });
+            }
+
+            if (name == DiePresetEnum.NotHiv.ToEnumDescriptionNameString())
+            {
+                whereStr.AddWhereSqlEqual("\"tblTempDieCureMKB10List\".\"Dethtype_id\"", "2");
+            }
+
+            if (name == DiePresetEnum.Aids.ToEnumDescriptionNameString())
+            {
+                whereStr.AddWhereSqlEqual("\"tblTempDieCureMKB10List\".\"Dethtype_id\"", "3");
+            }
+        }
+
+        public void AddWhereIbRes(string namePart)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblIbResult", field: "ib_result_id", table: "tblPatientBlot");
+            whereStr.AddWhereSqlEqualString("\"tblIbResult\".ib_result_short", namePart);
+        }
+
+        public void AddWhereDateIbResStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientBlot\".blot_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateIbResEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientBlot\".blot_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereIbNum(string namePart)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlEqual("\"tblPatientBlot\".blot_no", namePart);
+        }
+
+        public void AddWhereDateInpIbStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientBlot\".datetime1", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateInpIbEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientBlot\".datetime1", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereIbSelect(string name)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+
+            if (name == "Первый")
+            {
+                whereStr.AddWhereSqlTrue("\"tblPatientBlot\".first1");
+            }
+
+            if (name == "Последний")
+            {
+                whereStr.AddWhereSqlTrue("\"tblPatientBlot\".last1");
+            }
+
+            if (name == "Перв.и посл.")
+            {
+                whereStr.AddWhereSqlTrue("\"tblPatientBlot\".first1");
+                whereStr.AddWhereSqlTrue("\"tblPatientBlot\".last1");
+            }
+        }
+
+        public void AddWhereHospCourse(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHosp", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblHospCourse", field: "hosp_course_id", table: "tblPatientHosp");
+            whereStr.AddWhereSqlIn("\"tblShowIllness\".show_illness_long", names);
+        }
+
+        // TODO: выглядит как что-то очень тяжелое, надо как-то пересмотреть
+        public void AddWhereAge(string[] names)
+        {
+            const string field = "date_part('year'::text, age(\"tblPatientCard\".birth_date::timestamp with time zone))::integer";
+
+            var ages = new List<string>();
+
+            using (HivContext context = new())
+            {
+                foreach (var item in names)
+                {
+                    var tblAgegr = context.TblAgegrs.FirstOrDefault(e => e.AgegrLong == item);
+
+                    if (tblAgegr.Start1 == null || tblAgegr.End1 == null)
+                        continue;
+
+                    for (int i = (int)tblAgegr.Start1; i <= (int)tblAgegr.End1; i++)
+                        ages.Add($"{i}");
+                }
+            }
+
+            whereStr.AddWhereSqlIn(field, ages.ToArray());
+        }
+
+        public void AddWhereMkb10(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblTempDieCureMKB10List\".die_course_long", names);
+        }
+
+        public void AddWhereTransfFederYNA(string ynaName)
+        {
+            var fieldName = "\"tblPatientCard\".transf_feder_date";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+            AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWhereDateTransfFederStart(string date)
+        {
+            whereStr.AddWhereSqlDateMore("\"tblPatientCard\".transf_feder_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateTransfFederEnd(string date)
+        {
+            whereStr.AddWhereSqlDateLess("\"tblPatientCard\".transf_feder_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereUfsinYNA(string ynaName)
+        {
+            var fieldName = "\"tblPatientCard\".ufsin_date";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+            AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWhereDateUfsinStart(string date)
+        {
+            whereStr.AddWhereSqlDateMore("\"tblPatientCard\".ufsin_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateUfsinEnd(string date)
+        {
+            whereStr.AddWhereSqlDateLess("\"tblPatientCard\".ufsin_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereAids12(string name)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblAids12", field: "aids12_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlEqualString("\"tblAids12\".aids12_long", name);
+        }
+
+        public void AddWhereDtMailRegStart(string date)
+        {
+            whereStr.AddWhereSqlDateMore("\"tblPatientCard\".dt_mail_reg", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDtMailRegEnd(string date)
+        {
+            whereStr.AddWhereSqlDateLess("\"tblPatientCard\".dt_mail_reg", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereEducation(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblListEducation",
+                                                   fieldLeft: "edu_id",
+                                                   fieldRight: "education_id",
+                                                   table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblListEducation\".edu_name", names);
+        }
+
+        public void AddWhereFamilyStatus(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListFamilyStatus", field: "family_status_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblListFamilyStatus\".fammily_status_name", names);
+        }
+
+        public void AddWhereEmployment(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListEmployment", field: "employment_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblListEmployment\".employment_name", names);
+        }
+
+        public void AddWhereTrans(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListTrans", field: "trans_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblListTrans\".trans_name", names);
+        }
+
+        public void AddWherePlaceCheck(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListPlaceCheck", field: "place_check_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblListPlaceCheck\".place_check_name", names);
+        }
+
+        public void AddWhereSituationDetect(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListSituationDetect", field: "situation_detect_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblListSituationDetect\".situation_detect_name", names);
+        }
+
+        public void AddWhereTransmisionMech(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListTransmisionMech", field: "transmission_mech_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblListTransmisionMech\".transmisiom_mech_name", names);
+        }
+
+        public void AddWhereVulnerableGroup(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListVulnerableGroup", field: "vulnerable_group_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblListVulnerableGroup\".vulnerable_group_name", names);
+        }
+
+        public void AddWhereVacName(string name)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCOVID_vac", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListVac", field: "vac_id", table: "tblCOVID_vac");
+            whereStr.AddWhereSqlEqualString("\"tblListVac\".vac_name", name);
+        }
+
+        public void AddWhereVacDateStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCOVID_vac", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblCOVID_vac\".d_vac1", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereVacDateEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCOVID_vac", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblCOVID_vac\".d_vac1", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereCovidMkb10(string name)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCOVID", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblListMkb10COVID",
+                                                   fieldLeft: "covid_MKB10",
+                                                   fieldRight: "MKB10_id",
+                                                   table: "tblCOVID");
+            whereStr.AddWhereSqlEqualString("\"tblListMkb10COVID\".mkb10_long_name", name);
+        }
+
+        public void AddWhereCovidDateStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCOVID", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblCOVID\".d_positiv_res_covid", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereCovidDateEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCOVID", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblCOVID\".d_positiv_res_covid", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereChemsexYNA(string ynaName)
+        {
+            var fieldName = "\"tblListYNChemsex\".y_n_name";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactChemsex", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblInfectCourse",
+                                                   fieldLeft: "contact_type",
+                                                   fieldRight: "infect_course_id",
+                                                   table: "tblPatientContactChemsex",
+                                                   alias: "ChemSexContactType");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblListYN",
+                                                   fieldLeft: "y_n_id",
+                                                   fieldRight: "id_y_n",
+                                                   table: "tblPatientContactChemsex",
+                                                   alias: "tblListYNChemsex");
+
+            AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWhereChemsexContactType(string name)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactChemsex", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblInfectCourse",
+                                                   fieldLeft: "contact_type",
+                                                   fieldRight: "infect_course_id",
+                                                   table: "tblPatientContactChemsex",
+                                                   alias: "ChemSexContactType");
+            whereStr.AddWhereSqlEqualString("\"ChemSexContactType\".infect_course_long", name);
+        }
+
+        public void AddWherePavInjYNA(string ynaName)
+        {
+            var fieldName = "\"tblListYNPavInj\".y_n_name";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactPavInj", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblListYN",
+                                                   fieldLeft: "y_n_id",
+                                                   fieldRight: "id_y_n",
+                                                   table: "tblPatientContactPavInj",
+                                                   alias: "tblListYNPavInj");
+
+            AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWherePavInjDateStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactPavInj", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientContactPavInj\".date_start", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWherePavInjDateEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactPavInj", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientContactPavInj\".date_start", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWherePavNotInjYNA(string ynaName)
+        {
+            var fieldName = "\"tblListYNPavNotInj\".y_n_name";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactPavNotInj", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblListYN",
+                                                   fieldLeft: "y_n_id",
+                                                   fieldRight: "id_y_n",
+                                                   table: "tblPatientContactPavNotInj",
+                                                   alias: "tblListYNPavNotInj");
+
+            AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWherePavNotInjDateStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactPavNotInj", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientContactPavNotInj\".date_start", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWherePavNotInjDateEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientContactPavNotInj", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientContactPavNotInj\".date_start", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereTimeInfectDateStart(string date)
+        {
+            whereStr.AddWhereSqlDateMore("\"tblPatientCard\".epidem_time_infect_start", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereTimeInfectDateEnd(string date)
+        {
+            whereStr.AddWhereSqlDateLess("\"tblPatientCard\".epidem_time_infect_start", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereEpidDescr(string name)
+        {
+            whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".epidem_descr", name);
+        }
+
+        public void AddWhereCallStatus(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCall", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListCallStatus", field: "call_status_id", table: "tblPatientCall");
+            whereStr.AddWhereSqlIn("\"tblListCallStatus\".long_name", names);
+        }
+
+        public void AddWhereCallDateStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCall", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientCall\".call_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereCallDateEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCall", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientCall\".call_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
 
         #endregion
 
@@ -692,7 +1349,6 @@ namespace HIVBackend.Helpers
                 case YNAEnum.No:
                     whereStr.AddWhereSqlFalseOrNull(fieldName);
                     break;
-
             }
         }
 

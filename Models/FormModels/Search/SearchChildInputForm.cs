@@ -1,5 +1,4 @@
 ﻿using HIVBackend.Enums;
-using HIVBackend.Helpers;
 
 namespace HIVBackend.Models.FormModels.Search
 {
@@ -64,7 +63,7 @@ namespace HIVBackend.Models.FormModels.Search
                 if ((bool)key.GetValue(this) == true)
                 {
                     if (key.Name == "SelectBirthDate")
-                        _queryBuilder.AddAge();
+                        _queryBuilder.AddSelectAgeDay();
 
                     if (key.Name == "SelectSex")
                         _queryBuilder.AddSelectSex();
@@ -177,7 +176,8 @@ namespace HIVBackend.Models.FormModels.Search
             if (MaterHome[0] != "Все")
                 _queryBuilder.AddWhereMaterHome(MaterHome);
 
-            _queryBuilder.AddWhereForm309YNA(Form309);
+            if (Form309 != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereForm309YNA(Form309);
 
             #endregion
         }

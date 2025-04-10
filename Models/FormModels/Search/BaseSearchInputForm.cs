@@ -229,9 +229,11 @@ namespace HIVBackend.Models.FormModels.Search
             if (ThirdName.Length != 0)
                 _queryBuilder.AddWhereThirdName(ThirdName);
 
-            _queryBuilder.AddWhereFrYNA(FrYNA);
+            if(FrYNA != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereFrYNA(FrYNA);
 
-            _queryBuilder.AddWhereZavApoYNA(ZavApoYNA);
+            if (ZavApoYNA != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereZavApoYNA(ZavApoYNA);
 
             if (InfectCourse[0] != "Все")
                 _queryBuilder.AddWhereInfectCourse(InfectCourse);
@@ -270,7 +272,8 @@ namespace HIVBackend.Models.FormModels.Search
             if (UnRegCourse.Length != 0)
                 _queryBuilder.AddWhereUnRegCourse(UnRegCourse);
 
-            _queryBuilder.AddWhereSnilsYNA(SnilsYNA);
+            if (SnilsYNA != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereSnilsYNA(SnilsYNA);
 
             if (Snils.Length != 0)
                 _queryBuilder.AddWhereSnils(Snils);
@@ -278,7 +281,8 @@ namespace HIVBackend.Models.FormModels.Search
             if (Stage[0] != "Все")
                 _queryBuilder.AddWhereStage(Stage);
 
-            _queryBuilder.AddWhereTransfAreaYNA(TransfAreaYNA);
+            if (TransfAreaYNA != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereTransfAreaYNA(TransfAreaYNA);
 
             if (DateTransfAreaStart.Length != 0)
                 _queryBuilder.AddWhereDateTransfAreaStart(DateTransfAreaStart);
@@ -289,7 +293,8 @@ namespace HIVBackend.Models.FormModels.Search
             if (Unrz.Length != 0)
                 _queryBuilder.AddWhereUnrz(Unrz);
 
-            _queryBuilder.AddWhereUnrzYNA(UnrzYNA);
+            if (UnrzYNA != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereUnrzYNA(UnrzYNA);
 
             #endregion
         }

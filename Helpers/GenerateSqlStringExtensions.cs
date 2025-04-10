@@ -2,6 +2,9 @@
 
 namespace HIVBackend.Helpers
 {
+    /// <summary>
+    /// методы расширения StringBuilder для составление sql строк
+    /// </summary>
     public static class GenerateSqlStringExtensions
     {
         #region WHERE
