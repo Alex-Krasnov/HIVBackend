@@ -663,6 +663,142 @@ namespace HIVBackend.Helpers
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
         }
 
+        public void AddSelectPregCheck()
+        {
+            columName.Add("Выявление");
+            selectGroupSrt.AppendLine(",\"tblPregCheck\".preg_check_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPregCheck", field: "preg_check_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectPregMonthNo()
+        {
+            columName.Add("Срок беременности");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".preg_month_no");
+        }
+
+        public void AddSelectBirthType()
+        {
+            columName.Add("Вид родов");
+            selectGroupSrt.AppendLine(",\"tblBirthType\".birth_type_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblBirthType", field: "birth_type_id", table: "tblPatientPregnantM");
+        }
+
+        public void AddSelectMedecineStartMonthNo()
+        {
+            columName.Add("Срок начала приёма медик.");
+            selectGroupSrt.AppendLine(",\"tblPatientPregnantM\".medicine_st_month_no_old");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM", field: "patient_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectChildBirthDate()
+        {
+            columName.Add("Дата родов");
+            selectGroupSrt.AppendLine(",\"tblPatientPregnantM\".child_birth_date");
+
+            columName.Add("Дата начала берем");
+            selectGroupSrt.AppendLine(",\"tblPatientPregnantM\".preg_date");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM", field: "patient_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectChildFio()
+        {
+            columName.Add("Фамилия ребёнка");
+            selectGroupSrt.AppendLine(",\"tblPatientPregnantM\".child_family_name");
+
+            columName.Add("Имя ребёнка");
+            selectGroupSrt.AppendLine(",\"tblPatientPregnantM\".child_first_name");
+
+            columName.Add("Отчество ребёнка");
+            selectGroupSrt.AppendLine(",\"tblPatientPregnantM\".child_third_name");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM", field: "patient_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectPhpSchema1()
+        {
+            AddSelectPhpSchemaInternal("ПХП1 схема", "phpschema_id1", "php1");
+        }
+
+        public void AddSelectPhpSchema2()
+        {
+            AddSelectPhpSchemaInternal("ПХП2 схема", "phpschema_id2", "php2");
+        }
+
+        public void AddSelectPhpSchema3()
+        {
+            AddSelectPhpSchemaInternal("ПХП3 схема", "phpschema_id3", "php3");
+        }
+
+        public void AddSelectMedecineForSchema1()
+        {
+            AddSelectMedecineForSchemaInternal(
+                columnName: "ПХП1 препарат",
+                schemaField: "phpschema_id1",
+                phpAlias: "php1",
+                medicineRAlias: "tblSchemaMedicineR1",
+                medicineAlias: "tblMedicineForSchema1");
+        }
+
+        public void AddSelectMedecineForSchema2()
+        {
+            AddSelectMedecineForSchemaInternal(
+                columnName: "ПХП2 препарат",
+                schemaField: "phpschema_id2",
+                phpAlias: "php2",
+                medicineRAlias: "tblSchemaMedicineR2",
+                medicineAlias: "tblMedicineForSchema2");
+        }
+
+        public void AddSelectMedecineForSchema3()
+        {
+            AddSelectMedecineForSchemaInternal(
+                columnName: "ПХП3 препарат",
+                schemaField: "phpschema_id3",
+                phpAlias: "php3",
+                medicineRAlias: "tblSchemaMedicineR3",
+                medicineAlias: "tblMedicineForSchema3");
+        }
+
+        public void AddSelectMaterhome()
+        {
+            columName.Add("Роддом");
+            selectGroupSrt.AppendLine(",\"tblMaterHome\".materhome_long");
+
+            columName.Add("Ид ребёнка");
+            selectGroupSrt.AppendLine(",\"qryParentChild\".child_id");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "qryParentChild", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblMaterHome", field: "materhome_id", table: "qryParentChild");
+        }
+
+        public void AddSelectAclDate()
+        {
+            columName.Add("Дата опред.иммун.стат.");
+            selectGroupSrt.AppendLine(",\"tblPatientAclResult\".acl_sample_date");
+
+            string str = $"LEFT JOIN \"tblPatientAclResult\" " +
+                         $"ON \"tblPatientCard\".\"patient_id\" = \"tblPatientAclResult\".\"patient_id\" " +
+                         $"AND \"tblPatientAclResult\".\"acl_test_code\" in (\'И0025\',\'И0070\')";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+        }
+
+        public void AddSelectAclMcnCode()
+        {
+            columName.Add("CD4+(abc)");
+            selectGroupSrt.AppendLine(",\"tblPatientAclResult\".acl_mcn_code");
+
+            string str = $"LEFT JOIN \"tblPatientAclResult\" " +
+                         $"ON \"tblPatientCard\".\"patient_id\" = \"tblPatientAclResult\".\"patient_id\" " +
+                         $"AND \"tblPatientAclResult\".\"acl_test_code\" in (\'И0025\',\'И0070\')";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+        }
+
         #endregion
 
         #region Where
@@ -1642,6 +1778,141 @@ namespace HIVBackend.Helpers
             whereStr.AddWhereSqlDateLess("\"tblPatientNonresident\".date_departure", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
         }
 
+        public void OnlyPregnant()
+        {
+            whereStr.Append($" AND (\"tblPatientCard\".preg_month_no IS NOT NULL " +
+                                    $"OR \"tblPatientPregnantM\".preg_id IS NOT NULL " +
+                                    $"OR \"tblPatientCard\".preg_check_id IS NOT NULL)");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM", field: "patient_id", table: "tblPatientCard");
+        }
+
+        public void AddWherePregCheck(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPregCheck", field: "preg_check_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblPregCheck\".preg_check_long", names);
+        }
+
+        public void AddWherePregMonthNo(string name)
+        {
+            whereStr.AddWhereSqlEqual("\"tblPatientCard\".preg_month_no", name);
+        }
+
+        public void AddWhereBirthType(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblBirthType", field: "birth_type_id", table: "tblPatientPregnantM");
+            whereStr.AddWhereSqlIn("\"tblBirthType\".birth_type_long", names);
+        }
+
+        public void AddWhereMedecineStartMonthNo(string name)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlEqual("\"tblPatientPregnantM\".medicine_st_month_no_old", name);
+        }
+
+        public void AddWhereChildBirthDateStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientPregnantM\".child_birth_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereChildBirthDateEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientPregnantM\".child_birth_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereChildFamilyName(string name)
+        {
+            whereStr.AddWhereSqlStartWhith("\"tblPatientPregnantM\".child_family_name", name);
+        }
+
+        public void AddWhereChildFirstName(string name)
+        {
+            whereStr.AddWhereSqlStartWhith("\"tblPatientPregnantM\".child_first_name", name);
+        }
+
+        public void AddWhereChildThirdName(string name)
+        {
+            whereStr.AddWhereSqlStartWhith("\"tblPatientPregnantM\".child_third_name", name);
+        }
+
+        public void AddWherePhpSchema1(string[] names)
+        {
+            AddPhpSchemaCondition("phpschema_id1", "php1", names);
+        }
+
+        public void AddWherePhpSchema2(string[] names)
+        {
+            AddPhpSchemaCondition("phpschema_id2", "php2", names);
+        }
+
+        public void AddWherePhpSchema3(string[] names)
+        {
+            AddPhpSchemaCondition("phpschema_id3", "php3", names);
+        }
+
+        public void AddWhereMedecineForSchema1(string[] names)
+        {
+            AddMedicineForSchemaCondition(
+                schemaField: "phpschema_id1",
+                phpAlias: "php1",
+                medicineRAlias: "tblSchemaMedicineR1",
+                medicineAlias: "tblMedicineForSchema1",
+                medicineValues: names);
+        }
+
+        public void AddWhereMedecineForSchema2(string[] names)
+        {
+            AddMedicineForSchemaCondition(
+                schemaField: "phpschema_id2",
+                phpAlias: "php2",
+                medicineRAlias: "tblSchemaMedicineR2",
+                medicineAlias: "tblMedicineForSchema2",
+                medicineValues: names);
+        }
+
+        public void AddWhereMedecineForSchema3(string[] names)
+        {
+            AddMedicineForSchemaCondition(
+                schemaField: "phpschema_id3",
+                phpAlias: "php3",
+                medicineRAlias: "tblSchemaMedicineR3",
+                medicineAlias: "tblMedicineForSchema3",
+                medicineValues: names);
+        }
+
+        public void AddWhereMaterhome(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "qryParentChild", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblMaterHome", field: "materhome_id", table: "qryParentChild");
+            whereStr.AddWhereSqlIn("\"tblMaterHome\".materhome_long", names);
+        }
+
+        public void AddWhereAclDateStart(string date)
+        {
+            string str = $"LEFT JOIN \"tblPatientAclResult\" " +
+                         $"ON \"tblPatientCard\".\"patient_id\" = \"tblPatientAclResult\".\"patient_id\" " +
+                         $"AND \"tblPatientAclResult\".\"acl_test_code\" in (\'И0025\',\'И0070\')";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+
+            whereStr.AddWhereSqlDateMore("\"tblPatientAclResult\".acl_sample_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereAclDateEnd(string date)
+        {
+            string str = $"LEFT JOIN \"tblPatientAclResult\" " +
+                         $"ON \"tblPatientCard\".\"patient_id\" = \"tblPatientAclResult\".\"patient_id\" " +
+                         $"AND \"tblPatientAclResult\".\"acl_test_code\" in (\'И0025\',\'И0070\')";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+
+            whereStr.AddWhereSqlDateLess("\"tblPatientAclResult\".acl_sample_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
         #endregion
 
         #region приватные методы
@@ -1657,6 +1928,94 @@ namespace HIVBackend.Helpers
                     whereStr.AddWhereSqlFalseOrNull(fieldName);
                     break;
             }
+        }
+
+        private void AddSelectPhpSchemaInternal(string columnName, string schemaField, string alias)
+        {
+            columName.Add(columnName);
+            selectGroupSrt.AppendLine($",\"{alias}\".cure_schema_long");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblCureSchema",
+                                                   fieldLeft: schemaField,
+                                                   fieldRight: "cure_schema_id",
+                                                   table: "tblPatientPregnantM",
+                                                   alias: alias);
+        }
+
+        private void AddSelectMedecineForSchemaInternal(string columnName, string schemaField, string phpAlias, string medicineRAlias, string medicineAlias)
+        {
+            columName.Add(columnName);
+
+            selectGroupSrt.AppendLine($",\"{medicineAlias}\".medforschema_long");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPregnantM",
+                                          field: "patient_id",
+                                          table: "tblPatientCard");
+
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblCureSchema",
+                                                   fieldLeft: schemaField,
+                                                   fieldRight: "cure_schema_id",
+                                                   table: "tblPatientPregnantM",
+                                                   alias: phpAlias);
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblSchemaMedicineR",
+                                          field: "cure_schema_id",
+                                          table: phpAlias,
+                                          alias: medicineRAlias);
+
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblMedicineForSchema",
+                                                   fieldLeft: "medicine_id",
+                                                   fieldRight: "medforschema_id",
+                                                   table: medicineRAlias,
+                                                   alias: medicineAlias);
+        }
+        
+        private void AddPhpSchemaCondition(string schemaField, string alias, string[] schemaValues)
+        {
+            joinStr.AddLeftJoinIfNotExist(
+                joinTable: "tblPatientPregnantM",
+                field: "patient_id",
+                table: "tblPatientCard");
+
+            joinStr.AddLeftJoinIfNotExistDiffField(
+                joinTable: "tblCureSchema",
+                fieldLeft: schemaField,
+                fieldRight: "cure_schema_id",
+                table: "tblPatientPregnantM",
+                alias: alias);
+
+            whereStr.AddWhereSqlIn($"\"{alias}\".cure_schema_long", schemaValues);
+        }
+
+        private void AddMedicineForSchemaCondition(string schemaField, string phpAlias, string medicineRAlias, string medicineAlias, string[] medicineValues)
+        {
+            joinStr.AddLeftJoinIfNotExist(
+                joinTable: "tblPatientPregnantM",
+                field: "patient_id",
+                table: "tblPatientCard");
+
+            joinStr.AddLeftJoinIfNotExistDiffField(
+                joinTable: "tblCureSchema",
+                fieldLeft: schemaField,
+                fieldRight: "cure_schema_id",
+                table: "tblPatientPregnantM",
+                alias: phpAlias);
+
+            joinStr.AddLeftJoinIfNotExist(
+                joinTable: "tblSchemaMedicineR",
+                field: "cure_schema_id",
+                table: phpAlias,
+                alias: medicineRAlias);
+
+            joinStr.AddLeftJoinIfNotExistDiffField(
+                joinTable: "tblMedicineForSchema",
+                fieldLeft: "medicine_id",
+                fieldRight: "medforschema_id",
+                table: medicineRAlias,
+                alias: medicineAlias);
+
+            whereStr.AddWhereSqlIn($"\"{medicineAlias}\".medforschema_long", medicineValues);
         }
 
         #endregion
