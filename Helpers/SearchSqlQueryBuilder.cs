@@ -564,6 +564,66 @@ namespace HIVBackend.Helpers
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblHospResult", field: "hosp_result_id", table: "tblPatientHospResultR");
         }
 
+        public void AddSelectArchive()
+        {
+            columName.Add("Архив");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".snils_fed");
+        }
+
+        public void AddSelectChemprof()
+        {
+            columName.Add("Химиопрофилактика");
+            selectGroupSrt.AppendLine(",\"tblChemop\".chemop_long");
+
+            columName.Add("Химиопрофилактика с");
+            selectGroupSrt.AppendLine(",\"tblPatientChemop\".chemop_date_from");
+
+            columName.Add("Химиопрофилактика по");
+            selectGroupSrt.AppendLine(",\"tblPatientChemop\".chemop_date_to");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientChemop", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblChemop", field: "chemop_id", table: "tblPatientChemop");
+        }
+
+        public void AddSelectDieDiag()
+        {
+            columName.Add("Диагноз посмертно");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".flg_diagnosis_after_death");
+        }
+
+        public void AddSelectDateReg()
+        {
+            columName.Add("Дата регистрации нач");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".dt_reg_beg");
+
+            columName.Add("Дата регистрации кон");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".dt_reg_end");
+        }
+
+        public void AddSelectPasSer()
+        {
+            columName.Add("Паспорт серия");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".pas_ser");
+        }
+
+        public void AddSelectPasNum()
+        {
+            columName.Add("Паспорт номер");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".pas_num");
+        }
+
+        public void AddSelectPasWhom()
+        {
+            columName.Add("Паспорт выдан");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".pas_when");
+        }
+
+        public void AddSelectPasWhen()
+        {
+            columName.Add("Паспорт Дата выдачи");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".pas_whom");
+        }
+
         #endregion
 
         #region Where
@@ -1401,6 +1461,77 @@ namespace HIVBackend.Helpers
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientHospResultR", field: "patient_id", table: "tblPatientCard");
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblHospResult", field: "hosp_result_id", table: "tblPatientHospResultR");
             whereStr.AddWhereSqlIn("\"tblHospResult\".hosp_result_long", names);
+        }
+
+        public void AddWhereFioChange(string name)
+        {
+            whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".fio_change", name);
+        }
+
+        public void AddWhereReferenceMO(string name)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListReferenceMo", field: "reference_mo_id", table: "tblPatientBlot");
+            whereStr.AddWhereSqlEqualString("\"tblListReferenceMo\".reference_mo_name", name);
+        }
+
+        public void AddWhereArchiveYNA(string ynaName)
+        {
+            var fieldName = "\"tblPatientCard\".snils_fed";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+            AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWhereDieDiagYNA(string ynaName)
+        {
+            var fieldName = "\"tblPatientCard\".flg_diagnosis_after_death";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+            AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWhereChemprof(string name)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientChemop", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblChemop", field: "chemop_id", table: "tblPatientChemop");
+            whereStr.AddWhereSqlEqualString("\"tblChemop\".chemop_long", name);
+        }
+
+        public void AddWhereDateChemprofStartStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientChemop", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientChemop\".chemop_date_from", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateChemprofStartEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientChemop", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientChemop\".chemop_date_from", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateChemprofEndStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientChemop", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientChemop\".chemop_date_to", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateChemprofEndEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientChemop", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientChemop\".chemop_date_to", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateRegStart(string date)
+        {
+            whereStr.AddWhereSqlDateMore("\"tblPatientCard\".dt_reg_beg", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateRegEnd(string date)
+        {
+            whereStr.AddWhereSqlDateLess("\"tblPatientCard\".dt_reg_beg", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
         }
 
         #endregion
