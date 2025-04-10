@@ -120,6 +120,7 @@ namespace HIVBackend.Models.FormModels.Search
         public int Page { get; set; } = 1;
         public bool Excel { get; set; } = false;
 
+        /// <inheritdoc cref="SearchSqlQueryBuilder"/>
         public SearchSqlQueryBuilder _queryBuilder;
 
         #endregion
