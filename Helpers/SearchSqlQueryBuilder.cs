@@ -624,6 +624,45 @@ namespace HIVBackend.Helpers
             selectGroupSrt.AppendLine(",\"tblPatientCard\".pas_whom");
         }
 
+        public void AddSelectDateDiagnosis()
+        {
+            columName.Add("Дата установления диагноза");
+            selectGroupSrt.AppendLine(",\"tblPatientNonresident\".date_diagnosis");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+
+        }
+
+        public void AddSelectPlaceDiagnosis()
+        {
+            columName.Add("Место установл.диагноза");
+            selectGroupSrt.AppendLine(",\"tblRegionNonresident\".region_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblRegion",
+                                               alias: "tblRegionNonresident",
+                                               fieldRight: "region_id",
+                                               table: "tblPatientNonresident",
+                                               fieldLeft: "place_diagnosis");
+        }
+
+        public void AddSelectDateRegistration()
+        {
+            columName.Add("Дата регистрации с");
+            selectGroupSrt.AppendLine(",\"tblPatientNonresident\".date_registration_from");
+            columName.Add("Дата регистрации по");
+            selectGroupSrt.AppendLine(",\"tblPatientNonresident\".date_registration_to");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectDateDeparture()
+        {
+            columName.Add("Дата убытия");
+            selectGroupSrt.AppendLine(",\"tblPatientNonresident\".date_departure");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+        }
+
         #endregion
 
         #region Where
@@ -1532,6 +1571,75 @@ namespace HIVBackend.Helpers
         public void AddWhereDateRegEnd(string date)
         {
             whereStr.AddWhereSqlDateLess("\"tblPatientCard\".dt_reg_beg", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateDiagnosisStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientNonresident\".date_diagnosis", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateDiagnosisEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientNonresident\".date_diagnosis", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWherePlaceDiagnosis(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblRegion",
+                                                        alias: "tblRegionNonresident",
+                                                        fieldRight: "region_id",
+                                                        table: "tblPatientNonresident",
+                                                        fieldLeft: "place_diagnosis");
+            whereStr.AddWhereSqlIn("\"tblRegionNonresident\".region_long", names);
+        }
+
+        public void AddWhereDateRegistrationYNA(string ynaName)
+        {
+            var fieldName = "\"tblPatientNonresident\".date_registration_from";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+
+            AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWhereDateRegistrationStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientNonresident\".date_registration_from", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateRegistrationEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientNonresident\".date_registration_from", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateDepartureYNA(string ynaName)
+        {
+            var fieldName = "\"tblPatientNonresident\".date_departure";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+
+            AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWhereDateDepartureStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientNonresident\".date_departure", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateDepartureEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientNonresident\".date_departure", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
         }
 
         #endregion
