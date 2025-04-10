@@ -52,9 +52,14 @@ namespace HIVBackend.Controllers.Search
                 return File(fileBytes, contentType, "res_search.xlsx");
             }
 
-            var searchRes = SerarchResService.GetSearchRes(form.selectGroupSrt, form.joinStr, form.whereStr, pageSize, form.Page);
+            var searchRes = SerarchResService.GetSearchRes(
+                    form._queryBuilder.selectGroupSrt, 
+                    form._queryBuilder.joinStr, 
+                    form._queryBuilder.whereStr, 
+                    pageSize, 
+                    form.Page);
 
-            searchRes.ColumName = form.columName;
+            searchRes.ColumName = form._queryBuilder.columName;
             return Ok(searchRes);
         }
     }
