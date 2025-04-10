@@ -1,5 +1,6 @@
 ﻿using HIVBackend.Data;
 using HIVBackend.Enums;
+using HIVBackend.Models.FormModels;
 using System.Text;
 
 namespace HIVBackend.Helpers
@@ -797,6 +798,38 @@ namespace HIVBackend.Helpers
 
             if (!joinStr.ToString().Contains(str))
                 joinStr.AppendLine(str);
+        }
+
+        public void AddSelectRegDate()
+        {
+            columName.Add("Дата записи");
+            selectGroupSrt.AppendLine(",\"tblPatientRegistry\".reg_date");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientRegistry", field: "patient_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectCheckDate()
+        {
+            columName.Add("Дата приема на выезде");
+            selectGroupSrt.AppendLine(",\"tblPatientCheckOut\".check_date");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCheckOut", field: "patient_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectDoctor()
+        {
+            columName.Add("Специалист");
+            selectGroupSrt.AppendLine(",\"tblDoctor\".doctor_long");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientRegistry", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblDoctor", fieldLeft: "reg_doctor_id", fieldRight: "doctor_id", table: "tblPatientRegistry");
+        }
+
+        public void AddSelectRegCheck()
+        {
+            columName.Add("Явка");
+            selectGroupSrt.AppendLine(",\"tblPatientRegistry\".reg_check");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientRegistry", field: "patient_id", table: "tblPatientCard");
         }
 
         #endregion
@@ -1911,6 +1944,48 @@ namespace HIVBackend.Helpers
                 joinStr.AppendLine(str);
 
             whereStr.AddWhereSqlDateLess("\"tblPatientAclResult\".acl_sample_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereRegDateStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientRegistry", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientRegistry\".reg_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereRegDateEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientRegistry", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientRegistry\".reg_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereCheckDateStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCheckOut", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientCheckOut\".check_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereCheckDateEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCheckOut", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientCheckOut\".check_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDoctor(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientRegistry", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblDoctor", fieldLeft: "reg_doctor_id", fieldRight: "doctor_id", table: "tblPatientRegistry");
+            whereStr.AddWhereSqlIn("\"tblDoctor\".doctor_long", names);
+        }
+
+        public void AddWhereRegCheck(string ynaName)
+        {
+            var fieldName = "\"tblPatientRegistry\".reg_check";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientRegistry", field: "patient_id", table: "tblPatientCard");
+
+            AddWhereYNAEnum(fieldName, enumValue);
         }
 
         #endregion
