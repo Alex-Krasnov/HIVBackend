@@ -42,12 +42,12 @@ namespace HIVBackend.Controllers.Search
             {
                 string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 byte[] fileBytes = SerarchResService.GetExcelRes(authHeader: Request.Headers["Authorization"].First(),
-                                                                 selectGroupSrt: form.selectGroupSrt,
-                                                                 joinStr: form.joinStr,
-                                                                 whereStr: form.whereStr,
+                                                                 selectGroupSrt: form._queryBuilder.selectGroupSrt,
+                                                                 joinStr: form._queryBuilder.joinStr,
+                                                                 whereStr: form._queryBuilder.whereStr,
                                                                  pageSize: pageSize,
                                                                  page: form.Page,
-                                                                 columName: form.columName);
+                                                                 columName: form._queryBuilder.columName);
 
                 return File(fileBytes, contentType, "res_search.xlsx");
             }
