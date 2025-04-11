@@ -66,7 +66,7 @@ namespace HIVBackend.Models.FormModels.Search
                         _queryBuilder.AddSelectCheckDate();
 
                     if (key.Name == "SelectDoctor")
-                        _queryBuilder.AddSelectDoctor();
+                        _queryBuilder.AddSelectDoctorReg();
 
                     if (key.Name == "SelectCardNo")
                         _queryBuilder.AddSelectCardNo();
@@ -117,7 +117,7 @@ namespace HIVBackend.Models.FormModels.Search
                 _queryBuilder.AddWhereCheckDateEnd(CheckDateEnd);
 
             if (Doctor[0] != "Все")
-                _queryBuilder.AddWhereDoctor(Doctor);
+                _queryBuilder.AddWhereDoctorReg(Doctor);
 
             if (CardNo.Length != 0)
                 _queryBuilder.AddWhereCardNo(CardNo);

@@ -1,6 +1,5 @@
 ﻿using HIVBackend.Data;
 using HIVBackend.Enums;
-using HIVBackend.Models.FormModels;
 using System.Text;
 
 namespace HIVBackend.Helpers
@@ -816,7 +815,7 @@ namespace HIVBackend.Helpers
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCheckOut", field: "patient_id", table: "tblPatientCard");
         }
 
-        public void AddSelectDoctor()
+        public void AddSelectDoctorReg()
         {
             columName.Add("Специалист");
             selectGroupSrt.AppendLine(",\"tblDoctor\".doctor_long");
@@ -830,6 +829,157 @@ namespace HIVBackend.Helpers
             columName.Add("Явка");
             selectGroupSrt.AppendLine(",\"tblPatientRegistry\".reg_check");
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientRegistry", field: "patient_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectInvalid()
+        {
+            columName.Add("Группа инвалидности");
+            selectGroupSrt.AppendLine(",\"tblInvalid\".invalid_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblInvalid", field: "invalid_id", table: "tblPatientCard");
+        }
+
+        public void AddSelectCorrespIllnesses()
+        {
+            columName.Add("Сопутствующее заболевание");
+            selectGroupSrt.AppendLine(",\"tblCorrespIllness\".corresp_illness_long");
+
+            columName.Add("Сопутствующее заболевание дата");
+            selectGroupSrt.AppendLine(",\"tblPatientCorrespIllness\".datetime1");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCorrespIllness", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCorrespIllness", field: "corresp_illness_id", table: "tblPatientCorrespIllness");
+        }
+
+        public void AddSelectSchemaDate()
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+
+            columName.Add("Дата назн.схемы");
+            selectGroupSrt.AppendLine(",\"tblPatientCureSchema\".start_date");
+        }
+
+        public void AddSelectSchema()
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+
+            columName.Add("Схема лечения");
+            selectGroupSrt.AppendLine(",\"tblCureSchema\".cure_schema_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureSchema", field: "cure_schema_id", table: "tblPatientCureSchema");
+        }
+
+        public void AddSelectSchemaMedecine()
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+
+            columName.Add("Схема лечения (препарат)");
+            selectGroupSrt.AppendLine(",\"tblMedicineForSchema\".medforschema_long");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblSchemaMedicineR", field: "cure_schema_id", table: "tblPatientCureSchema");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblMedicineForSchema",
+                                                   fieldLeft: "medicine_id",
+                                                   fieldRight: "medforschema_id",
+                                                   table: "tblSchemaMedicineR");
+        }
+
+        public void AddSelectGiveDate()
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+
+            columName.Add("Дата выдачи препарата");
+            selectGroupSrt.AppendLine(",\"tblPatientPrescrM\".give_date");
+        }
+
+        public void AddSelectDoctorMedecine()
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+
+            columName.Add("Персонал");
+            selectGroupSrt.AppendLine(",\"tblDoctor\".doctor_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblDoctor", field: "doctor_id", table: "tblPatientPrescrM");
+        }
+
+        public void AddSelectMedecine()
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+
+            columName.Add("Препарат прописанный");
+            selectGroupSrt.AppendLine(",\"tblMedicine\".medicine_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblMedicine", field: "medicine_id", table: "tblPatientPrescrM");
+        }
+
+        public void AddSelectMedecineGive()
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+
+            columName.Add("Препарат выданный");
+            selectGroupSrt.AppendLine(",\"tblGiveMedicine\".medicine_long");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblMedicine",
+                                                   fieldLeft: "give_med_id",
+                                                   fieldRight: "medicine_id",
+                                                   table: "tblPatientPrescrM",
+                                                   alias: "tblGiveMedicine");
+        }
+
+        public void AddSelectSchemaChange()
+        {
+            columName.Add("Причина смены схемы леч.");
+            selectGroupSrt.AppendLine(",\"tblCureChange\".cure_change_long");
+
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureChange", field: "cure_change_id", table: "tblPatientCureSchema");
+        }
+
+        public void AddSelectRangeTherapy()
+        {
+            columName.Add("Ряд терапии");
+            selectGroupSrt.AppendLine(",\"tblRangeTherapy\".range_therapy_long");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblRangeTherapy", field: "range_therapy_id", table: "tblPatientCureSchema");
+        }
+
+        public void AddSelectVlDate()
+        {
+            columName.Add("Дата опред.вир.нагр.");
+            selectGroupSrt.AppendLine(",\"vn\".acl_sample_date");
+
+            string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+
+        }
+
+        public void AddSelectVlRes()
+        {
+            columName.Add("Вирусн.нагр.");
+            selectGroupSrt.AppendLine(",\"vn\".acl_result");
+
+            string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+        }
+
+        public void AddSelectImDate()
+        {
+            columName.Add("Дата опред.иммун.стат.");
+            selectGroupSrt.AppendLine(",\"im\".acl_sample_date");
+
+            string str = $"LEFT JOIN \"tblPatientAclResult\" \"im\" ON \"tblPatientCard\".\"patient_id\" = \"im\".\"patient_id\" AND \"im\".\"acl_test_code\" = \'И0025\'";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+        }
+
+        public void AddSelectImRes()
+        {
+            columName.Add("CD4+(abc)");
+            selectGroupSrt.AppendLine(",\"im\".acl_result");
+
+            string str = $"LEFT JOIN \"tblPatientAclResult\" \"im\" ON \"tblPatientCard\".\"patient_id\" = \"im\".\"patient_id\" AND \"im\".\"acl_test_code\" = \'И0025\'";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
         }
 
         #endregion
@@ -1970,7 +2120,7 @@ namespace HIVBackend.Helpers
             whereStr.AddWhereSqlDateLess("\"tblPatientCheckOut\".check_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
         }
 
-        public void AddWhereDoctor(string[] names)
+        public void AddWhereDoctorReg(string[] names)
         {
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientRegistry", field: "patient_id", table: "tblPatientCard");
             joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblDoctor", fieldLeft: "reg_doctor_id", fieldRight: "doctor_id", table: "tblPatientRegistry");
@@ -1986,6 +2136,175 @@ namespace HIVBackend.Helpers
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientRegistry", field: "patient_id", table: "tblPatientCard");
 
             AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWhereInvalid(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblInvalid", field: "invalid_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlIn("\"tblInvalid\".invalid_long", names);
+        }
+
+        public void AddWhereCorrespIllnesses(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCorrespIllness", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCorrespIllness", field: "corresp_illness_id", table: "tblPatientCorrespIllness");
+            whereStr.AddWhereSqlIn("\"tblCorrespIllness\".corresp_illness_long", names);
+        }
+
+        public void AddWhereDateCorrespIllnessesStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCorrespIllness", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientCorrespIllness\".datetime1", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateCorrespIllnessesEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCorrespIllness", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientCorrespIllness\".datetime1", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereSchema(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureSchema", field: "cure_schema_id", table: "tblPatientCureSchema");
+            whereStr.AddWhereSqlIn("\"tblCureSchema\".cure_schema_long", names);
+        }
+
+        public void AddWhereSchemaLast()
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlTrue("\"tblPatientCureSchema\".\"lastYN\"");
+        }
+
+        public void AddWhereSchemaMedecine(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureSchema", field: "cure_schema_id", table: "tblPatientCureSchema");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblSchemaMedicineR", field: "cure_schema_id", table: "tblPatientCureSchema");
+            joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblMedicineForSchema",
+                                                   fieldLeft: "medicine_id",
+                                                   fieldRight: "medforschema_id",
+                                                   table: "tblSchemaMedicineR");
+            whereStr.AddWhereSqlIn("\"tblMedicineForSchema\".medforschema_long", names);
+        }
+
+        public void AddWhereMedecine(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblMedicine", field: "medicine_id", table: "tblPatientPrescrM");
+            whereStr.AddWhereSqlIn("\"tblMedicine\".medicine_long", names);
+        }
+
+        public void AddWhereMedecineGive(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblMedicine", field: "medicine_id", table: "tblPatientPrescrM");
+            whereStr.AddWhereSqlIn("\"tblGiveMedicine\".medicine_long", names);
+        }
+
+        public void AddWhereDoctorMedecine(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblDoctor", field: "doctor_id", table: "tblPatientPrescrM");
+            whereStr.AddWhereSqlIn("\"tblDoctor\".doctor_long", names);
+        }
+
+        public void AddWhereDateGiveStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientPrescrM\".give_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateGiveEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientPrescrM", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientPrescrM\".give_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereSchemaChange(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblCureChange", field: "cure_change_id", table: "tblPatientCureSchema");
+            whereStr.AddWhereSqlIn("\"tblCureChange\".cure_change_long", names);
+        }
+
+        public void AddWhereDateSchemaStart(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateMore("\"tblPatientCureSchema\".start_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateSchemaEnd(string date)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+            whereStr.AddWhereSqlDateLess("\"tblPatientCureSchema\".start_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereRangeTherapy(string[] names)
+        {
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientCureSchema", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblRangeTherapy", field: "range_therapy_id", table: "tblPatientCureSchema");
+            whereStr.AddWhereSqlIn("\"tblRangeTherapy\".range_therapy_long", names);
+        }
+
+        public void AddWhereDateVlStart(string date)
+        {
+            string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+
+            whereStr.AddWhereSqlDateMore("\"vn\".acl_sample_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateVlEnd(string date)
+        {
+            string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+
+            whereStr.AddWhereSqlDateLess("\"vn\".acl_sample_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereResVlStart(string res)
+        {
+            string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+
+            whereStr.AddWhereIntConvertMore("\"vn\".acl_mcn_code", Int32.Parse(res));
+        }
+
+        public void AddWhereResVlEnd(string res)
+        {
+            string str = $"LEFT JOIN \"tblPatientAclResult\" \"vn\" ON \"tblPatientCard\".\"patient_id\" = \"vn\".\"patient_id\" AND \"vn\".\"acl_test_code\" in (\'П0030\',\'П0060\')";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+
+            whereStr.AddWhereIntConvertLess("\"vn\".acl_mcn_code", Int32.Parse(res));
+        }
+
+        public void AddWhereDateIMStart(string date)
+        {
+            string str = $"LEFT JOIN \"tblPatientAclResult\" \"im\" ON \"tblPatientCard\".\"patient_id\" = \"im\".\"patient_id\" AND \"im\".\"acl_test_code\" = \'И0025\'";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+
+            whereStr.AddWhereSqlDateMore("\"im\".acl_sample_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDateImEnd(string date)
+        {
+            string str = $"LEFT JOIN \"tblPatientAclResult\" \"im\" ON \"tblPatientCard\".\"patient_id\" = \"im\".\"patient_id\" AND \"im\".\"acl_test_code\" = \'И0025\'";
+
+            if (!joinStr.ToString().Contains(str))
+                joinStr.AppendLine(str);
+
+            whereStr.AddWhereSqlDateLess("\"im\".acl_sample_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
         }
 
         #endregion
