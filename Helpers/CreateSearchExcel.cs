@@ -2,7 +2,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
 
-namespace HIVBackend.Services
+namespace HIVBackend.Helpers
 {
     public class CreateExcel
     {

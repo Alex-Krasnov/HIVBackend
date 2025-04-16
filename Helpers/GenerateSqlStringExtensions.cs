@@ -1,8 +1,10 @@
-﻿using DocumentFormat.OpenXml.Drawing;
-using System.Text;
+﻿using System.Text;
 
-namespace HIVBackend.Services
+namespace HIVBackend.Helpers
 {
+    /// <summary>
+    /// методы расширения StringBuilder для составление sql строк
+    /// </summary>
     public static class GenerateSqlStringExtensions
     {
         #region WHERE
@@ -123,11 +125,11 @@ namespace HIVBackend.Services
         /// <summary>
         /// Добавляет LEFT JOIN если такого еще нет с разными полями
         /// </summary>
-        public static void AddLeftJoinIfNotExistDiffField(this StringBuilder joinStr, 
-                                                          string joinTable, 
-                                                          string fieldLeft, 
-                                                          string fieldRight, 
-                                                          string table, 
+        public static void AddLeftJoinIfNotExistDiffField(this StringBuilder joinStr,
+                                                          string joinTable,
+                                                          string fieldLeft,
+                                                          string fieldRight,
+                                                          string table,
                                                           string? alias = null)
         {
             string str = alias != null && alias.Length != 0 ?

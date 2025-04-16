@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace HIVBackend.Services
+namespace HIVBackend.Helpers
 {
     public class CreateLambda<T>
     {

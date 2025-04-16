@@ -1,4 +1,4 @@
-﻿namespace HIVBackend.Services
+﻿namespace HIVBackend.Helpers
 {
     public class DictionaryEqualityComparer : IEqualityComparer<IDictionary<string, object>>
     {

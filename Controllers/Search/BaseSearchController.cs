@@ -1,7 +1,7 @@
 ﻿using HIVBackend.Data;
+using HIVBackend.Helpers;
 using HIVBackend.Models.FormModels.Search;
 using HIVBackend.Models.OutputModel.Search;
-using HIVBackend.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,12 +11,12 @@ namespace HIVBackend.Controllers.Search
     /// базовый контролер форм поиска
     /// </summary>
     /// <typeparam name="TForm">класс наследованый от BaseSearchForm</typeparam>
-    /// <typeparam name="TFormModel"></typeparam>
+    /// <typeparam name="TInputForm"></typeparam>
     [Route("api/[controller]")]
     [ApiController]
-    public abstract class BaseSearchController<TForm, TFormModel> : ControllerBase
+    public abstract class BaseSearchController<TForm, TInputForm> : ControllerBase
         where TForm : BaseSearchForm
-        where TFormModel : BaseSearchInputForm
+        where TInputForm : BaseSearchInputForm
     {
         [HttpGet]
         [Authorize(Roles = "User")]
@@ -31,7 +31,7 @@ namespace HIVBackend.Controllers.Search
 
         [HttpPost, Route("GetRes")]
         [Authorize(Roles = "User")]
-        public IActionResult GetRes(TFormModel form)
+        public IActionResult GetRes(TInputForm form)
         {
             int pageSize = 100;
 
@@ -42,19 +42,24 @@ namespace HIVBackend.Controllers.Search
             {
                 string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
                 byte[] fileBytes = SerarchResService.GetExcelRes(authHeader: Request.Headers["Authorization"].First(),
-                                                                 selectGroupSrt: form.selectGroupSrt,
-                                                                 joinStr: form.joinStr,
-                                                                 whereStr: form.whereStr,
+                                                                 selectGroupSrt: form._queryBuilder.selectGroupSrt,
+                                                                 joinStr: form._queryBuilder.joinStr,
+                                                                 whereStr: form._queryBuilder.whereStr,
                                                                  pageSize: pageSize,
                                                                  page: form.Page,
-                                                                 columName: form.columName);
+                                                                 columName: form._queryBuilder.columName);
 
                 return File(fileBytes, contentType, "res_search.xlsx");
             }
 
-            var searchRes = SerarchResService.GetSearchRes(form.selectGroupSrt, form.joinStr, form.whereStr, pageSize, form.Page);
+            var searchRes = SerarchResService.GetSearchRes(
+                    form._queryBuilder.selectGroupSrt, 
+                    form._queryBuilder.joinStr, 
+                    form._queryBuilder.whereStr, 
+                    pageSize, 
+                    form.Page);
 
-            searchRes.ColumName = form.columName;
+            searchRes.ColumName = form._queryBuilder.columName;
             return Ok(searchRes);
         }
     }

@@ -1,7 +1,8 @@
 ﻿using HIVBackend.Models;
+using HIVBackend.Services;
 using System.Text;
 
-namespace HIVBackend.Services
+namespace HIVBackend.Helpers
 {
     public class SerarchResService
     {
@@ -16,24 +17,24 @@ namespace HIVBackend.Services
             //получаем сами данные из бд тут, вроде пофиг на кол-во из-за пагинации, но хз
             var res = NpgsqlService.GetDBData(selectGroupSrt, joinStr, whereStr, pageSize, page);
 
-            return new SearchRes() { ResCount = count, ResPage = NpgsqlService.DataSetToList(res)};
+            return new SearchRes() { ResCount = count, ResPage = NpgsqlService.DataSetToList(res) };
         }
 
         /// <summary>
         /// Для отправки Excel
         /// </summary>
-        public static byte[] GetExcelRes(string authHeader, 
-                                         StringBuilder selectGroupSrt, 
-                                         StringBuilder joinStr, 
-                                         StringBuilder whereStr, 
-                                         int pageSize, 
-                                         int page, 
+        public static byte[] GetExcelRes(string authHeader,
+                                         StringBuilder selectGroupSrt,
+                                         StringBuilder joinStr,
+                                         StringBuilder whereStr,
+                                         int pageSize,
+                                         int page,
                                          List<string> columName)
         {
             string jwt = authHeader.Substring("Bearer ".Length);
             var jwtHandler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
             var token = jwtHandler.ReadJwtToken(jwt);
-            
+
             var excelRes = NpgsqlService.GetDBData(selectGroupSrt, joinStr, whereStr, pageSize, page, true);
 
             var createExcel = new CreateExcel();
@@ -48,7 +49,7 @@ namespace HIVBackend.Services
             string contentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet";
             byte[] fileBytes = File.ReadAllBytes(path);
 
-            return fileBytes; 
+            return fileBytes;
         }
     }
 }

@@ -3,7 +3,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HIVBackend.Data;
 
-namespace HIVBackend.Services
+namespace HIVBackend.Helpers
 {
     public class ReferalAnalysisCreateWord
     {
@@ -157,7 +157,7 @@ namespace HIVBackend.Services
                         Size = 1
                     }));
 
-                table.AppendChild<TableProperties>(props);
+                table.AppendChild(props);
 
                 foreach (var item in research)
                 {
@@ -199,7 +199,7 @@ namespace HIVBackend.Services
                     para16.Append(new Run(new RunProperties(new Bold()), new Text(docName)));
 
 
-                    table1.AppendChild<TableProperties>(props1);
+                    table1.AppendChild(props1);
                     TableRow tr0 = new();
                     TableCell tc01 = new(new Paragraph(new Run(new RunProperties(new Bold()), new Text("Каб№"))));
                     TableCell tc02 = new(new Paragraph(new Run(new RunProperties(new Bold()), new Text("Специалист"))));

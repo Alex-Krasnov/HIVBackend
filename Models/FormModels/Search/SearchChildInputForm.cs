@@ -1,6 +1,4 @@
 ﻿using HIVBackend.Enums;
-using HIVBackend.Services;
-using System;
 
 namespace HIVBackend.Models.FormModels.Search
 {
@@ -65,120 +63,46 @@ namespace HIVBackend.Models.FormModels.Search
                 if ((bool)key.GetValue(this) == true)
                 {
                     if (key.Name == "SelectBirthDate")
-                    {
-                        columName.Add("Возраст в днях");
-                        selectGroupSrt.AppendLine(",now()::date - \"tblPatientCard\".birth_date");
-                    }
+                        _queryBuilder.AddSelectAgeDay();
 
                     if (key.Name == "SelectSex")
-                    {
-                        columName.Add("Пол");
-                        selectGroupSrt.AppendLine(",\"tblSex\".sex_short");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblSex", field: "sex_id", table: "tblPatientCard");
-                    }
+                        _queryBuilder.AddSelectSex();
 
                     if (key.Name == "SelectDieDate")
-                    {
-                        columName.Add("Дата смерти");
-                        selectGroupSrt.AppendLine(",\"tblPatientCard\".die_date");
-                        columName.Add("Дата смерти от СПИДа");
-                        selectGroupSrt.AppendLine(",\"tblPatientCard\".die_aids_date");
-                    }
+                        _queryBuilder.AddSelectDieDate();
 
                     if (key.Name == "SelectShowIllnes")
-                    {
-                        columName.Add("Индикаторная болезнь");
-                        selectGroupSrt.AppendLine(",\"tblShowIllness\".show_illness_long");
-
-                        columName.Add("Дата вторичного заболивания с");
-                        selectGroupSrt.AppendLine(",\"tblPatientShowIllness\".start_date");
-
-                        columName.Add("Дата вторичного заболивания по");
-                        selectGroupSrt.AppendLine(",\"tblPatientShowIllness\".end_date");
-
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
-                    }
+                        _queryBuilder.AddSelectShowIllnes();
 
                     if (key.Name == "SelectCardNo")
-                    {
-                        columName.Add("№ карты");
-                        selectGroupSrt.AppendLine(",\"tblPatientCard\".card_no");
-                    }
+                        _queryBuilder.AddSelectCardNo();
 
                     if (key.Name == "SelectArt")
-                    {
-                        columName.Add("АРТ");
-                        selectGroupSrt.AppendLine(",\"tblArvt\".arvt_long");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblArvt", field: "arvt_id", table: "tblPatientCard");
-                    }
+                        _queryBuilder.AddSelectArt();
 
                     if (key.Name == "SelectFamilyType")
-                    {
-                        columName.Add("Состав семьи");
-                        selectGroupSrt.AppendLine(",\"tblFamilyType\".family_type_long");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblFamilyType", field: "family_type_id", table: "tblPatientCard");
-                    }
+                        _queryBuilder.AddSelectFamilyType();
 
                     if (key.Name == "SelectFirstCheckDate")
-                    {
-                        columName.Add("Дата 1-го визита");
-                        selectGroupSrt.AppendLine(",\"tblPatientCard\".check_first_date");
-                    }
+                        _queryBuilder.AddSelectFirstCheckDate();
 
                     if (key.Name == "SelectChildPlace")
-                    {
-                        columName.Add("Распол отказ реб");
-                        selectGroupSrt.AppendLine(",\"tblChildPlace\".child_place_long");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblChildPlace", field: "child_place_id", table: "tblPatientCard");
-                    }
+                        _queryBuilder.AddSelectChildPlace();
 
                     if (key.Name == "SelectBreastMonthNo")
-                    {
-                        columName.Add("Месяц грудного вскармливания");
-                        selectGroupSrt.AppendLine(",\"tblPatientCard\".breast_month_no");
-                    }
+                        _queryBuilder.AddSelectBreastMonthNo();
 
                     if (key.Name == "SelectChildPhp")
-                    {
-                        columName.Add("Профилактика ПХП");
-                        selectGroupSrt.AppendLine(",\"tblChildPHP\".child_php_long");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblChildPHP", field: "child_php_id", table: "tblPatientCard");
-                    }
+                        _queryBuilder.AddSelectChildPhp();
 
                     if (key.Name == "SelectParentId")
-                    {
-                        columName.Add("Зарег. мать");
-                        selectGroupSrt.AppendLine(",\"tblPatientCard\".mother_patient_id");
-                        columName.Add("Зарег. мать фамилия");
-                        selectGroupSrt.AppendLine(",\"tblPatientCardMather\".family_name");
-                        columName.Add("Зарег. мать имя");
-                        selectGroupSrt.AppendLine(",\"tblPatientCardMather\".first_name");
-                        columName.Add("Зарег. мать отчество");
-                        selectGroupSrt.AppendLine(",\"tblPatientCardMather\".third_name");
-
-                        columName.Add("Зарег. отец");
-                        selectGroupSrt.AppendLine(",\"tblPatientCard\".father_patient_id");
-
-                        joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblPatientCard", 
-                                                               fieldLeft: "mother_patient_id", 
-                                                               fieldRight: "patient_id", 
-                                                               table: "tblPatientCard", 
-                                                               alias: "tblPatientCardMather");
-                    }
+                        _queryBuilder.AddSelectParent();
 
                     if (key.Name == "SelectMaterHome")
-                    {
-                        columName.Add("Роддом");
-                        selectGroupSrt.AppendLine(",\"tblMaterHome\".materhome_long");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblMaterHome", field: "materhome_id", table: "tblPatientCard");
-                    }
+                        _queryBuilder.AddSelectMaterHome();
 
                     if (key.Name == "SelectForm309")
-                    {
-                        columName.Add("Форма 309");
-                        selectGroupSrt.AppendLine(",\"tblPatientCard\".forma_309");
-                    }
+                        _queryBuilder.AddSelectForm309();
                 }
             }
 
@@ -187,136 +111,73 @@ namespace HIVBackend.Models.FormModels.Search
             #region Генерация строки WHERE
 
             if (Sex.Length != 0)
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblSex", field: "sex_id", table: "tblPatientCard");
-                whereStr.AddWhereSqlEqualString("\"tblSex\".sex_short", Sex);
-            }
+                _queryBuilder.AddWhereSex(Sex);
 
             if (DateDieStart.Length != 0)
-            {
-                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".die_date", DateOnly.Parse(DateDieStart).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereDateDieStart(DateDieStart);
 
             if (DateDieEnd.Length != 0)
-            {
-                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".die_date", DateOnly.Parse(DateDieEnd).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereDateDieEnd(DateDieEnd);
 
             if (DateDieAidsStart.Length != 0)
-            {
-                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".die_aids_date", DateOnly.Parse(DateDieAidsStart).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereDateDieAidsStart(DateDieAidsStart);
 
             if (DateDieAidsEnd.Length != 0)
-            {
-                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".die_aids_date", DateOnly.Parse(DateDieAidsEnd).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereDateDieAidsEnd(DateDieAidsEnd);
 
             if (ShowIllnes[0] != "Все")
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
-                whereStr.AddWhereSqlIn("\"tblShowIllness\".show_illness_long", ShowIllnes);
-            }
+                _queryBuilder.AddWhereShowIllnes(ShowIllnes);
 
             if (DateShowIllnesStart.Length != 0)
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
-                whereStr.AddWhereSqlDateMore("\"tblPatientShowIllness\".start_date", DateOnly.Parse(DateShowIllnesStart).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereDateShowIllnesStart(DateShowIllnesStart);
 
             if (DateShowIllnesEnd.Length != 0)
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
-                whereStr.AddWhereSqlDateLess("\"tblPatientShowIllness\".end_date", DateOnly.Parse(DateShowIllnesEnd).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereDateShowIllnesEnd(DateShowIllnesEnd);
 
             if (CardNo.Length != 0)
-            {
-                whereStr.AddWhereSqlStartWhith("\"tblPatientCard\".card_no", CardNo);
-            }
+                _queryBuilder.AddWhereCardNo(CardNo);
 
             if (Art[0] != "Все")
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblArvt", field: "arvt_id", table: "tblPatientCard");
-                whereStr.AddWhereSqlIn("\"tblArvt\".arvt_long", Art);
-            }
+                _queryBuilder.AddWhereArt(Art);
 
             if (AgeDayStart.Length != 0)
-            {
-                whereStr.AddWhereIntConvertMore("now()::date - \"tblPatientCard\".birth_date", int.Parse(AgeDayStart));
-            }
+                _queryBuilder.AddWhereAgeDayStart(AgeDayStart);
 
             if (AgeDayEnd.Length != 0)
-            {
-                whereStr.AddWhereIntConvertLess("now()::date - \"tblPatientCard\".birth_date", int.Parse(AgeDayEnd));
-            }
+                _queryBuilder.AddWhereAgeDayEnd(AgeDayEnd);
 
             if (FamilyType[0] != "Все")
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblFamilyType", field: "family_type_id", table: "tblPatientCard");
-                whereStr.AddWhereSqlIn("\"tblFamilyType\".family_type_long", FamilyType);
-            }
+                _queryBuilder.AddWhereFamilyType(FamilyType);
 
             if (FirstCheckDateStart.Length != 0)
-            {
-                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".check_first_date", DateOnly.Parse(FirstCheckDateStart).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereFirstCheckDateStart(FirstCheckDateStart);
 
             if (FirstCheckDateEnd.Length != 0)
-            {
-                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".check_first_date", DateOnly.Parse(FirstCheckDateEnd).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereFirstCheckDateEnd(FirstCheckDateEnd);
 
             if (ChildPlace[0] != "Все")
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblChildPlace", field: "child_place_id", table: "tblPatientCard");
-                whereStr.AddWhereSqlIn("\"tblChildPlace\".child_place_long", ChildPlace);
-            }
+                _queryBuilder.AddWhereChildPlace(ChildPlace);
 
             if (BreastMonthNoStart.Length != 0)
-            {
-                whereStr.AddWhereIntConvertMore("\"tblPatientCard\".breast_month_no", int.Parse(BreastMonthNoStart));
-            }
+                _queryBuilder.AddWhereBreastMonthNoStart(BreastMonthNoStart);
 
             if (BreastMonthNoEnd.Length != 0)
-            {
-                whereStr.AddWhereIntConvertLess("\"tblPatientCard\".breast_month_no", int.Parse(BreastMonthNoEnd));
-            }
+                _queryBuilder.AddWhereBreastMonthNoEnd(BreastMonthNoEnd);
 
             if (ChildPhp[0] != "Все")
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblChildPHP", field: "child_php_id", table: "tblPatientCard");
-                whereStr.AddWhereSqlIn("\"tblChildPHP\".child_php_long", ChildPhp);
-            }
+                _queryBuilder.AddWhereChildPhp(ChildPhp);
 
             if (MotherPatientId.Length != 0)
-            {
-                whereStr.AddWhereSqlEqual("\"tblPatientCard\".mother_patient_id", MotherPatientId);
-            }
+                _queryBuilder.AddWhereMotherPatientId(MotherPatientId);
 
             if (FatherPatientId.Length != 0)
-            {
-                whereStr.AddWhereSqlEqual("\"tblPatientCard\".father_patient_id", FatherPatientId);
-            }
+                _queryBuilder.AddWhereFatherPatientId(FatherPatientId);
 
             if (MaterHome[0] != "Все")
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblMaterHome", field: "materhome_id", table: "tblPatientCard");
-                whereStr.AddWhereSqlIn("\"tblMaterHome\".materhome_long", MaterHome);
-            }
+                _queryBuilder.AddWhereMaterHome(MaterHome);
 
-            if (Form309 == YNAEnum.Yes.ToEnumDescriptionNameString())
-            {
-                whereStr.AddWhereSqlEqual("\"tblPatientCard\".forma_309", "1");
-            }
-
-            if (Form309 == YNAEnum.No.ToEnumDescriptionNameString())
-            {
-                whereStr.AddWhereSqlEqual("\"tblPatientCard\".forma_309", "2");
-            }
+            if (Form309 != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereForm309YNA(Form309);
 
             #endregion
         }

@@ -33,6 +33,29 @@ namespace HIVBackend.Enums
             return !attributes.Any() ? string.Empty : ((DescriptionAttribute)attributes[0]).Description;
         }
 
+        /// <summary>
+        /// перобразуем string в enum по DescriptionAttribute
+        /// </summary>
+        public static T GetEnumFromDescription<T>(string description) where T : Enum
+        {
+            if (string.IsNullOrEmpty(description))
+                throw new ArgumentNullException(nameof(description));
+
+            var type = typeof(T);
+
+            foreach (var field in type.GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                if (Attribute.GetCustomAttribute(field, typeof(DescriptionAttribute))
+                    is DescriptionAttribute attr)
+                {
+                    if (attr.Description.Equals(description, StringComparison.OrdinalIgnoreCase))
+                        return (T)field.GetValue(null)!;
+                }
+            }
+
+            throw new ArgumentException($"Не найдено соответствие для '{description}' в {typeof(T).Name}");
+        }
+
         private static string GetEnumDescription(Enum value)
         {
             var fieldInfo = value.GetType().GetField(value.ToString());

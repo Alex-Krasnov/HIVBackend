@@ -3,7 +3,7 @@ using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using HIVBackend.Data;
 
-namespace HIVBackend.Services
+namespace HIVBackend.Helpers
 {
     public class ReferalAnalysisIbCreateWord
     {
@@ -132,7 +132,7 @@ namespace HIVBackend.Services
                         Size = 1
                     }));
 
-                table.AppendChild<TableProperties>(props);
+                table.AppendChild(props);
 
                 var tr = new TableRow();
                 var tc = new TableCell();

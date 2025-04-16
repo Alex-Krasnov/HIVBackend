@@ -1,5 +1,4 @@
 ﻿using HIVBackend.Enums;
-using HIVBackend.Services;
 
 namespace HIVBackend.Models.FormModels.Search
 {
@@ -28,13 +27,13 @@ namespace HIVBackend.Models.FormModels.Search
 
         #region select поля
 
-        public bool selectSex { get; set; } = false;
-        public bool selectShowIllnes { get; set; } = false;
-        public bool selectUfsin { get; set; } = false;
-        public bool selectDateDiagnosis { get; set; } = false;
-        public bool selectPlaceDiagnosis { get; set; } = false;
-        public bool selectDateRegistration { get; set; } = false;
-        public bool selectDateDeparture { get; set; } = false;
+        public bool SelectSex { get; set; } = false;
+        public bool SelectShowIllnes { get; set; } = false;
+        public bool SelectUfsin { get; set; } = false;
+        public bool SelectDateDiagnosis { get; set; } = false;
+        public bool SelectPlaceDiagnosis { get; set; } = false;
+        public bool SelectDateRegistration { get; set; } = false;
+        public bool SelectDateDeparture { get; set; } = false;
 
         #endregion
 
@@ -50,71 +49,25 @@ namespace HIVBackend.Models.FormModels.Search
                 if ((bool)key.GetValue(this) == true)
                 {
                     if (key.Name == "SelectSex")
-                    {
-                        columName.Add("Пол");
-                        selectGroupSrt.AppendLine(",\"tblSex\".sex_short");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblSex", field: "sex_id", table: "tblPatientCard");
-                    }
+                        _queryBuilder.AddSelectSex();
 
                     if (key.Name == "selectShowIllnes")
-                    {
-                        columName.Add("Индикаторная болезнь");
-                        selectGroupSrt.AppendLine(",\"tblShowIllness\".show_illness_long");
-
-                        columName.Add("Дата вторичного заболивания с");
-                        selectGroupSrt.AppendLine(",\"tblPatientShowIllness\".start_date");
-
-                        columName.Add("Дата вторичного заболивания по");
-                        selectGroupSrt.AppendLine(",\"tblPatientShowIllness\".end_date");
-
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
-                    }
+                        _queryBuilder.AddSelectShowIllnes();
 
                     if (key.Name == "SelectUfsin")
-                    {
-                        columName.Add("Дата постановки на учет УФСИН");
-                        selectGroupSrt.AppendLine(",\"tblPatientCard\".ufsin_date");
-                    }
+                        _queryBuilder.AddSelectUfsin();
 
-                    if (key.Name == "selectDateDiagnosis")
-                    {
-                        columName.Add("Дата установления диагноза");
-                        selectGroupSrt.AppendLine(",\"tblPatientNonresident\".date_diagnosis");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+                    if (key.Name == "SelectDateDiagnosis")
+                        _queryBuilder.AddSelectDateDiagnosis();
 
-                    }
+                    if (key.Name == "SelectPlaceDiagnosis")
+                        _queryBuilder.AddSelectPlaceDiagnosis();
 
-                    if (key.Name == "selectPlaceDiagnosis")
-                    {
-                        columName.Add("Место установл.диагноза");
-                        selectGroupSrt.AppendLine(",\"tblRegionNonresident\".region_long");
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
+                    if (key.Name == "SelectDateRegistration")
+                        _queryBuilder.AddSelectDateRegistration();
 
-                        joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblRegion", 
-                                                           alias: "tblRegionNonresident", 
-                                                           fieldRight: "region_id", 
-                                                           table: "tblPatientNonresident",
-                                                           fieldLeft: "place_diagnosis");
-                    }
-
-                    if (key.Name == "selectDateRegistration")
-                    {
-                        columName.Add("Дата регистрации с");
-                        selectGroupSrt.AppendLine(",\"tblPatientNonresident\".date_registration_from");
-                        columName.Add("Дата регистрации по");
-                        selectGroupSrt.AppendLine(",\"tblPatientNonresident\".date_registration_to");
-
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-                    }
-
-                    if (key.Name == "selectDateDeparture")
-                    {
-                        columName.Add("Дата убытия");
-                        selectGroupSrt.AppendLine(",\"tblPatientNonresident\".date_departure");
-
-                        joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-                    }
+                    if (key.Name == "SelectDateDeparture")
+                        _queryBuilder.AddSelectDateDeparture();
                 }
             }
 
@@ -123,127 +76,52 @@ namespace HIVBackend.Models.FormModels.Search
             #region Генерация строки WHERE
 
             if (Sex.Length != 0)
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblSex", field: "sex_id", table: "tblPatientCard");
-                whereStr.AddWhereSqlEqualString("\"tblSex\".sex_short", Sex);
-            }
+                _queryBuilder.AddWhereSex(Sex);
 
             if (ShowIllnes[0] != "Все")
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
-                whereStr.AddWhereSqlIn("\"tblShowIllness\".show_illness_long", ShowIllnes);
-            }
+                _queryBuilder.AddWhereShowIllnes(ShowIllnes);
 
             if (DateShowIllnesStart.Length != 0)
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
-                whereStr.AddWhereSqlDateMore("\"tblPatientShowIllness\".start_date", DateOnly.Parse(DateShowIllnesStart).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereDateShowIllnesStart(DateShowIllnesStart);
 
             if (DateShowIllnesEnd.Length != 0)
-            {
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientShowIllness", field: "patient_id", table: "tblPatientCard");
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblShowIllness", field: "show_illness_id", table: "tblPatientShowIllness");
-                whereStr.AddWhereSqlDateLess("\"tblPatientShowIllness\".end_date", DateOnly.Parse(DateShowIllnesEnd).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereDateShowIllnesEnd(DateShowIllnesEnd);
 
-            if (UfsinYNA == YNAEnum.Yes.ToEnumDescriptionNameString())
-            {
-                whereStr.AddWhereSqlIsNotNull("\"tblPatientCard\".ufsin_date");
-            }
-
-            if (UfsinYNA == YNAEnum.No.ToEnumDescriptionNameString())
-            {
-                whereStr.AddWhereSqlIsNull("\"tblPatientCard\".ufsin_date");
-            }
+            if (UfsinYNA != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereUfsinYNA(UfsinYNA);
 
             if (DateUfsinStart.Length != 0)
-            {
-                whereStr.AddWhereSqlDateMore("\"tblPatientCard\".ufsin_date", DateOnly.Parse(DateUfsinStart).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereDateUfsinStart(DateUfsinStart);
 
             if (DateUfsinEnd.Length != 0)
-            {
-                whereStr.AddWhereSqlDateLess("\"tblPatientCard\".ufsin_date", DateOnly.Parse(DateUfsinEnd).ToString("dd-MM-yyyy"));
-            }
+                _queryBuilder.AddWhereDateUfsinEnd(DateUfsinEnd);
 
             if (DateDiagnosisStart.Length != 0)
-            {
-                whereStr.AddWhereSqlDateMore("\"tblPatientNonresident\".date_diagnosis", DateOnly.Parse(DateDiagnosisStart).ToString("dd-MM-yyyy"));
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-            }
+                _queryBuilder.AddWhereDateDiagnosisStart(DateDiagnosisStart);
 
             if (DateDiagnosisEnd.Length != 0)
-            {
-                whereStr.AddWhereSqlDateLess("\"tblPatientNonresident\".date_diagnosis", DateOnly.Parse(DateDiagnosisEnd).ToString("dd-MM-yyyy"));
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-            }
+                _queryBuilder.AddWhereDateDiagnosisEnd(DateDiagnosisEnd);
 
             if (PlaceDiagnosis[0] != "Все")
-            {
-                whereStr.AddWhereSqlIn("\"tblRegionNonresident\".region_long", PlaceDiagnosis);
+                _queryBuilder.AddWherePlaceDiagnosis(PlaceDiagnosis);
 
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-                joinStr.AddLeftJoinIfNotExistDiffField(joinTable: "tblRegion",
-                                                            alias: "tblRegionNonresident",
-                                                            fieldRight: "region_id",
-                                                            table: "tblPatientNonresident",
-                                                            fieldLeft: "place_diagnosis");
-            }
-
-            if (DateRegistrationYNA == YNAEnum.Yes.ToEnumDescriptionNameString())
-            {
-                whereStr.AddWhereSqlIsNotNull("\"tblPatientNonresident\".date_registration_from");
-
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-            }
-
-            if (DateRegistrationYNA == YNAEnum.No.ToEnumDescriptionNameString())
-            {
-                whereStr.AddWhereSqlIsNull("\"tblPatientNonresident\".date_registration_from");
-
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-            }
+            if (DateRegistrationYNA != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereDateRegistrationYNA(DateRegistrationYNA);
 
             if (DateRegistrationStart.Length != 0)
-            {
-                whereStr.AddWhereSqlDateMore("\"tblPatientNonresident\".date_registration_from", DateOnly.Parse(DateRegistrationStart).ToString("dd-MM-yyyy"));
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-            }
+                _queryBuilder.AddWhereDateRegistrationStart(DateRegistrationStart);
 
             if (DateRegistrationEnd.Length != 0)
-            {
-                whereStr.AddWhereSqlDateLess("\"tblPatientNonresident\".date_registration_from", DateOnly.Parse(DateRegistrationEnd).ToString("dd-MM-yyyy"));
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-            }
+                _queryBuilder.AddWhereDateRegistrationEnd(DateRegistrationEnd);
 
-            if (DateDepartureYNA == YNAEnum.Yes.ToEnumDescriptionNameString())
-            {
-                whereStr.AddWhereSqlIsNotNull("\"tblPatientNonresident\".date_departure");
-
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-            }
-
-            if (DateDepartureYNA == YNAEnum.No.ToEnumDescriptionNameString())
-            {
-                whereStr.AddWhereSqlIsNull("\"tblPatientNonresident\".date_departure");
-
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-            }
+            if (DateDepartureYNA != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereDateDepartureYNA(DateDepartureYNA);
 
             if (DateDepartureStart.Length != 0)
-            {
-                whereStr.AddWhereSqlDateMore("\"tblPatientNonresident\".date_departure", DateOnly.Parse(DateDepartureStart).ToString("dd-MM-yyyy"));
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-            }
+                _queryBuilder.AddWhereDateDepartureStart(DateDepartureStart);
 
             if (DateDepartureEnd.Length != 0)
-            {
-                whereStr.AddWhereSqlDateLess("\"tblPatientNonresident\".date_departure", DateOnly.Parse(DateDepartureEnd).ToString("dd-MM-yyyy"));
-                joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientNonresident", field: "patient_id", table: "tblPatientCard");
-            }
+                _queryBuilder.AddWhereDateDepartureEnd(DateDepartureEnd);
 
             #endregion
         }

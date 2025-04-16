@@ -3,7 +3,7 @@ using HIVBackend.Models.DBModuls;
 using HIVBackend.Models.FormModels.Search.LEGACY;
 using HIVBackend.Models.OutputModel;
 using HIVBackend.Models.OutputModel.Search;
-using HIVBackend.Services;
+using HIVBackend.Helpers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Data;
