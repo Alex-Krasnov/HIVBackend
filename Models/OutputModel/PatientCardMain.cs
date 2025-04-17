@@ -2,7 +2,7 @@
 {
     public class PatientCardMain
     {
-        public int PatientId { get; set; }
+        public int? PatientId { get; set; }
         public DateOnly? InputDate { get; set; }
         public string? FamilyName { get; set; }
         public string? FirstName { get; set; }

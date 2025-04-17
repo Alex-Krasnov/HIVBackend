@@ -4,6 +4,8 @@ using HIVBackend.Models.FormModels;
 using HIVBackend.Models.OutputModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace HIVBackend.Controllers.PatientCard
 {
@@ -19,12 +21,44 @@ namespace HIVBackend.Controllers.PatientCard
         }
 
         [HttpGet]
-        [Authorize(Roles = "User")]
-        public IActionResult Get(int patientId)
+        //[Authorize(Roles = "User")]
+        public IActionResult Get(int? patientId)
         {
+            PatientCardMain patientCardMain = new();
+
             List<FrmBlot> blots = new();
             List<FrmSecondDeseases> secondDeseases = new();
             List<FrmStage> stages = new();
+
+            patientCardMain.ListSex = _context.TblSexes.Select(e => e.SexShort)?.ToList();
+            patientCardMain.ListRegOffReason = _context.TblInfectCourses
+                .Where(e => e.InfectCourseId == 201 || e.InfectCourseId == 203 || e.InfectCourseId == 210).Select(e => e.InfectCourseLong)?.ToList();
+            patientCardMain.ListRegion = _context.TblRegions.Select(e => e.RegionLong)?.ToList();
+            patientCardMain.ListCountry = _context.TblCountries.Select(e => e.CountryLong)?.ToList();
+            patientCardMain.ListPlaceCheck = _context.TblListPlaceChecks.Select(e => e.PlaceCheckName)?.ToList();
+            patientCardMain.ListCodeMKB = _context.TblCodeMkb10s.Select(e => e.CodeMkb10Long)?.ToList();
+            patientCardMain.ListCheckCourseShort = _context.TblCheckCourses.Select(e => e.CheckCourseShort)?.ToList();
+            patientCardMain.ListCheckCourseLong = _context.TblCheckCourses.Select(e => e.CheckCourseLong)?.ToList();
+            patientCardMain.ListInfectCourseShort = _context.TblInfectCourses.Where(e => e.InfectCourseShort != null).Select(e => e.InfectCourseShort)?.ToList();
+            patientCardMain.ListInfectCourseLong = _context.TblInfectCourses.Where(e => e.InfectCourseShort != null).Select(e => e.InfectCourseLong)?.ToList();
+            patientCardMain.ListDieCourseLong = _context.TblTempDieCureMkb10lists.Select(e => new Selector2Col { Short = e.DieCourseShort, Long = e.DieCourseLong })?.ToList();
+            patientCardMain.ListVulnerableGroup = _context.TblListVulnerableGroups.Select(e => e.VulnerableGroupName)?.ToList();
+            patientCardMain.ListARVT = _context.TblArvts.Select(e => e.ArvtLong)?.ToList();
+            patientCardMain.ListInvalid = _context.TblInvalids.Select(e => e.InvalidLong)?.ToList();
+            patientCardMain.ListCheckPlace = _context.TblCheckPlaces.Select(e => e.CheckPlaceLong)?.ToList();
+            patientCardMain.ListRes = _context.TblIbResults.Select(e => e.IbResultShort)?.ToList();
+            patientCardMain.ListDesease = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong)?.ToList();
+            patientCardMain.ListStage = _context.TblDiagnoses.Select(e => e.DiagnosisLong)?.ToList();
+            patientCardMain.ListReferenceMo = _context.TblListReferenceMos.Select(e => e.ReferenceMoName).ToList();
+
+            patientCardMain.Blots = blots;
+            patientCardMain.SecondDeseases = secondDeseases;
+            patientCardMain.Stages = stages;
+
+            if (patientId == null)
+            {
+                return Ok(patientCardMain);
+            }
 
             TblPatientCard patient = _context.TblPatientCards.Where(e => e.PatientId == patientId && e.IsActive == true).ToList().FirstOrDefault();
             if (patient is null)
@@ -73,7 +107,6 @@ namespace HIVBackend.Controllers.PatientCard
                     });
             }
 
-            PatientCardMain patientCardMain = new();
 
             patientCardMain.PatientId = patient.PatientId;
             patientCardMain.InputDate = patient.InputDate;
@@ -135,29 +168,6 @@ namespace HIVBackend.Controllers.PatientCard
             patientCardMain.Archive = patient.SnilsFed;
             patientCardMain.CodeWord = patient.Codeword;
             patientCardMain.FlgDiagnosisAfterDeath = patient.FlgDiagnosisAfterDeath;
-
-            patientCardMain.ListSex = _context.TblSexes.Select(e => e.SexShort)?.ToList();
-            patientCardMain.ListRegOffReason = _context.TblInfectCourses
-                .Where(e => e.InfectCourseId == 201 || e.InfectCourseId == 203 || e.InfectCourseId == 210).Select(e => e.InfectCourseLong)?.ToList();
-            patientCardMain.ListRegion = _context.TblRegions.Select(e => e.RegionLong)?.ToList();
-            patientCardMain.ListCountry = _context.TblCountries.Select(e => e.CountryLong)?.ToList();
-            patientCardMain.ListPlaceCheck = _context.TblListPlaceChecks.Select(e => e.PlaceCheckName)?.ToList();
-            patientCardMain.ListCodeMKB = _context.TblCodeMkb10s.Select(e => e.CodeMkb10Long)?.ToList();
-            patientCardMain.ListCheckCourseShort = _context.TblCheckCourses.Select(e => e.CheckCourseShort)?.ToList();
-            patientCardMain.ListCheckCourseLong = _context.TblCheckCourses.Select(e => e.CheckCourseLong)?.ToList();
-            patientCardMain.ListInfectCourseShort = _context.TblInfectCourses.Where(e => e.InfectCourseShort != null).Select(e => e.InfectCourseShort)?.ToList();
-            patientCardMain.ListInfectCourseLong = _context.TblInfectCourses.Where(e => e.InfectCourseShort != null).Select(e => e.InfectCourseLong)?.ToList();
-
-            patientCardMain.ListDieCourseLong = _context.TblTempDieCureMkb10lists.Select(e => new Selector2Col { Short = e.DieCourseShort, Long = e.DieCourseLong })?.ToList();
-
-            patientCardMain.ListVulnerableGroup = _context.TblListVulnerableGroups.Select(e => e.VulnerableGroupName)?.ToList();
-            patientCardMain.ListARVT = _context.TblArvts.Select(e => e.ArvtLong)?.ToList();
-            patientCardMain.ListInvalid = _context.TblInvalids.Select(e => e.InvalidLong)?.ToList();
-            patientCardMain.ListCheckPlace = _context.TblCheckPlaces.Select(e => e.CheckPlaceLong)?.ToList();
-            patientCardMain.ListRes = _context.TblIbResults.Select(e => e.IbResultShort)?.ToList();
-            patientCardMain.ListDesease = _context.TblShowIllnesses.Select(e => e.ShowIllnessLong)?.ToList();
-            patientCardMain.ListStage = _context.TblDiagnoses.Select(e => e.DiagnosisLong)?.ToList();
-            patientCardMain.ListReferenceMo = _context.TblListReferenceMos.Select(e => e.ReferenceMoName).ToList();
 
             patientCardMain.Blots = blots;
             patientCardMain.SecondDeseases = secondDeseases;
@@ -391,7 +401,7 @@ namespace HIVBackend.Controllers.PatientCard
         [Authorize(Roles = "User")]
         public IActionResult DelPatientPatient(int patientId)
         {
-            TblPatientCard item = _context.TblPatientCards.First(e => e.PatientId == patientId);//new(){ PatientId = patientId };
+            TblPatientCard item = _context.TblPatientCards.First(e => e.PatientId == patientId);
             _context.TblPatientCards.Attach(item);
             item.IsActive = false;
             _context.SaveChanges();
@@ -402,8 +412,29 @@ namespace HIVBackend.Controllers.PatientCard
         [Authorize(Roles = "User")]
         public IActionResult UpdatePatient(PatientCardMainForm patient)
         {
-            TblPatientCard item = _context.TblPatientCards.First(e => e.PatientId == patient.PatientId);
-            _context.TblPatientCards.Attach(item);
+            TblPatientCard item;
+
+            if (patient.PatientId == null)
+            {
+                int MaxPatientId = _context.TblPatientCards.Max(e => e.PatientId) + 1;
+
+                item = new() { 
+                    PatientId = MaxPatientId, 
+                    IsActive = true, 
+                    InputDate = DateOnly.FromDateTime(DateTime.Now) 
+                };
+
+                _context.TblPatientCards.Add(item);
+            }
+            else
+            {
+                item = _context.TblPatientCards.First(e => e.PatientId == patient.PatientId);
+            }
+
+            if (_context.Entry(item).State == EntityState.Detached)
+            {
+                _context.TblPatientCards.Attach(item);
+            }
 
             item.FamilyName = patient.FamilyName;
             _context.Entry(item).Property(e => e.FamilyName).IsModified = true;
@@ -481,8 +512,6 @@ namespace HIVBackend.Controllers.PatientCard
                 _context.Entry(item).Property(e => e.DieAidsDate).IsModified = true;
                 item.DieDateInput = DateOnly.FromDateTime(DateTime.Now);
             }
-
-            var a = patient.BirthDate?.Length != 0;
 
             item.BirthDate = patient.BirthDate != null && patient.BirthDate?.Length != 0 ? DateOnly.Parse(patient.BirthDate) : null;
             _context.Entry(item).Property(e => e.BirthDate).IsModified = true;
@@ -678,7 +707,7 @@ namespace HIVBackend.Controllers.PatientCard
                 }
 
             _context.SaveChanges();
-            return Ok();
+            return Ok(item.PatientId);
         }
     }
 }
