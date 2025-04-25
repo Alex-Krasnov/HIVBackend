@@ -20,7 +20,7 @@ namespace HIVBackend.Controllers.PatientCard
 
         [HttpGet]
         [Authorize(Roles = "User")]
-        public IActionResult Get(int patientId)
+        public IActionResult Get(int? patientId)
         {
             List<FrmBlot> blots = new();
             List<FrmSecondDeseases> secondDeseases = new();
