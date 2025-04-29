@@ -1,5 +1,5 @@
 ﻿using HIVBackend.Data;
-using HIVBackend.Enums;
+using HIVBackend.Models.Enums;
 
 namespace HIVBackend.Models.OutputModel.Search
 {

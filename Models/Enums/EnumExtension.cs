@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Reflection;
 
-namespace HIVBackend.Enums
+namespace HIVBackend.Models.Enums
 {
     public static class EnumExtension
     {

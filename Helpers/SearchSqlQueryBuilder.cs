@@ -1,5 +1,5 @@
 ﻿using HIVBackend.Data;
-using HIVBackend.Enums;
+using HIVBackend.Models.Enums;
 using System.Text;
 
 namespace HIVBackend.Helpers

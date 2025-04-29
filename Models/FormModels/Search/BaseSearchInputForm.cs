@@ -1,5 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Drawing.Charts;
-using HIVBackend.Enums;
+using HIVBackend.Models.Enums;
 using HIVBackend.Helpers;
 using System.Reflection;
 

@@ -1,4 +1,4 @@
-﻿using HIVBackend.Enums;
+﻿using HIVBackend.Models.Enums;
 
 namespace HIVBackend.Models.FormModels.Search
 {

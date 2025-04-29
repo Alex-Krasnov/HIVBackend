@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel;
 
-namespace HIVBackend.Enums
+namespace HIVBackend.Models.Enums
 {
     /// <summary>
     /// варианты заполения полей DiePreset 
