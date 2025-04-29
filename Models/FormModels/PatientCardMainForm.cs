@@ -42,8 +42,8 @@
         public string? VulnerableGroupId { get; set; }
         public decimal? HeightOld { get; set; }//
         public decimal? WeightOld { get; set; }//
-        public bool? FlgZamMedPart { get; set; }
-        public bool? FlgHeadPhysician { get; set; }
+        public bool FlgZamMedPart { get; set; }
+        public bool FlgHeadPhysician { get; set; }
 
         public string? CheckCourseId { get; set; }
         public string? InfectCourseId { get; set; }
@@ -60,6 +60,7 @@
         public string? Codeword { get; set; }
         public string? Snils { get; set; }
         public string? FioChange { get; set; }
-        public bool? FlgDiagnosisAfterDeath { get; set; }
+        public bool FlgDiagnosisAfterDeath { get; set; }
+        public bool DeathTransferSub {  get; set; }
     }
 }

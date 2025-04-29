@@ -18,8 +18,8 @@
         public string? LastCareDate { get; set; }
         public string? CommunicationParentDate { get; set; }
         public string? CallingDistrictSpecDate { get; set; }
-        public bool? RefusalPhp { get; set; }
-        public bool? RefusalResearch { get; set; }
-        public bool? RefusalTherapy { get; set; }
+        public bool RefusalPhp { get; set; }
+        public bool RefusalResearch { get; set; }
+        public bool RefusalTherapy { get; set; }
     }
 }

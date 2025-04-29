@@ -21,9 +21,9 @@
         public DateOnly? LastCareDate { get; set; }
         public DateOnly? CommunicationParentDate { get; set; }
         public DateOnly? CallingDistrictSpecDate { get; set; }
-        public bool? RefusalPhp { get; set; }
-        public bool? RefusalResearch { get; set; }
-        public bool? RefusalTherapy { get; set; }
+        public bool RefusalPhp { get; set; }
+        public bool RefusalResearch { get; set; }
+        public bool RefusalTherapy { get; set; }
 
         public List<string>? ListFamilyType { get; set; }
         public List<string>? ListChildPlace { get; set; }

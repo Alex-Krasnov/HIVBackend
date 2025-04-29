@@ -75,7 +75,7 @@ namespace HIVBackend.Controllers.PatientCard
         }
 
         [HttpPost, Route("UpdatePatient")]
-        [Authorize(Roles = "User")]
+        //[Authorize(Roles = "User")]
         public IActionResult UpdatePatient(PatientCardChildForm patient)
         {
             TblPatientCard item = _context.TblPatientCards.First(e => e.PatientId == patient.PatientId);

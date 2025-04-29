@@ -1681,6 +1681,7 @@ public partial class HivContext : DbContext
                 .HasColumnName("is_active");
             entity.Property(e => e.HepBDate).HasColumnName("hep_b_date");
             entity.Property(e => e.HepBDescr).HasColumnName("hep_b_descr");
+            entity.Property(e => e.DeathTransferSub).HasColumnName("death_transfer_sub");
 
             entity.HasOne(d => d.Aids12).WithMany(p => p.TblPatientCards)
                 .HasForeignKey(d => d.Aids12Id)

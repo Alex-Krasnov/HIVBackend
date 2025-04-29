@@ -5,7 +5,6 @@ using HIVBackend.Models.OutputModel;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace HIVBackend.Controllers.PatientCard
 {
@@ -21,7 +20,7 @@ namespace HIVBackend.Controllers.PatientCard
         }
 
         [HttpGet]
-        //[Authorize(Roles = "User")]
+        [Authorize(Roles = "User")]
         public IActionResult Get(int? patientId)
         {
             PatientCardMain patientCardMain = new();
@@ -168,6 +167,7 @@ namespace HIVBackend.Controllers.PatientCard
             patientCardMain.Archive = patient.SnilsFed;
             patientCardMain.CodeWord = patient.Codeword;
             patientCardMain.FlgDiagnosisAfterDeath = patient.FlgDiagnosisAfterDeath;
+            patientCardMain.DeathTransferSub = patient.DeathTransferSub;
 
             patientCardMain.Blots = blots;
             patientCardMain.SecondDeseases = secondDeseases;
@@ -494,6 +494,8 @@ namespace HIVBackend.Controllers.PatientCard
             _context.Entry(item).Property(e => e.FioChange).IsModified = true;
             item.FlgDiagnosisAfterDeath = patient.FlgDiagnosisAfterDeath;
             _context.Entry(item).Property(e => e.FlgDiagnosisAfterDeath).IsModified = true;
+            item.DeathTransferSub = patient.DeathTransferSub;
+            _context.Entry(item).Property(e => e.DeathTransferSub).IsModified = true;
 
             DateOnly? dieDate = null, dieAidsDate = null;
             try { dieDate = DateOnly.Parse(patient.DieDate); } catch { }

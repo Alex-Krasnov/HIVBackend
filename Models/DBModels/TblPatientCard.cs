@@ -152,9 +152,9 @@ public partial class TblPatientCard
 
     public string? ChildDescr { get; set; }
 
-    public bool? FlgZamMedPart { get; set; }
+    public bool FlgZamMedPart { get; set; }
 
-    public bool? FlgHeadPhysician { get; set; }
+    public bool FlgHeadPhysician { get; set; }
 
     public DateOnly? TransfFederDate { get; set; }
 
@@ -236,11 +236,11 @@ public partial class TblPatientCard
 
     public int? TransmitionMechId { get; set; }
 
-    public bool? RefusalPhp { get; set; }
+    public bool RefusalPhp { get; set; }
 
-    public bool? RefusalResearch { get; set; }
+    public bool RefusalResearch { get; set; }
 
-    public bool? RefusalTherapy { get; set; }
+    public bool RefusalTherapy { get; set; }
 
     public DateOnly? LetterCareDate { get; set; }
 
@@ -260,7 +260,9 @@ public partial class TblPatientCard
 
     public bool IsActive { get; set; }
 
-    public bool? FlgDiagnosisAfterDeath { get; set; }
+    public bool FlgDiagnosisAfterDeath { get; set; }
+
+    public bool DeathTransferSub { get; set; }
 
     public virtual TblAids12? Aids12 { get; set; }
 

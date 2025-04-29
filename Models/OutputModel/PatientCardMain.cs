@@ -46,8 +46,8 @@
         public string? CardNo { get; set; }
         public string? VulnerableGroup { get; set; }
         public bool RegOn { get; set; }
-        public bool? HeadPhysician { get; set; }
-        public bool? ZamMedPart { get; set; }
+        public bool HeadPhysician { get; set; }
+        public bool ZamMedPart { get; set; }
         public bool TransfArea { get; set; }
         public DateOnly? TransfAreaDate { get; set; }
         public DateOnly? TransfFederDate { get; set; }
@@ -61,7 +61,8 @@
         public string? Invalid { get; set; }
         public string? Archive { get; set; }
         public string? CodeWord { get; set; }
-        public bool? FlgDiagnosisAfterDeath { get; set; }
+        public bool FlgDiagnosisAfterDeath { get; set; }
+        public bool DeathTransferSub {  get; set; }
 
         public List<string>? ListSex { get; set; }
         public List<string>? ListRegOffReason { get; set; }

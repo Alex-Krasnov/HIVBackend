@@ -50,6 +50,7 @@ namespace HIVBackend.Models.FormModels.Search
         public string DateChemprofEndEnd { get; set; } = string.Empty;
         public string DateRegStart { get; set; } = string.Empty;
         public string DateRegEnd { get; set; } = string.Empty;
+        public string DeathTransferSubYNA { get; set; } = YNAEnum.All.ToEnumDescriptionNameString();
 
         #endregion
 
@@ -78,6 +79,7 @@ namespace HIVBackend.Models.FormModels.Search
         public bool SelectPasNum { get; set; } = false;
         public bool SelectPasWhom { get; set; } = false;
         public bool SelectPasWhen { get; set; } = false;
+        public bool SelectDeathTransferSub { get; set; } = false;
 
         #endregion
 
@@ -158,6 +160,9 @@ namespace HIVBackend.Models.FormModels.Search
 
                     if (key.Name == "SelectPasWhen")
                         _queryBuilder.AddSelectPasWhen();
+
+                    if (key.Name == "SelectDeathTransferSub")
+                        _queryBuilder.AddSelectDeathTransferSub();
                 }
             }
 
@@ -287,6 +292,9 @@ namespace HIVBackend.Models.FormModels.Search
 
             if (DateRegEnd.Length != 0)
                 _queryBuilder.AddWhereDateRegEnd(DateRegEnd);
+
+            if (DeathTransferSubYNA != YNAEnum.All.ToEnumDescriptionNameString())
+                _queryBuilder.AddWhereDeathTransferSubYNA(DeathTransferSubYNA);
 
             #endregion
         }

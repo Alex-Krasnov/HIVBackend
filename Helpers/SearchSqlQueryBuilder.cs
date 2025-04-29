@@ -982,6 +982,12 @@ namespace HIVBackend.Helpers
                 joinStr.AppendLine(str);
         }
 
+        public void AddSelectDeathTransferSub()
+        {
+            columName.Add("Смерть передана в субъект РФ");
+            selectGroupSrt.AppendLine(",\"tblPatientCard\".death_transfer_sub");
+        }
+
         #endregion
 
         #region Where
@@ -2305,6 +2311,15 @@ namespace HIVBackend.Helpers
                 joinStr.AppendLine(str);
 
             whereStr.AddWhereSqlDateLess("\"im\".acl_sample_date", DateOnly.Parse(date).ToString("dd-MM-yyyy"));
+        }
+
+        public void AddWhereDeathTransferSubYNA(string ynaName)
+        {
+            var fieldName = "\"tblPatientCard\".death_transfer_sub";
+
+            var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
+
+            AddWhereYNAEnum(fieldName, enumValue);
         }
 
         #endregion
