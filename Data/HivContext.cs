@@ -2794,6 +2794,7 @@ public partial class HivContext : DbContext
                 .HasMaxLength(100)
                 .HasColumnName("user_name");
             entity.Property(e => e.Write1).HasColumnName("write1");
+            entity.Property(e => e.Lab).HasColumnName("lab");
             entity.Property(e => e.RefreshToken).HasColumnName("refresh_token");
             entity.Property(e => e.RefreshTokenExpiryTime).HasColumnName("refresh_token_expiry_time");
 

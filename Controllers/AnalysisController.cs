@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace HIVBackend.Controllers
 {
-    [Route("api/analyses")]
+    [Route("api/[controller]")]
     [ApiController]
     [Authorize(Roles = "User")]
     public class AnalysisController : ControllerBase
@@ -60,8 +60,8 @@ namespace HIVBackend.Controllers
         }
 
         [HttpDelete]
-        //[Authorize(Roles = "User")] // TODO add role
-        public IActionResult DeleteAnalysis([FromBody] DeleteAnalysisRequest request)
+        [Authorize(Roles = "Lab")]
+        public IActionResult DeleteAnalysis([FromQuery] DeleteAnalysisRequest request)
         {
             var entity = _context.TblPatientAclResults
                 .FirstOrDefault(a =>

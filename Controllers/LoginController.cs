@@ -32,10 +32,9 @@ namespace HIVBackend.Controllers
 
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.UserName)
+                new(ClaimTypes.Name, user.UserName),
+                new (ClaimTypes.Role, "User")
             };
-            claims.Add(new Claim(ClaimTypes.Role, "User"));
-            claims.Add(new Claim(ClaimTypes.Role, "User1"));
 
             if (user.Write1 == true)
                 claims.Add(new Claim(ClaimTypes.Role, "Writer"));
@@ -47,13 +46,14 @@ namespace HIVBackend.Controllers
                 claims.Add(new Claim(ClaimTypes.Role, "Excel"));
             if (user.Klassif1 == true)
                 claims.Add(new Claim(ClaimTypes.Role, "Klassif"));
+            if (user.Lab == true)
+                claims.Add(new Claim(ClaimTypes.Role, "Lab"));
 
             var accessToken = _tokenService.GenerateAccessToken(claims);
             var refreshToken = _tokenService.GenerateRefreshToken();
 
             user.RefreshToken = refreshToken;
             user.RefreshTokenExpiryTime = DateTime.UtcNow.AddHours(6);
-            //Console.WriteLine(DateTime.UtcNow.AddMinutes(-14));
 
             _context.SaveChanges();
 

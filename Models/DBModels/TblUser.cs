@@ -12,6 +12,7 @@ public partial class TblUser
     public bool Admin1 { get; set; }
     public bool Delete1 { get; set; }
     public bool Klassif1 { get; set; }
+    public bool Lab { get; set; }
     public string? RefreshToken { get; set; }
     public DateTime RefreshTokenExpiryTime { get; set; }
 

@@ -10,5 +10,6 @@
         public bool Admin { get; set; }
         public bool Deleter { get; set; }
         public bool Klassif { get; set; }
+        public bool Lab { get; set; }
     }
 }

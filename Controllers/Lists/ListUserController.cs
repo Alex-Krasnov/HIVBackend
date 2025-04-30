@@ -31,7 +31,8 @@ namespace HIVBackend.Controllers.Lists
                     Write = e.Write1,
                     Admin = e.Admin1,
                     Deleter = e.Delete1,
-                    Klassif = e.Klassif1
+                    Klassif = e.Klassif1,
+                    Lab = e.Lab
                 }).ToList();
             return Ok(list);
         }
@@ -65,6 +66,7 @@ namespace HIVBackend.Controllers.Lists
                 Admin1 = list.Admin,
                 Delete1 = list.Deleter,
                 Klassif1 = list.Klassif,
+                Lab = list.Lab,
                 RefreshTokenExpiryTime = DateTime.Now.ToUniversalTime(),
                 User1 = User.Identity?.Name,
                 Datetime1 = DateTime.Now.ToUniversalTime()
@@ -94,6 +96,7 @@ namespace HIVBackend.Controllers.Lists
             item.Admin1 = list.Admin;
             item.Delete1 = list.Deleter;
             item.Klassif1 = list.Klassif;
+            item.Lab = list.Lab;
             item.RefreshTokenExpiryTime = DateTime.Now.ToUniversalTime();
             item.User1 = User.Identity?.Name;
             item.Datetime1 = DateTime.Now.ToUniversalTime();
