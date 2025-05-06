@@ -300,13 +300,20 @@ namespace HIVBackend.Helpers
             columName.Add("Номер");
             selectGroupSrt.AppendLine(",\"tblPatientBlot\".blot_no");
 
-            columName.Add("Послед");
+            columName.Add("Первый");
             selectGroupSrt.AppendLine(",\"tblPatientBlot\".first1");
+
+            columName.Add("Последний");
+            selectGroupSrt.AppendLine(",\"tblPatientBlot\".last1");
 
             columName.Add("Дата ввода");
             selectGroupSrt.AppendLine(",\"tblPatientBlot\".datetime1");
 
+            columName.Add("Референс");
+            selectGroupSrt.AppendLine(",\"tblListReferenceMo\".reference_mo_name");
+
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
+            joinStr.AddLeftJoinIfNotExist(joinTable: "tblListReferenceMo", field: "reference_mo_id", table: "tblPatientBlot");
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblIbResult", field: "ib_result_id", table: "tblPatientBlot");
         }
 
