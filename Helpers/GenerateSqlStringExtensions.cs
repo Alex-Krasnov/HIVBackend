@@ -34,19 +34,19 @@ namespace HIVBackend.Helpers
         }
 
         /// <summary>
-        /// Добваляем строку типа $" AND lower({column}) LIKE '{condition}%'"
+        /// Добваляем строку типа $" AND {column} ILIKE '{condition}%'"
         /// </summary>
         public static void AddWhereSqlStartWhith(this StringBuilder whereStr, string column, string condition)
         {
-            whereStr.Append($" AND lower({column}) LIKE '{condition}%'");
+            whereStr.Append($" AND {column} ILIKE '{condition}%'");
         }
 
         /// <summary>
         /// Добваляем строку типа $" AND {column} LIKE '%{condition}%'"
         /// </summary>
-        public static void AddWhereSqlEqualString(this StringBuilder whereStr, string column, string condition)
+        public static void AddWhereSqlContainsString(this StringBuilder whereStr, string column, string condition)
         {
-            whereStr.Append($" AND {column} LIKE '%{condition}%'");
+            whereStr.Append($" AND {column} ILIKE '%{condition}%'");
         }
 
         /// <summary>

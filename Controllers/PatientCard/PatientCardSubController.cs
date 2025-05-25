@@ -25,7 +25,7 @@ namespace HIVBackend.Controllers.PatientCard
             return Ok(new { 
                 patientFio = patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName,
                 isNonResident = _context.TblRegions.FirstOrDefault(e => e.RegionId == patient.RegionId)?.RegtypeId != 1
-        });
+            });
         }
     }
 }

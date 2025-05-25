@@ -995,6 +995,12 @@ namespace HIVBackend.Helpers
             selectGroupSrt.AppendLine(",\"tblPatientCard\".death_transfer_sub");
         }
 
+        public void AddSelectDesc()
+        {
+            columName.Add("Примечание");
+            selectGroupSrt.AppendLine(",addr_name");
+        }
+
         #endregion
 
         #region Where
@@ -1203,7 +1209,7 @@ namespace HIVBackend.Helpers
                 fieldRight: "infect_course_id",
                 table: "tblPatientCard",
                 alias: "regOff");
-            whereStr.AddWhereSqlEqualString("\"regOff\".infect_course_long", name);
+            whereStr.AddWhereSqlContainsString("\"regOff\".infect_course_long", name);
         }
 
         public void AddWhereSnilsYNA(string ynaName)
@@ -1217,7 +1223,7 @@ namespace HIVBackend.Helpers
 
         public void AddWhereSnils(string namePart)
         {
-            whereStr.AddWhereSqlEqualString("\"tblPatientCard\".snils", namePart);
+            whereStr.AddWhereSqlContainsString("\"tblPatientCard\".snils", namePart);
         }
 
         public void AddWhereStage(string[] names)
@@ -1248,7 +1254,7 @@ namespace HIVBackend.Helpers
 
         public void AddWhereUnrz(string namePart)
         {
-            whereStr.AddWhereSqlEqualString("\"tblPatientCard\".unrz_fr", namePart);
+            whereStr.AddWhereSqlContainsString("\"tblPatientCard\".unrz_fr", namePart);
         }
 
         public void AddWhereUnrzYNA(string ynaName)
@@ -1263,7 +1269,7 @@ namespace HIVBackend.Helpers
         public void AddWhereSex(string name)
         {
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblSex", field: "sex_id", table: "tblPatientCard");
-            whereStr.AddWhereSqlEqualString("\"tblSex\".sex_short", name);
+            whereStr.AddWhereSqlContainsString("\"tblSex\".sex_short", name);
         }
 
         public void AddWhereDateDieStart(string date)
@@ -1436,7 +1442,7 @@ namespace HIVBackend.Helpers
         {
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblIbResult", field: "ib_result_id", table: "tblPatientBlot");
-            whereStr.AddWhereSqlEqualString("\"tblIbResult\".ib_result_short", namePart);
+            whereStr.AddWhereSqlContainsString("\"tblIbResult\".ib_result_short", namePart);
         }
 
         public void AddWhereDateIbResStart(string date)
@@ -1568,7 +1574,7 @@ namespace HIVBackend.Helpers
         public void AddWhereAids12(string name)
         {
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblAids12", field: "aids12_id", table: "tblPatientCard");
-            whereStr.AddWhereSqlEqualString("\"tblAids12\".aids12_long", name);
+            whereStr.AddWhereSqlContainsString("\"tblAids12\".aids12_long", name);
         }
 
         public void AddWhereDtMailRegStart(string date)
@@ -1636,7 +1642,7 @@ namespace HIVBackend.Helpers
         {
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblCOVID_vac", field: "patient_id", table: "tblPatientCard");
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblListVac", field: "vac_id", table: "tblCOVID_vac");
-            whereStr.AddWhereSqlEqualString("\"tblListVac\".vac_name", name);
+            whereStr.AddWhereSqlContainsString("\"tblListVac\".vac_name", name);
         }
 
         public void AddWhereVacDateStart(string date)
@@ -1658,7 +1664,7 @@ namespace HIVBackend.Helpers
                                                    fieldLeft: "covid_MKB10",
                                                    fieldRight: "MKB10_id",
                                                    table: "tblCOVID");
-            whereStr.AddWhereSqlEqualString("\"tblListMkb10COVID\".mkb10_long_name", name);
+            whereStr.AddWhereSqlContainsString("\"tblListMkb10COVID\".mkb10_long_name", name);
         }
 
         public void AddWhereCovidDateStart(string date)
@@ -1702,7 +1708,7 @@ namespace HIVBackend.Helpers
                                                    fieldRight: "infect_course_id",
                                                    table: "tblPatientContactChemsex",
                                                    alias: "ChemSexContactType");
-            whereStr.AddWhereSqlEqualString("\"ChemSexContactType\".infect_course_long", name);
+            whereStr.AddWhereSqlContainsString("\"ChemSexContactType\".infect_course_long", name);
         }
 
         public void AddWherePavInjYNA(string ynaName)
@@ -1843,7 +1849,7 @@ namespace HIVBackend.Helpers
         {
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientBlot", field: "patient_id", table: "tblPatientCard");
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblListReferenceMo", field: "reference_mo_id", table: "tblPatientBlot");
-            whereStr.AddWhereSqlEqualString("\"tblListReferenceMo\".reference_mo_name", name);
+            whereStr.AddWhereSqlContainsString("\"tblListReferenceMo\".reference_mo_name", name);
         }
 
         public void AddWhereArchiveYNA(string ynaName)
@@ -1868,7 +1874,7 @@ namespace HIVBackend.Helpers
         {
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblPatientChemop", field: "patient_id", table: "tblPatientCard");
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblChemop", field: "chemop_id", table: "tblPatientChemop");
-            whereStr.AddWhereSqlEqualString("\"tblChemop\".chemop_long", name);
+            whereStr.AddWhereSqlContainsString("\"tblChemop\".chemop_long", name);
         }
 
         public void AddWhereDateChemprofStartStart(string date)
@@ -2327,6 +2333,11 @@ namespace HIVBackend.Helpers
             var enumValue = EnumExtension.GetEnumFromDescription<YNAEnum>(ynaName);
 
             AddWhereYNAEnum(fieldName, enumValue);
+        }
+
+        public void AddWhereDesc(string name)
+        {
+            whereStr.AddWhereSqlContainsString("\"tblPatientCard\".addr_name", name);
         }
 
         #endregion
