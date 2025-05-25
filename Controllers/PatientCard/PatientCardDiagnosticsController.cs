@@ -225,8 +225,6 @@ namespace HIVBackend.Controllers.PatientCard
             patientCardDiagnostics.IHLs = iHLs.OrderBy(e => e.Date).ToList();
             patientCardDiagnostics.DrugRemains = drugRemains;
 
-            patientCardDiagnostics.IsNonResident = _context.TblRegions.FirstOrDefault(e => e.RegionId == patient.RegionId)?.RegtypeId != 1;
-
             return Ok(patientCardDiagnostics);
         }
     }

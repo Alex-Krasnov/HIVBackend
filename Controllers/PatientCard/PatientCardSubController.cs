@@ -22,8 +22,10 @@ namespace HIVBackend.Controllers.PatientCard
             TblPatientCard patient = _context.TblPatientCards.Where(e => e.PatientId == patientId && e.IsActive == true).ToList().FirstOrDefault();
             if (patient is null)
                 return BadRequest("Пациент не найден");
-
-            return Ok(new { patientFio = patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName });
+            return Ok(new { 
+                patientFio = patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName,
+                isNonResident = _context.TblRegions.FirstOrDefault(e => e.RegionId == patient.RegionId)?.RegtypeId != 1
+        });
         }
     }
 }
