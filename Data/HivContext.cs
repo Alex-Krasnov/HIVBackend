@@ -246,6 +246,8 @@ public partial class HivContext : DbContext
 
     public virtual DbSet<TblHepC> TblHepCs { get; set; }
 
+    public virtual DbSet<TblIhlaAnalysis> TblIhlaAnalyses { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         var host = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
@@ -3444,6 +3446,31 @@ public partial class HivContext : DbContext
                 .HasColumnName("reference_mo_name");
             entity.Property(e => e.User).HasColumnName("user");
             entity.Property(e => e.Datetime).HasColumnName("datetime");
+        });
+
+        modelBuilder.Entity<TblIhlaAnalysis>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+
+            entity.ToTable("tblIhlaAnalisis");
+
+            entity.Property(e => e.Id)
+                .ValueGeneratedOnAdd()
+                .HasColumnName("id");
+
+            entity.Property(e => e.PatientId).HasColumnName("patient_id");
+
+            entity.Property(e => e.Result)
+                .HasMaxLength(200)
+                .IsFixedLength()
+                .HasColumnName("result");
+
+            entity.Property(e => e.AnalysisDate).HasColumnName("analysis_date");
+
+            entity.Property(e => e.User).HasColumnName("user");
+
+            entity.Property(e => e.DateCreate).HasColumnName("date_create");
+            entity.Property(e => e.DateChange).HasColumnName("date_change");
         });
 
         OnModelCreatingPartial(modelBuilder);
