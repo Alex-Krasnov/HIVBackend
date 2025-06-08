@@ -28,7 +28,7 @@ namespace HIVBackend.Controllers.PatientCard
 
             return Ok(
                 new { 
-                    Ihla = _context.TblIhlaAnalyses.Where(e => e.PatientId == patientId).ToList(), 
+                    Ihla = _context.TblIhlaAnalyses.Where(e => e.PatientId == patientId).OrderByDescending(e => e.AnalysisDate).ToList(), 
                     PatientId = patient.PatientId,
                     PatientFio = patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName
                 });
