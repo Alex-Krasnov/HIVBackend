@@ -16,6 +16,8 @@ namespace HIVBackend.Models.DBModels
 
         public DateOnly AnalysisDate { get; set; }
 
+        public string? AnalysisNumber { get; set; }
+
         public string? User { get; set; }
 
         public DateOnly DateCreate { get; set; }

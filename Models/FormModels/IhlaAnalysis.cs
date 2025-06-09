@@ -12,5 +12,7 @@ namespace HIVBackend.Models.FormModels
         public string? Result { get; set; }
 
         public DateOnly AnalysisDate { get; set; }
+
+        public string? AnalysisNumber { get; set; }
     }
 }

@@ -60,6 +60,7 @@ namespace HIVBackend.Controllers.PatientCard
                 User = User.Identity?.Name,
                 DateCreate = DateOnly.FromDateTime(DateTime.Now),
                 DateChange = DateOnly.FromDateTime(DateTime.Now),
+                AnalysisNumber = ihla.AnalysisNumber,
             };
 
             _context.TblIhlaAnalyses.Add(item);
@@ -85,6 +86,8 @@ namespace HIVBackend.Controllers.PatientCard
             _context.Entry(item).Property(e => e.AnalysisDate).IsModified = true;
             item.DateChange = DateOnly.FromDateTime(DateTime.Now);
             _context.Entry(item).Property(e => e.DateChange).IsModified = true;
+            item.AnalysisNumber = ihla.AnalysisNumber;
+            _context.Entry(item).Property(e => e.AnalysisNumber).IsModified = true;
 
             _context.SaveChanges();
             return Ok();

@@ -3466,6 +3466,7 @@ public partial class HivContext : DbContext
                 .HasColumnName("result");
 
             entity.Property(e => e.AnalysisDate).HasColumnName("analysis_date");
+            entity.Property(e => e.AnalysisNumber).HasColumnName("analysis_number");
 
             entity.Property(e => e.User).HasColumnName("user");
 
