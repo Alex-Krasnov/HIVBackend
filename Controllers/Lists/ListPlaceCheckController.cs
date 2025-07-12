@@ -65,7 +65,7 @@ namespace HIVBackend.Controllers.Lists
         {
             var isExist = _context.TblListPlaceChecks.Any(e => e.PlaceCheckName == list.LongName);
 
-            if (isExist)
+            if (!isExist)
                 return BadRequest($"Запись {list.Id} не найдена!");
 
             var item = _context.TblListPlaceChecks.Where(e => e.PlaceCheckId == list.Id).First();

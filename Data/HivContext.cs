@@ -1304,6 +1304,8 @@ public partial class HivContext : DbContext
             entity.Property(e => e.User1)
                 .HasMaxLength(50)
                 .HasColumnName("user1");
+            entity.Property(e => e.IsHivMed)
+                .HasColumnName("is_hiv_med");
         });
 
         modelBuilder.Entity<TblMedicineForSchema>(entity =>

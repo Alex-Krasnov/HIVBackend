@@ -14,6 +14,8 @@ public partial class TblMedicine
 
     public string? KorvetId { get; set; }
 
+    public bool IsHivMed { get; set; }
+
     public virtual ICollection<TblPatientPregnantM> TblPatientPregnantMMedicineId2Navigations { get; } = new List<TblPatientPregnantM>();
 
     public virtual ICollection<TblPatientPregnantM> TblPatientPregnantMMedicineId3Navigations { get; } = new List<TblPatientPregnantM>();

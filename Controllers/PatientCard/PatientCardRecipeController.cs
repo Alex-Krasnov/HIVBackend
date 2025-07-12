@@ -28,7 +28,20 @@ namespace HIVBackend.Controllers.PatientCard
             if (patient is null)
                 return BadRequest("Пациент не найден");
 
-            List<TblPatientPrescrM> patientRecipe = _context.TblPatientPrescrMs.Where(e => e.PatientId == patientId).ToList();
+            List<TblPatientPrescrM> allPatientRecipe = _context.TblPatientPrescrMs.Where(e => e.PatientId == patientId).ToList();
+
+            List<TblPatientPrescrM> patientRecipe = new();
+            foreach (var item in allPatientRecipe)
+            {
+                var isHiv = item.GiveMedId == null || 
+                            item.MedicineId == null || 
+                            _context.TblMedicines.Any(e => (e.MedicineId == item.MedicineId && e.MedicineId == item.GiveMedId) && e.IsHivMed);
+
+                if (isHiv)
+                {
+                    patientRecipe.Add(item);
+                }
+            }
 
             foreach (var item in patientRecipe)
             {
@@ -53,7 +66,7 @@ namespace HIVBackend.Controllers.PatientCard
             patientCardRecipe.PatientId = patient.PatientId;
             patientCardRecipe.PatientFio = patient.FamilyName + " " + patient.FirstName + " " + patient.ThirdName;
             patientCardRecipe.ListDoctor = _context.TblDoctors.Select(e => e.DoctorLong).ToList();
-            patientCardRecipe.ListMedicine = _context.TblMedicines.Select(e => e.MedicineLong).ToList();
+            patientCardRecipe.ListMedicine = _context.TblMedicines.Where(e => e.IsHivMed).Select(e => e.MedicineLong).ToList();
             patientCardRecipe.ListFinSource = _context.TblFinSources.Select(e => e.FinSourceLong).ToList();
             patientCardRecipe.Recipes = recipe.OrderBy(e => e.PrescrDate).ToList();
 

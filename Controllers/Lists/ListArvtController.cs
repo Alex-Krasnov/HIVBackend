@@ -66,7 +66,7 @@ namespace HIVBackend.Controllers.Lists
         {
             var isExist = _context.TblArvts.Any(e => e.ArvtLong == list.LongName);
 
-            if (isExist)
+            if (!isExist)
                 return BadRequest($"Запись {list.Id} не найдена!");
 
             var item = _context.TblArvts.Where(e => e.ArvtId == list.Id).First();

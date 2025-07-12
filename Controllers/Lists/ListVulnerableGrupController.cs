@@ -65,7 +65,7 @@ namespace HIVBackend.Controllers.Lists
         {
             var isExist = _context.TblListVulnerableGroups.Any(e => e.VulnerableGroupName == list.LongName);
 
-            if (isExist)
+            if (!isExist)
                 return BadRequest($"Запись {list.Id} не найдена!");
 
             var item = _context.TblListVulnerableGroups.Where(e => e.VulnerableGroupId == list.Id).First();

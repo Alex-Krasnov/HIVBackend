@@ -45,7 +45,7 @@ namespace HIVBackend.Models.OutputModel.Search
             ListInvalid = _context.TblInvalids.Select(e => e.InvalidLong).OrderBy(e => e).ToList();
             ListCorrespIllness = _context.TblCorrespIllnesses.Select(e => e.CorrespIllnessLong).OrderBy(e => e).ToList();
             ListSchemaMedecine = _context.TblMedicineForSchemas.Select(e => e.MedforschemaLong).OrderBy(e => e).ToList();
-            ListMedecine = _context.TblMedicines.Select(e => e.MedicineLong).OrderBy(e => e).ToList();
+            ListMedecine = _context.TblMedicines.Where(e => e.IsHivMed).Select(e => e.MedicineLong).OrderBy(e => e).ToList();
             ListDoctor = _context.TblDoctors.Select(e => e.DoctorLong).OrderBy(e => e).ToList();
             ListSchemaChange = _context.TblCureChanges.Select(e => e.CureChangeLong).OrderBy(e => e).ToList();
             ListFinSourse = _context.TblFinSources.Select(e => e.FinSourceLong).OrderBy(e => e).ToList();

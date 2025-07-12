@@ -66,7 +66,7 @@ namespace HIVBackend.Controllers.Lists
         {
             var isExist = _context.TblMedicineForSchemas.Any(e => e.MedforschemaLong == list.LongName);
 
-            if (isExist)
+            if (!isExist)
                 return BadRequest($"Запись {list.Id} не найдена!");
 
             var item = _context.TblMedicineForSchemas.Where(e => e.MedforschemaId == list.Id).First();

@@ -9,10 +9,10 @@ namespace HIVBackend.Controllers.Lists
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class ListCureChangeController : ControllerBase
+    public class ListMedForRecipeController : ControllerBase
     {
         private readonly HivContext _context;
-        public ListCureChangeController(HivContext context)
+        public ListMedForRecipeController(HivContext context)
         {
             _context = context;
         }
@@ -21,60 +21,61 @@ namespace HIVBackend.Controllers.Lists
         [Authorize(Roles = "User")]
         public IActionResult Get()
         {
-            var list = _context.TblCureChanges.OrderBy(e => e.CureChangeLong)
-                .Select(e => new { id = e.CureChangeId, longName = e.CureChangeLong, shortName = e.CureChangeShort }).ToList();
-            return Ok(new { list, maxId = _context.TblCureChanges.Max(e => e.CureChangeId) });
+            var list = _context.TblMedicines.OrderBy(e => e.MedicineLong)
+                .Select(e => new { id = e.MedicineId, longName = e.MedicineLong, IsActive = e.IsHivMed })
+                .ToList();
+            return Ok(new { list, maxId = _context.TblMedicines.Max(e => e.MedicineId) });
         }
 
         [HttpDelete, Route("Del")]
         [Authorize(Roles = "User")]
         public IActionResult Del(string longName)
         {
-            var item = _context.TblCureChanges.Where(e => e.CureChangeLong == longName).First();
-            _context.TblCureChanges.Remove(item);
+            var item = _context.TblMedicines.Where(e => e.MedicineLong == longName).First();
+            _context.TblMedicines.Remove(item);
             _context.SaveChanges();
             return Ok();
         }
 
         [HttpPost, Route("Create")]
         [Authorize(Roles = "User")]
-        public IActionResult Create(List2Col list)
+        public IActionResult Create(List3Col list)
         {
-            var isUnique = _context.TblCureChanges.Any(e => e.CureChangeLong == list.LongName);
+            var isUnique = _context.TblMedicines.Any(e => e.MedicineLong == list.LongName);
 
             if (isUnique)
                 return BadRequest($"Запись {list.LongName} уже существует!");
 
-            TblCureChange item = new()
+            TblMedicine item = new()
             {
-                CureChangeId = list.Id,
-                CureChangeShort = list.ShortName,
-                CureChangeLong = list.LongName,
+                MedicineId = list.Id,
+                MedicineLong = list.LongName,
                 User1 = User.Identity?.Name,
+                IsHivMed = list.IsActive,
                 Datetime1 = DateOnly.FromDateTime(DateTime.Now)
             };
 
-            _context.TblCureChanges.Attach(item);
-            _context.TblCureChanges.Add(item);
+            _context.TblMedicines.Attach(item);
+            _context.TblMedicines.Add(item);
             _context.SaveChanges();
             return Ok();
         }
 
         [HttpPost, Route("Update")]
         [Authorize(Roles = "User")]
-        public IActionResult Update(List2Col list)
+        public IActionResult Update(List3Col list)
         {
-            var isExist = _context.TblCureChanges.Any(e => e.CureChangeLong == list.LongName);
+            var isExist = _context.TblMedicines.Any(e => e.MedicineLong == list.LongName);
 
             if (!isExist)
                 return BadRequest($"Запись {list.Id} не найдена!");
 
-            var item = _context.TblCureChanges.Where(e => e.CureChangeId == list.Id).First();
+            var item = _context.TblMedicines.Where(e => e.MedicineId == list.Id).First();
 
-            item.CureChangeShort = list.ShortName;
-            item.CureChangeLong = list.LongName;
+            item.MedicineLong = list.LongName;
             item.User1 = User.Identity?.Name;
             item.Datetime1 = DateOnly.FromDateTime(DateTime.Now);
+            item.IsHivMed = list.IsActive;
 
             _context.SaveChanges();
             return Ok();

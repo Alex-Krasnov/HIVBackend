@@ -65,7 +65,7 @@ namespace HIVBackend.Controllers.Lists
         {
             var isExist = _context.TblListFamilyStatuses.Any(e => e.FammilyStatusName == list.LongName);
 
-            if (isExist)
+            if (!isExist)
                 return BadRequest($"Запись {list.Id} не найдена!");
 
             var item = _context.TblListFamilyStatuses.Where(e => e.FamilyStatusId == list.Id).First();

@@ -606,7 +606,7 @@ namespace HIVBackend.Controllers.Lists
             if (data.Str == null || data.Str?.Length == 0)
                 return Ok(true);
 
-            var inList = _context.TblMedicines.Any(e => e.MedicineLong == data.Str);
+            var inList = _context.TblMedicines.Where(e => e.IsHivMed).Any(e => e.MedicineLong == data.Str);
             return Ok(inList);
         }
 
