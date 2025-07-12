@@ -287,6 +287,51 @@ namespace HIVBackend.Helpers
             columName.Add("МКБ причина смерти");
             selectGroupSrt.AppendLine(",\"tblTempDieCureMKB10List\".die_course_short");
             joinStr.AddLeftJoinIfNotExist(joinTable: "tblTempDieCureMKB10List", field: "die_course_id", table: "tblPatientCard");
+
+            AddDieCauseColumns(
+                columName,
+                selectGroupSrt,
+                joinStr,
+                "Непосредственная причина смерти",
+                "die_course_id1",
+                "tblTempDieCureMKB10List1"
+            );
+
+            AddDieCauseColumns(
+                columName,
+                selectGroupSrt,
+                joinStr,
+                "Патологическое состояние, которое привело к возникновению смерти",
+                "die_course_id2",
+                "tblTempDieCureMKB10List2"
+            );
+
+            AddDieCauseColumns(
+                columName,
+                selectGroupSrt,
+                joinStr,
+                "Первоначальная причина смерти",
+                "die_course_id3",
+                "tblTempDieCureMKB10List3"
+            );
+
+            AddDieCauseColumns(
+                columName,
+                selectGroupSrt,
+                joinStr,
+                "Внешняя причина смерти",
+                "die_course_id4",
+                "tblTempDieCureMKB10List4"
+            );
+
+            AddDieCauseColumns(
+                columName,
+                selectGroupSrt,
+                joinStr,
+                "Прочие состояния, способствовавшие смерти",
+                "die_course_id5",
+                "tblTempDieCureMKB10List5"
+            );
         }
 
         public void AddSelectIb()
@@ -2443,6 +2488,29 @@ namespace HIVBackend.Helpers
                 alias: medicineAlias);
 
             whereStr.AddWhereSqlIn($"\"{medicineAlias}\".medforschema_long", medicineValues);
+        }
+
+        private void AddDieCauseColumns(
+            List<string> columName,
+            StringBuilder selectGroupSrt,
+            StringBuilder joinStr,
+            string description,
+            string fieldLeft,
+            string alias)
+        {
+            columName.Add(description);
+            selectGroupSrt.AppendLine($",\"{alias}\".die_course_long");
+
+            columName.Add($"МКБ {description}");
+            selectGroupSrt.AppendLine($",\"{alias}\".die_course_short");
+
+            joinStr.AddLeftJoinIfNotExistDiffField(
+                joinTable: "tblTempDieCureMKB10List",
+                fieldLeft: fieldLeft,
+                fieldRight: "die_course_id",
+                table: "tblPatientCard",
+                alias: alias
+            );
         }
 
         #endregion
