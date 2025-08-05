@@ -47,11 +47,10 @@ namespace HIVBackend.Controllers.PatientCard
                 List<int> meds = _context.TblSchemaMedicineRs.Where(e => e.CureSchemaId == item.Key).Select(e => e.MedicineId).ToList();
                 if (lst.id.OrderBy(e => e).SequenceEqual(meds.OrderBy(e => e)))
                 {
-                    var b = _context.TblCureSchemas.First(e => e.CureSchemaId == item.Key).CureSchemaLong;
-                    return Ok(new { b });
+                    return Ok(new { _context.TblCureSchemas.First(e => e.CureSchemaId == item.Key).CureSchemaLong });
                 }
             }
-            return BadRequest("Ошибка");
+            return BadRequest("Схема не найдена");
 
         }
 
