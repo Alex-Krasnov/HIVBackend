@@ -35,7 +35,7 @@ namespace HIVBackend.Controllers.PatientCard
             {
                 var isHiv = item.GiveMedId == null || 
                             item.MedicineId == null || 
-                            _context.TblMedicines.Any(e => (e.MedicineId == item.MedicineId && e.MedicineId == item.GiveMedId) && e.IsHivMed);
+                            _context.TblMedicines.Any(e => (e.MedicineId == item.MedicineId || e.MedicineId == item.GiveMedId) && e.IsHivMed);
 
                 if (isHiv)
                 {
