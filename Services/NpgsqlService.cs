@@ -6,6 +6,8 @@ namespace HIVBackend.Services
 {
     public class NpgsqlService
     {
+        const string DEFAULT_ORDER_BY = "Order by \"tblPatientCard\".family_name,\"tblPatientCard\".first_name,\"tblPatientCard\".third_name,\"tblPatientCard\".patient_id";
+
         private static readonly string connectionString = $"Host={Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost"};Port={Environment.GetEnvironmentVariable("DB_PORT") ?? "5432"};Database=HIV;Username=vs_test;Password=4100";
 
         /// <summary>
@@ -52,7 +54,7 @@ namespace HIVBackend.Services
         /// <summary>
         /// Получаем DataSet из базы
         /// </summary>
-        public static DataSet GetDBData(StringBuilder selectGroupSrt, StringBuilder joinStr, StringBuilder whereStr, int pageSize, int page, bool isExcel = false)
+        public static DataSet GetDBData(StringBuilder selectGroupSrt, StringBuilder joinStr, StringBuilder whereStr, int pageSize, int page, bool isExcel = false, StringBuilder orderByStr = null)
         {
             DataSet ds = new();
 
@@ -60,7 +62,7 @@ namespace HIVBackend.Services
                       + joinStr.ToString() + "\n"
                       + whereStr.ToString() + "\n"
                       + "Group by " + selectGroupSrt.ToString() + "\n"
-                      + "ORDER BY \"tblPatientCard\".patient_id \n";
+                      + (orderByStr?.ToString() ?? DEFAULT_ORDER_BY + "\n");
 
             if (!isExcel)
                 qry += $"LIMIT {pageSize} OFFSET {(page - 1) * pageSize}";

@@ -31,14 +31,20 @@ namespace HIVBackend.Controllers.PatientCard
 
             if (patient.MotherPatientId != null)
             {
-                TblPatientCard m = _context.TblPatientCards.First(e => e.PatientId == patient.MotherPatientId && e.IsActive == true);
-                mFio = m.FamilyName + " " + m.FirstName + " " + m.ThirdName;
+                TblPatientCard m = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == patient.MotherPatientId && e.IsActive == true);
+                mFio = m?.FamilyName + " " + m?.FirstName + " " + m?.ThirdName;
+
+                if (mFio.Length == 2)
+                    mFio = $"Карта ИД:{patient.MotherPatientId} удалена";
             }
 
             if (patient.FatherPatientId != null)
             {
-                TblPatientCard f = _context.TblPatientCards.First(e => e.PatientId == patient.FatherPatientId && e.IsActive == true);
-                fFio = f.FamilyName + " " + f.FirstName + " " + f.ThirdName;
+                TblPatientCard f = _context.TblPatientCards.FirstOrDefault(e => e.PatientId == patient.FatherPatientId && e.IsActive == true);
+                fFio = f?.FamilyName + " " + f?.FirstName + " " + f?.ThirdName;
+
+                if (fFio.Length == 2)
+                    fFio = $"Карта ИД:{patient.FatherPatientId} удалена";
             }
 
             PatientCardChild patientCardChild = new();
